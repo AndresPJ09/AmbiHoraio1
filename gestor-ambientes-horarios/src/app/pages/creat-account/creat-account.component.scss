@@ -1,0 +1,325 @@
+/**** Fondo de la página ****/
+.bg-image {
+    background-image: url('../assets/image 2.jpg');
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    min-height: 100vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 20px;
+    overflow: hidden; 
+  }
+  
+  .bg-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+  }
+  
+  @media (max-width: 768px) {
+    .bg-image {
+      padding: 10px; 
+      background-size: cover; 
+    }
+  }
+  
+  @media (max-width: 300px) {
+    .bg-image {
+      background-size: contain; 
+      background-position: top; 
+    }
+  }
+  /********/
+  
+/**** Container ****/
+.container {
+    background-color: #ffffffde;
+    border-radius: 40px; 
+    width: 40%;
+    min-width: 300px; 
+    padding: 50px; 
+    position: absolute; 
+    top: 50%; 
+    transform: translateY(-50%); 
+    z-index: 2; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+    overflow: hidden;
+    
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      width: 70%; /* Ancho más grande en pantallas medianas */
+      right: 10px; /* Menor margen a la derecha */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .container {
+      width: 90%; /* Muy ancho en pantallas pequeñas */
+      right: 0; /* Elimina el margen a la derecha */
+      left: 0; /* Se asegura de que el contenedor esté completamente centrado */
+      margin: 0 auto; /* Centra el contenedor horizontalmente */
+      padding: 50px; /* Reduce el espaciado interno */
+      transform: translateY(-50%); /* Sigue centrado verticalmente */
+    }
+  }
+  /********/
+
+  /**** Estilo botono de inicio ****/
+  .group {
+    position: relative;
+    margin-bottom: 50px;
+    top: 10px;
+  }
+  
+  .container-1 {
+    padding-top: 30px;
+  }
+  
+  .main-input {
+    font-size: 16px;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #6c6c6c;
+    background: transparent;
+    color: #242323;
+  }
+  
+  .main-input:focus {
+    outline: none;
+    border-bottom-color: #5EB319;
+  }
+  
+  .lebal-email {
+    color: #999999;
+    font-size: 18px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+  }
+  
+  .main-input:focus ~ .lebal-email,
+  .main-input:valid ~ .lebal-email {
+    top: -20px;
+    font-size: 14px;
+    color: #5EB319;
+  }
+  
+  .highlight-span {
+    position: absolute;
+    height: 60%;
+    width: 0px;
+    top: 25%;
+    left: 0;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  
+  .main-input:focus ~ .highlight-span {
+    -webkit-animation: input-focus 0.3s ease;
+    animation: input-focus 0.3s ease;
+  }
+  
+  @keyframes input-focus {
+    from {
+      background: #5EB319;
+    }
+  
+    to {
+        width: 100%;
+    }
+  }
+  
+  .submit {
+    margin-top: 1.2rem;
+    padding: 10px 20px;
+    border-radius: 10px;
+    left: 100px;
+  }
+  /********/
+
+    /****Botones****/
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 32px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.button-group {
+  display: flex;
+  margin-top: 50px;
+}
+
+
+.btn-primary {
+    background-color: #4CAF50;
+    color: rgb(0, 0, 0);
+    margin-left: 360px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:hover {
+  background-color: #4B7A25;
+  color: rgb(255, 255, 255);
+  transform: scale(1.05); 
+}
+
+/* Botón secundario */
+.btn-primary1 {
+  background-color: #C5C5C5;
+  color: rgb(0, 0, 0);
+  margin: 0 10px;
+  padding: 12px 40px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary1:hover {
+  background-color: #B31919;
+  color: rgb(255, 255, 255);
+  transform: scale(1.05);
+}
+
+/**** Términos y condiciones Checkbox con efecto bonito ****/
+.termss {
+  display: flex;
+  text-align: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+.termss input {
+  transform: scale(1.5);
+  cursor: pointer;
+}
+
+.termss label {
+  font-size: 14px;
+  color: #242323;
+}
+
+.termss input:checked {
+  background-color: #5EB319;
+}
+
+/***** Nevegacion ****/
+.login {
+  margin-top: 20px;
+  text-align: left;
+  font-size: 17px;
+}
+
+.login a {
+  text-decoration: none;
+  color: #5EB319;
+}
+
+.login a:hover {
+  text-decoration: underline;
+}
+/********/
+
+/***** Nevegacion ****/
+.termss {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 17px;
+}
+
+.termss a {
+  text-decoration: none;
+  color: #5EB319;
+}
+
+.termss a:hover {
+  text-decoration: underline;
+}
+/********/
+
+/****Spinner****/
+.container1 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: auto;
+  border-radius: 50%;
+  height: 96px;
+  width: 96px;
+  animation: rotate_3922 1.2s linear infinite;
+  background-color: #9b59b6;
+  background-image: linear-gradient(#9b59b6, #84cdfa, #5ad1cd);
+}
+
+.container1 span {
+  position: absolute;
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+  background-color: #9b59b6;
+  background-image: linear-gradient(#9b59b6, #84cdfa, #5ad1cd);
+}
+
+.container1 span:nth-of-type(1) {
+  filter: blur(5px);
+}
+
+.container1 span:nth-of-type(2) {
+  filter: blur(10px);
+}
+
+.container1 span:nth-of-type(3) {
+  filter: blur(25px);
+}
+
+.container1 span:nth-of-type(4) {
+  filter: blur(50px);
+}
+
+.container1::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  background-color: #fff;
+  border: solid 5px #ffffff;
+  border-radius: 50%;
+}
+
+@keyframes rotate_3922 {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+/********/
+
+/**** Botón deshabilitado hasta aceptar términos ****/
+.btn[disabled] {
+  background-color: #C5C5C5;
+  cursor: not-allowed;
+}
+/********/

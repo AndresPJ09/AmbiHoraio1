@@ -1,0 +1,432 @@
+/**** Fondo de la página ****/
+.bg-image {
+    background-image: url('../assets/image 2.jpg');
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    min-height: 100vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 20px;
+    overflow: hidden; 
+  }
+  
+  .bg-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+  }
+  
+  @media (max-width: 768px) {
+    .bg-image {
+      padding: 10px; 
+      background-size: cover; 
+    }
+  }
+  
+  @media (max-width: 300px) {
+    .bg-image {
+      background-size: contain; 
+      background-position: top; 
+    }
+  }
+  /********/
+  
+/**** Container ****/
+.container-right {
+  background-color: rgba(255, 255, 255, 0.8705882353);
+  border-radius: 40px;
+  width: 30%;
+  min-width: 300px;
+  padding: 40px;
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  z-index: 2;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding-top: 100px;
+  }
+  
+  @media (max-width: 768px) {
+    .container-right {
+      width: 70%; /* Ancho más grande en pantallas medianas */
+      right: 10px; /* Menor margen a la derecha */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .container-right {
+      width: 90%; /* Muy ancho en pantallas pequeñas */
+      right: 0; /* Elimina el margen a la derecha */
+      left: 0; /* Se asegura de que el contenedor esté completamente centrado */
+      margin: 0 auto; /* Centra el contenedor horizontalmente */
+      padding: 50px; /* Reduce el espaciado interno */
+      transform: translateY(-50%); /* Sigue centrado verticalmente */
+    }
+  }
+  /********/
+  
+
+/**** Estilo botono de inicio ****/
+  .group {
+    position: relative;
+    margin-bottom: 50px;
+    top: 10px;
+  }
+  
+  .container-1 {
+    padding-top: 30px;
+  }
+  
+  .main-input {
+    font-size: 16px;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #6c6c6c;
+    background: transparent;
+    color: #242323;
+  }
+  
+  .main-input:focus {
+    outline: none;
+    border-bottom-color: #5EB319;
+  }
+  
+  .lebal-email {
+    color: #999999;
+    font-size: 18px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+  }
+  
+  .main-input:focus ~ .lebal-email,
+  .main-input:valid ~ .lebal-email {
+    top: -20px;
+    font-size: 14px;
+    color: #5EB319;
+  }
+  
+  .highlight-span {
+    position: absolute;
+    height: 60%;
+    width: 0px;
+    top: 25%;
+    left: 0;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  
+  .main-input:focus ~ .highlight-span {
+    -webkit-animation: input-focus 0.3s ease;
+    animation: input-focus 0.3s ease;
+  }
+  
+  @keyframes input-focus {
+    from {
+      background: #5EB319;
+    }
+  
+    to {
+        width: 100%;
+    }
+  }
+  
+  .submit {
+    margin-top: 1.2rem;
+    padding: 10px 20px;
+    border-radius: 10px;
+    left: 100px;
+  }
+  /********/
+
+ /**** Boton de inicio sesión****/
+  button {
+    outline: none;
+    cursor: pointer;
+    border: none;
+    padding: 0.9rem 2rem;
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    position: relative;
+    display: inline-block;
+    letter-spacing: 0.05rem;
+    font-weight: 700;
+    font-size: 17px;
+    border-radius: 500px;
+    overflow: hidden;
+    background: #5EB319;
+    color: ghostwhite;
+    margin: 20px auto 0; /* Centrado */
+    display: block;
+   }
+   
+   button span {
+    position: relative;
+    z-index: 10;
+    transition: color 0.4s;
+   }
+   
+   button:hover span {
+    color: black;
+   }
+   
+   button::before,
+   button::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+   }
+   
+   button::before {
+    content: "";
+    background: #000;
+    width: 120%;
+    left: -10%;
+    transform: skew(30deg);
+    transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+   }
+   
+   button:hover::before {
+    transform: translate3d(100%, 0, 0);
+   }
+   /********/
+   
+/**** Nevegacion ****/
+.forgot-password {
+    margin-top: 10px;
+    text-align: right;
+    font-size: 17px;
+}
+
+.forgot-password a {
+    text-decoration: none;
+    color: #2d2e2d;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+/********/
+
+/***** Nevegacion ****/
+.creat-account {
+    margin-top: 20px;
+    text-align: left;
+    font-size: 17px;
+}
+
+.creat-account a {
+    text-decoration: none;
+    color: #5EB319;
+}
+
+.creat-account a:hover {
+    text-decoration: underline;
+}
+/********/
+
+/****Spinner****/
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    height: 96px;
+    width: 96px;
+    animation: rotate_3922 1.2s linear infinite;
+    background-color: #9b59b6;
+    background-image: linear-gradient(#9b59b6, #84cdfa, #5ad1cd);
+  }
+  
+  .container span {
+    position: absolute;
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+    background-color: #9b59b6;
+    background-image: linear-gradient(#9b59b6, #84cdfa, #5ad1cd);
+  }
+  
+  .container span:nth-of-type(1) {
+    filter: blur(5px);
+  }
+  
+  .container span:nth-of-type(2) {
+    filter: blur(10px);
+  }
+  
+  .container span:nth-of-type(3) {
+    filter: blur(25px);
+  }
+  
+  .container span:nth-of-type(4) {
+    filter: blur(50px);
+  }
+  
+  .container::after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    background-color: #fff;
+    border: solid 5px #ffffff;
+    border-radius: 50%;
+  }
+  
+  @keyframes rotate_3922 {
+    from {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+  
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+  /********/
+
+ /****log Personal****/
+  .nav-logo {
+    width: 100%;
+    text-align: left;
+    margin-top: -720px;
+  }
+  
+  .nav-logo svg {
+    width: 100px; 
+    height: 100px;
+  }
+
+  /* Media query para pantallas más pequeñas (tabletas y móviles) */
+@media (max-width: 768px) {
+  .nav-logo svg {
+    width: 20vw;  /* Aumenta el tamaño del logo al 20% en pantallas más pequeñas */
+  }
+}
+
+@media (max-width: 300px) {
+  .nav-logo svg {
+    width: 30vw;  /* Aumenta aún más el tamaño del logo en pantallas muy pequeñas (celulares) */
+  }
+}
+   /********/
+
+    /****Logo sena****/
+    .nav-logo2 {
+      width: 100%;
+      position: absolute;
+      top: 50%; 
+      left: 50%; 
+      transform: translate(-50%, -50%);
+      z-index: -1;
+      text-align: center;
+      opacity: 0.100; 
+    }
+    
+    .nav-logo2 svg {
+      width: 300px;  
+      height: 300px;
+      display: inline-block;
+    }
+   /********/
+  
+
+   .position-relative {
+    position: relative;
+  }
+  
+  .password-toggle-container {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 20px;
+    user-select: none;
+    z-index: 10;
+  
+    input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+  
+    .checkmark {
+      position: relative;
+      display: block;
+      height: 1.4em;
+      width: 1.4em;
+      border: 2px solid #5EB319;
+      border-radius: 1rem 0rem 1rem;
+      transform: rotate(45deg);
+      transition: all .5s ease-in-out;
+  
+      &:after {
+        content: "";
+        position: absolute;
+        display: none;
+        left: 0.35em;
+        top: 0.20em;
+        width: 0.25em;
+        height: 0.5em;
+        border: solid #5EB319;
+        border-width: 0 0.15em 0.15em 0;
+        transform: rotate(-5deg);
+        animation: upAnimate 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+      }
+    }
+  
+    input:checked ~ .checkmark {
+      box-shadow: 0px 0px 40px 5px #5EB319;
+      border-radius: 1rem 0rem 1rem;
+      background-color: #2195f31f;
+  
+      &:after {
+        display: block;
+      }
+    }
+  }
+  
+  @keyframes upAnimate {
+    from {
+      transform: translate(-20px, -20px) rotate(-5deg);
+      opacity: 0;
+    }
+  
+    to {
+      transform: translate(0, 0) rotate(-5deg);
+      opacity: 1;
+    }
+  }
+  
+  // Ensure the input doesn't overlap with the toggle button
+  .main-input {
+    padding-right: 45px;
+  }
+  
+  

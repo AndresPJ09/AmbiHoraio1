@@ -1,0 +1,99 @@
+<div class="container">
+    <!-- Modal para agregar/editar persona -->
+    <div id="personModal" class="modal" [ngClass]="{'show-modal': isModalOpen}">
+        <div class="modal-content">
+            <span class="close" (click)="closeModal()">&times;</span>
+            <h2>{{ person.id === 0 ? 'Agregar Persona' : 'Editar Persona' }}</h2>
+            <hr class="modal-border">
+
+            <form #personForm="ngForm" (ngSubmit)="onSubmit(personForm)" novalidate>
+                <input type="hidden" name="id" [(ngModel)]="person.id">
+
+                <div class="row">
+                    <div class="col">
+                        <label for="name" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="person.name" required>
+                    </div>
+
+                    <div class="col">
+                        <label for="last_name" class="form-label">Apellido:</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name" [(ngModel)]="person.last_name" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" [(ngModel)]="person.email" required>
+                    </div>
+
+                    <div class="col">
+                        <label for="identification" class="form-label">Identificación:</label>
+                        <input type="text" class="form-control" id="identification" name="identification" [(ngModel)]="person.identification" required>
+                    </div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                      <div class="col" *ngIf="person.id !== 0">
+                        <input 
+                          type="checkbox" 
+                          class="form-check-input bulk-select-checkbox" 
+                          id="state" 
+                          name="state" 
+                          [(ngModel)]="person.state" 
+                          [attr.data-bs-toggle]="'tooltip'" 
+                          [attr.data-bs-placement]="'top'"
+                          [attr.title]="person.state ? 'Activo' : 'Inactivo'" />
+                        <label class="form-check-label" for="state">Estado</label>
+                      </div>
+                    </div>
+                  </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="personForm.invalid">
+                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Título con estilo -->
+    <h2 class="title">Lista de Personas</h2>
+
+    <!-- Botón para abrir el modal de agregar persona -->
+    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar Persona</button>
+
+    <!-- Tabla para mostrar los registros de personas -->
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Identificación</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let person of persons">
+                <td>{{ person.name }}</td>
+                <td>{{ person.last_name }}</td>
+                <td>{{ person.email }}</td>
+                <td>{{ person.identification }}</td>
+                <td>{{ person.state ? 'Activo' : 'Inactivo' }}</td>
+                <td>
+                    <button class="btn-icon edit" (click)="editPersons(person)" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-icon delete" (click)="deletePersons(person.id)" title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

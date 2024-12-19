@@ -1,0 +1,93 @@
+<div class="container">
+
+    <!-- Modal para agregar/editar módulo -->
+    <div id="moduleModal" class="modal" [ngClass]="{'show-modal': isModalOpen}">
+        <div class="modal-content">
+            <span class="close" (click)="closeModal()">&times;</span>
+            <h2>{{ module.id === 0 ? 'Agregar módulo' : 'Editar módulo' }}</h2>
+
+            <hr class="modal-border">
+
+            <form #moduleForm="ngForm" (ngSubmit)="onSubmit(moduleForm)" novalidate>
+                <input type="hidden" name="id" [(ngModel)]="module.id">
+
+                <div class="row">
+                    <div class="col">
+                        <label for="name" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="module.name" required>
+                    </div>
+
+                    <div class="col">
+                        <label for="description" class="form-label">Descripción:</label>
+                        <input type="text" class="form-control" id="description" name="description" [(ngModel)]="module.description" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="position" class="form-label">Posición:</label>
+                        <input type="position" class="form-control" id="position" name="position" [(ngModel)]="module.position" required>
+                    </div>
+
+                      <div class="col" *ngIf="module.id !== 0">
+                        <input 
+                          type="checkbox" 
+                          class="form-check-input bulk-select-checkbox" 
+                          id="state" 
+                          name="state" 
+                          [(ngModel)]="module.state" 
+                          [attr.data-bs-toggle]="'tooltip'" 
+                          [attr.data-bs-placement]="'top'"
+                          [attr.title]="module.state ? 'Activo' : 'Inactivo'" />
+                        <label class="form-check-label" for="state">Estado</label>
+                      </div>
+                    </div>
+                  
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="moduleForm.invalid">
+                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                </div>
+         
+            </form>
+        </div>
+    </div>
+
+    <!-- Título con estilo -->
+    <h2 class="title">Lista de Módulos</h2>
+
+    <!-- Botón para abrir el modal de agregar módulos -->
+    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar Módulo</button>
+
+    <!-- Tabla para mostrar los registros de módulos -->
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Posición</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let module of modules">
+                <td>{{ module.name }}</td>
+                <td>{{ module.description }}</td>
+                <td>{{ module.position }}</td>
+                <td>{{ module.state ? 'Activo' : 'Inactivo' }}</td>
+                <td>
+                    <button class="btn-icon edit" (click)="editModules(module)" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-icon delete" (click)="deleteModules(module.id)" title="Eliminar">
+                        <i class="bi bi-trash3-fill"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

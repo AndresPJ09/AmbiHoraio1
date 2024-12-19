@@ -1,0 +1,70 @@
+<div class="bg-image">
+    <div class="container">
+      <h2>Crear Cuenta</h2>
+
+        <!-- Spinner -->
+        <div *ngIf="isLoading" class="container1">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+      </div>
+
+      <div class="login">
+        <p>Si ya tienes una cuenta regístrada, puede <a (click)="onLogin()">Iniciar sesión !</a></p>
+    </div>
+      <form>
+        <!-- Nombre y Apellidos -->
+        <div class="group">
+          <input required="true" type="name" class="main-input" id="name" [(ngModel)]="person.name" name="name" />
+          <span class="highlight-span"></span>
+          <label  class="lebal-email" for="name">Nombre</label>
+        </div>
+  
+        <div class="group">
+          <input required="true" type="text" class="main-input" id="last_name" [(ngModel)]="person.last_name" name="last_name" />
+          <span class="highlight-span"></span>
+          <label class="lebal-email" for="last_name">Apellidos</label>
+        </div>
+  
+        <!-- Email e Identificación -->
+        <div class="group">
+          <input required="true" type="text" class="main-input" id="email" [(ngModel)]="person.email" name="email"  />
+          <span class="highlight-span"></span>
+          <label class="lebal-email" for="email">Correo Electrónico</label>
+        </div>
+  
+        <div class="group">
+          <input required="true" type="text" class="main-input" id="identification" [(ngModel)]="person.identification" name="identification"  />
+          <span class="highlight-span"></span>
+          <label class="lebal-email" for="identification">Identificación</label>
+        </div>
+  
+        <!-- Usuario y Contraseña -->
+        <div class="group">
+          <input required="true" type="text" class="main-input" id="username" [(ngModel)]="user.username" name="username" />
+          <span class="highlight-span"></span>
+          <label class="lebal-email" for="username">Usuario</label>
+        </div>
+  
+        <div class="group">
+          <input required="true" type="password" class="main-input" id="password" [(ngModel)]="user.password" name="password"/>
+          <span class="highlight-span"></span>
+          <label class="lebal-email" for="password">Contraseña</label>
+        </div>
+  
+        <!-- Aceptación de términos y condiciones -->
+        <div class="termss">
+          <input type="checkbox" id="terms" [(ngModel)]="termsAccepted" name="terms"/>
+          <a for="terms" (click)="redirectToTerms()">Acepto los términos y condiciones</a>
+        </div>
+  
+        <!-- Botones de acción -->
+        <div class="button-group">
+          <button type="button"class="btn btn-primary1"  (click)="confirmExit()">Retroceder</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!termsAccepted" (click)="onSubmit()">Crear Cuenta</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

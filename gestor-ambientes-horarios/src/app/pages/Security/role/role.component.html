@@ -1,0 +1,95 @@
+<div class="container">
+    <!-- Modal para agregar/editar rol -->
+    <div id="roleModal" class="modal" [ngClass]="{'show-modal': isModalOpen}">
+        <div class="modal-content">
+            <span class="close" (click)="closeModal()">&times;</span>
+            <h2>{{ role.id === 0 ? 'Agregar role' : 'Editar role' }}</h2>
+            <hr class="modal-border">
+
+            <form #roleForm="ngForm" (ngSubmit)="onSubmit(roleForm)" novalidate>
+                <input type="hidden" name="id" [(ngModel)]="role.id">
+
+                <div class="row">
+                    <div class="col">
+                        <label for="name" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="role.name" required>
+                    </div>
+
+                    <div class="col">
+                        <label for="description" class="form-label">Descripción:</label>
+                        <input type="text" class="form-control" id="description" name="description" [(ngModel)]="role.description" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                <div class="col">
+                    <!-- Views Asociadas -->
+                    <label for="views">Vistas asociadas:</label>
+                    <div class="form-label">
+                        <p-multiSelect id="views" name="views" [options]="views" [(ngModel)]="role.views" required
+                            #viewsField="ngModel" optionLabel="name" placeholder="Selecciona views" scrollHeight="250px"
+                            display="chip">
+                        </p-multiSelect>
+                    </div>
+                </div>
+
+                <div class="modal-body">
+                      <div class="col" *ngIf="role.id !== 0">
+                        <input 
+                          type="checkbox" 
+                          class="form-check-input bulk-select-checkbox" 
+                          id="state" 
+                          name="state" 
+                          [(ngModel)]="role.state" 
+                          [attr.data-bs-toggle]="'tooltip'" 
+                          [attr.data-bs-placement]="'top'"
+                          [attr.title]="role.state ? 'Activo' : 'Inactivo'" />
+                        <label class="form-check-label" for="state">Estado</label>
+                      </div>
+                    </div>
+                  </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="roleForm.invalid">
+                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Título con estilo -->
+    <h2 class="title">Lista de roles</h2>
+
+    <!-- Botón para abrir el modal de agregar rol -->
+    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar rol</button> 
+ 
+ <!-- Tabla para mostrar los registros de roles -->
+ <table class="table table-bordered table-hover table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Vistas</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let role of roles">
+            <td>{{ role.name }}</td>
+            <td>{{ role.description }}</td>
+            <td>{{ role.viewString || 'Ninguno' }}</td>
+            <td>{{ role.state ? 'Activo' : 'Inactivo' }}</td>
+            <td>
+                <button class="btn-icon edit" (click)="editRoles(role)" title="Editar">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn-icon delete" (click)="deleteRoles(role.id)" title="Eliminar">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>

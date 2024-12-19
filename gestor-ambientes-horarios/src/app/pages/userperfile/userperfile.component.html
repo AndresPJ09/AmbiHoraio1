@@ -1,0 +1,76 @@
+<div class="container">
+    <h2 class="title">Editar perfil</h2>
+
+    <!-- Imagen de Perfil -->
+    <div class="profile-image">
+        <img [src]="profileImageUrl" alt="Foto de perfil" class="profile-pic">
+        <p class="change-photo-text" (click)="triggerFileInput()">Cambiar foto de perfil</p>
+        <input type="file" (change)="onFileSelected($event)" id="fileInput" hidden>
+    </div>
+
+    <!-- Sección de datos del usuario -->
+    <div class="user-data">
+        <div class="row">
+            <div class="col">
+                <label for="user" class="form-label">Usuario</label>
+                <input type="text" id="user" class="form-control input-field" placeholder="Ingresar usuario"
+                    [(ngModel)]="username" name="username" required>
+            </div>
+
+            <!-- Campos de Contraseña -->
+            <div class="col">
+                <div class="position-relative">
+                    <label for="newPassword" class="form-label">Contraseña</label>
+                    <div class="password-input-container">
+                        <input [type]="showPassword ? 'text' : 'password'" id="password"
+                            class="form-control input-field" placeholder="Nueva Contraseña" [(ngModel)]="password"
+                            name="password" required>
+                        <label class="password-toggle-container">
+                            <input type="checkbox" (change)="togglePasswordVisibility()" [checked]="showPassword">
+                            <div class="checkmark"></div>
+                        </label>
+                    </div>
+                </div>
+
+
+
+                <button (click)="saveChanges()" class="save-btn">Guardar cambios</button>
+            </div>
+
+            <!-- Sección para Actualizar otros datos de persona -->
+            <div class="user-data" (ngInit)="getPersons()">
+                <h3 class="title">Datos del usuario</h3>
+
+                <div class="person-data">
+                    <div class="row">
+                        <div class="col">
+                            <label for="firstName" class="form-label">Nombres</label>
+                            <input type="text" id="firstName" class="form-control input-field" [(ngModel)]="person.name"
+                                placeholder="Ingresar nombre">
+                        </div>
+
+                        <div class="col">
+                            <label for="lastName" class="form-label">Apellidos</label>
+                            <input type="text" id="lastName" class="form-control input-field"
+                                [(ngModel)]="person.last_name" placeholder="Ingresar apellido">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label for="identification" class="form-label">Identificación</label>
+                            <input type="text" id="identification" class="form-control input-field"
+                                [(ngModel)]="person.identification" placeholder="Ingresar tipo de documento">
+                        </div>
+
+                        <div class="col">
+                            <label for="email" class="form-label">Correo electrónico</label>
+                            <input type="text" id="email" class="form-control input-field" [(ngModel)]="person.email"
+                                placeholder="Ingresar correo electrónico">
+                        </div>
+                    </div>
+
+                    <button (click)="saveChangess()" class="save-btn1">Actualizar datos</button>
+                </div>
+            </div>
+        </div>

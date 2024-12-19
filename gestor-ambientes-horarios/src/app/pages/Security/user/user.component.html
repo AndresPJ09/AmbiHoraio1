@@ -1,0 +1,111 @@
+<div class="container">
+    <!-- Modal para agregar/editar usuario -->
+    <div id="userModal" class="modal" [ngClass]="{'show-modal': isModalOpen}">
+        <div class="modal-content">
+            <span class="close" (click)="closeModal()">&times;</span>
+            <h2>{{ user.id === 0 ? 'Agregar usuario' : 'Editar usuario' }}</h2>
+            <hr class="modal-border">
+
+            <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)" novalidate>
+                <input type="hidden" name="id" [(ngModel)]="user.id">
+
+                <div class="row">
+                    <div class="col">
+                        <label for="username" class="form-label">Nombre de usuario:</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                            [(ngModel)]="user.username" required>
+                    </div>
+
+                    <div class="col">
+                        <label for="password" class="form-label">Contraseña:</label>
+                        <input type="text" class="form-control" id="password" name="password"
+                            [(ngModel)]="user.password" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <!-- Persona -->
+                        <label for="personName">Persona:</label>
+                        <div class="form-label">
+                            <input type="text" class="form-control input-field" matInput [matAutocomplete]="auto"
+                                id="personName" name="personName" [(ngModel)]="user.personName"
+                                (input)="searchpersons($event)" required #personName="ngModel" />
+                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onpersonSelect($event)">
+                                <mat-option *ngFor="let person of filteredPersons" [value]="person.name">
+                                    {{ person.name }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+
+                <div class="col">
+                    <!-- Roles Asociadas -->
+                    <label for="roles">Roles asociadas:</label>
+                    <div class="form-label">
+                        <p-multiSelect id="roles" name="roles" [options]="roles" [(ngModel)]="user.roles" required
+                            #rolesField="ngModel" optionLabel="name" placeholder="Selecciona roles" scrollHeight="250px"
+                            display="chip">
+                        </p-multiSelect>
+                    </div>
+                </div>
+            </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col" *ngIf="user.id !== 0">
+                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
+                                [(ngModel)]="user.state" [attr.data-bs-toggle]="'tooltip'"
+                                [attr.data-bs-placement]="'top'" [attr.title]="user.state ? 'Activo' : 'Inactivo'" />
+                            <label class="form-check-label" for="state">Estado</label>
+                        </div>
+                    </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">
+                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Título con estilo -->
+    <h2 class="title">Lista de usuarios</h2>
+
+    <!-- Botón para abrir el modal de agregar usuario -->
+    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
+        usuario</button>
+
+    <!-- Tabla para mostrar los registros de usuarios -->
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Nombre de Usuario</th>
+                <th>Contraseña</th>
+                <th>Persona</th>
+                <th>Roles</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users">
+                <td>{{ user.username }}</td>
+                <td>{{ user.password }}</td>
+                <td>{{ getPersonName(user.personId) }}</td>
+                <td>{{ user.roleString || 'Ninguno' }}</td>
+                <td>{{ user.state ? 'Activo' : 'Inactivo' }}</td>
+                <td>
+                    <button class="btn-icon edit" (click)="editUsers(user)" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-icon delete" (click)="deleteUsers(user.id)" title="Eliminar">
+                        <i class="bi bi-trash3-fill"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>

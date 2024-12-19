@@ -1,0 +1,262 @@
+/* Título en color verde */
+.title {
+    color: #5EB319;
+    text-align: left;
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 40px;
+}
+
+/* Botón Agregar Nuevo */
+.add-btn {
+    float: right;
+    margin-bottom: 20px;
+    border: none;
+}
+
+/* Modal container */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.show-modal {
+    display: block;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 13% auto;
+    padding: 20px;
+    width: 50%;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.row {
+    padding: 14px;
+}
+
+.close {
+    position: absolute;
+    top: -4px;
+    right: 10px;
+    font-size: 30px;
+    color: #000;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 5px;
+  }
+  
+  .close:hover {
+    color: red; /* Optional: change color on hover */
+  }
+
+/* Add space between Description and State */
+.form-group+.form-group {
+    margin-top: 15px;
+    /* Adjust margin as needed */
+}
+
+/* Style checkbox */
+.form-check-input {
+    margin-top: 10px;
+    transform: scale(1.8);
+}
+
+.state-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-check-label {
+    margin-right: 10px;
+}
+
+/* Botones del modal de cerrar y agregar */
+.btn-secondary {
+    background-color: #ff0000;
+    /* Secondary grayish color */
+    color: rgb(0, 0, 0);
+    border: none;
+}
+
+.btn-secondary:hover {
+    background-color: #ff0000;
+    color: rgb(255, 255, 255);
+}
+
+.btn-primary {
+    background-color: #5EB319;
+    color: rgb(0, 0, 0);
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #5EB319;
+    color: rgb(255, 255, 255);
+}
+
+.btn-success {
+    background-color: #5EB319;
+    color: rgb(0, 0, 0);
+}
+
+.btn-success:hover {
+    background-color: #5EB319;
+    color: rgb(255, 255, 255);
+}
+
+/* Iconoes de la tabla de eliminar y editar*/
+.btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.btn-icon.edit {
+    color: #000000;
+}
+
+.btn-icon.delete {
+    color: #000000;
+}
+
+.btn-icon.edit:hover {
+    color: #007bff;
+    /* Green */
+}
+
+.btn-icon.delete:hover {
+    color: #ff0000;
+    /* Red */
+}
+
+.input-field {
+    transition: background-color 0.3s ease;
+}
+
+/* Estilo cuando el campo de entrada está en foco */
+.input-field:focus {
+    border: 1px solid #5EB319 !important;
+    outline: none !important;
+    box-shadow: 0 0 5px rgba(68, 227, 42, 0.5);
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    transition: background-color 0.3s;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    /* Color al pasar el mouse */
+}
+
+
+/* Estilo del contenedor de ng-select */
+.ng-select {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #fff;
+    height: 37px;
+}
+
+
+/* Estilo del contenedor de las opciones */
+.option-container {
+    width: 150px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f5f5f5;
+    margin-bottom: 1px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Alineación y separación del icono */
+.option-container i {
+    margin-right: 1px;
+    font-size: 18px;
+    color: #555;
+}
+
+/* Texto de la opción */
+.custom-option-text {
+    font-size: 14px;
+    color: #333;
+}
+
+/* Hover en las opciones */
+.option-container:hover {
+    background-color: #e0e0e0;
+    cursor: pointer;
+}
+
+.container {
+    position: relative;
+}
+
+.top-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.top-container>* {
+    flex-grow: 0.1;
+}
+
+
+/***** Estilos para el checkbox personalizado ****/
+.bulk-select-checkbox {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #44E32A; /* Borde verde */
+    border-radius: 4px;
+    position: relative;
+    margin: 0 auto;
+    cursor: pointer;
+    transition: all 0.2s ease; /* Efecto de transición */
+    background-color: white; /* Fondo blanco */
+  }
+  
+  .bulk-select-checkbox:checked {
+    background-color: #5EB319; /* Color verde cuando está activado */
+    border-color: #5EB319; /* Borde verde cuando está activado */
+  }
+  
+  .bulk-select-checkbox:checked + .form-check-label {
+    color: #5EB319; /* Cambiar color de la etiqueta a verde cuando está marcado */
+  }
+  
+  /* Estilos para el tooltip */
+  .tooltip-inner {
+    background-color: #5EB319; /* Fondo verde para el tooltip */
+    color: white; /* Color de texto blanco en el tooltip */
+    font-size: 0.9em;
+  }
+  
+  .tooltip-arrow {
+    border-top-color: #5EB319 !important; /* Flecha del tooltip en color verde */
+  }
+  
+  .form-check-label {
+    margin-left: 12px;
+}

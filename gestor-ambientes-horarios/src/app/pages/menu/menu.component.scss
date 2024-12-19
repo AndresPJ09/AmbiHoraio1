@@ -1,0 +1,468 @@
+/**** Estilos para el menú ****/
+.dashboard {
+  width: 336px;
+  background-color: #F2F2F2;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Estilos para el título del dashboard */
+.dashboard-title {
+  margin: 20px 0;
+  font-size: 24px;
+  text-align: center;
+}
+
+/* Estilo para la lista de enlaces */
+.dashboard ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+  width: 100%;
+}
+
+/* Estilos para los enlaces dentro del dashboard */
+.dashboard a {
+  color: black;
+  text-decoration: none;
+  font-size: 18px;
+  display: flex;
+  display: block;
+  padding: 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.dashboard a:hover,
+.dashboard a.active {
+  background-color: #5EB319;
+  border: 1px solid #5EB319;
+  border-radius: 5px;
+}
+
+/* Estilos específicos para el acordeón dentro del dashboard */
+.dashboard .accordion-button {
+  background-color: #F2F2F2;
+  color: black;
+  border: none;
+  width: 100%;
+  text-align: left;
+  padding-left: 10px;
+  font-size: 18px;
+}
+
+.dashboard .accordion-button i {
+  margin-right: 8px;
+}
+
+/* Elimina el efecto de selección del acordeón */
+.dashboard .accordion-button:focus {
+  box-shadow: none;
+  background-color: #5EB319;
+  outline: none;
+}
+
+.dashboard .accordion-button:hover {
+  color: black;
+  background-color: #5EB319;
+}
+
+.dashboard .accordion-item {
+  border: none;
+  width: 100%;
+}
+
+/* Elimina el borde en el acordeón */
+.dashboard .accordion-collapse {
+  border: none;
+}
+
+/* Estilo para el acordeón cuando está abierto */
+.dashboard .accordion-button:not(.collapsed) {
+  color: black;
+  background-color: #5EB319;
+}
+
+/* Estilo para el cuerpo del acordeón */
+.dashboard .accordion-body {
+  padding: 0;
+  background-color: #F2F2F2;
+}
+
+/* Estilo para los elementos de la lista dentro del acordeón */
+.dashboard .list-group-item {
+  list-style-type: none;
+  padding: 10px;
+  margin: 0;
+  background-color: #F2F2F2;
+  border: none;
+  text-align: center;
+}
+
+.dashboard .list-group-item {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  flex-grow: 1;
+  width: 100%;
+}
+
+.dashboard .list-group-item a {
+  display: flex;
+  align-items: center;
+}
+
+.dashboard .list-group-item a i {
+  margin-right: 8px;
+}
+
+/********/
+
+/**** Estilos para el boton de cerrar sesión ****/
+.logout {
+  margin-bottom: 20%;
+  color: black;
+}
+
+.logout:hover {
+  color: #008f39;
+  cursor: pointer;
+}
+
+.logout i {
+  transition: color 0.3s ease;
+}
+
+.logout:hover i {
+  color: #008f39;
+}
+
+/**** Estilos para el menú ****/
+
+/**** Estilos para el logo ****/
+.nav-logo {
+  width: 100%;
+  text-align: center;
+  margin: 40px;
+  /* Espacio entre la imagen y el navbar */
+}
+
+.nav-logo svg {
+  width: 100px;
+  /* Establece el ancho deseado */
+  height: 100px;
+  /* Establece la altura deseada */
+}
+
+/********/
+
+/**** Estilos personalizados para las alertas SweetAlert2 *****/
+.custom-swal-container {
+  background-color: #f0f4f8;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.custom-swal-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+.custom-swal-confirm {
+  background-color: #5EB319;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  /* Transiciones suaves */
+}
+
+.custom-swal-confirm:hover {
+  background-color: #36c236;
+  transform: scale(1.05);
+}
+
+.custom-swal-cancel {
+  background-color: #f44336;
+  color: rgb(0, 0, 0);
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.custom-swal-cancel:hover {
+  background-color: #d32f2f;
+  transform: scale(1.05);
+}
+
+.custom-swal-popup {
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+/********/
+
+/**** Dashboard responsive ****/
+@media (max-width: 768px) {
+  .dashboard {
+    width: 300px;
+    /* Cambia el tamaño mínimo */
+    transform: translateX(-300px);
+    /* Ocultar el menú fuera de la pantalla por defecto */
+    transition: transform 0.3s ease;
+    position: fixed;
+    z-index: 1000;
+  }
+
+  .dashboard.open {
+    transform: translateX(0);
+    /* Mostrar el menú */
+  }
+
+  .nav-logo {
+    margin: 20px;
+    text-align: center;
+  }
+
+  .nav-container .toggle-menu-btn {
+    display: block;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1500;
+    background-color: #5EB319;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+}
+
+/* Para pantallas grandes, ocultar el botón del menú */
+@media (min-width: 769px) {
+  .nav-container .toggle-menu-btn {
+    display: none;
+  }
+}
+
+/********/
+
+/**** Estilo dropdown perfil ****/
+.profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-profile-dropdown {
+  .btn-userprofile {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #0c0c0c;
+    margin-left: -144px;
+
+    .profile-pic {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .username {
+      font-weight: bold;
+      margin-right: 8px; 
+    }
+    .dropdown-arrow {
+      transition: transform 0.3s ease; 
+    }
+
+    &.dropdown-open .dropdown-arrow {
+      transform: rotate(180deg);
+    }
+  }
+
+  .custom-dropdown-menu {
+    padding: 0;
+
+    .dropdown-item {
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+
+      i {
+        margin-right: 10px;
+        width: 20px;
+        text-align: center;
+      }
+
+      .menu-text {
+        margin-left: 5px;
+      }
+
+      &:hover {
+        background-color: #ffffff;
+        color: #5EB319;
+      }
+    }
+  }
+}
+
+.dropdown-menu.show {
+  display: block;
+  margin-left: -150px;
+  margin-top: 14px;
+}
+
+/********/
+
+/* Estilo base del navbar */
+.nav-container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* Garantiza que el padding no altere el ancho */
+}
+
+.nav-items {
+  background-color: #5EB319;
+  padding: 15px;
+  /* Mantiene el padding de base */
+  margin: 0;
+  list-style-type: none;
+  display: flex;
+  justify-content: flex-end;
+  /* Elementos alineados a la derecha */
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  /* Asegura que ocupe el 100% del contenedor */
+  box-sizing: border-box;
+  /* Incluye padding y bordes en el ancho */
+  flex-wrap: wrap;
+  /* Permite que los elementos bajen de línea si no caben */
+}
+
+/* Evitar que los elementos individuales desborden el contenedor */
+.nav-item {
+  display: inline-block;
+  white-space: nowrap;
+  /* Evita que los elementos se rompan en líneas múltiples */
+}
+
+/* Ajustar íconos o imágenes del navbar */
+.nav-items img,
+.nav-items .menu-icon {
+  height: 40px;
+  max-height: 100%;
+  width: auto;
+}
+
+/* Responsividad para pantallas pequeñas */
+@media (max-width: 742px) {
+  .nav-items {
+    flex-direction: column;
+    /* Los elementos se apilan verticalmente */
+    align-items: center;
+    /* Centra los elementos */
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-items {
+    gap: 10px;
+  }
+
+  .nav-items img,
+  .nav-items .menu-icon {
+    height: 30px;
+    /* Tamaño reducido para íconos */
+  }
+}
+
+@media (max-width: 300px) {
+  .nav-items {
+    gap: 5px;
+    align-items: center;
+  }
+
+  .nav-items img,
+  .nav-items .menu-icon {
+    height: 25px;
+    /* Íconos más pequeños */
+  }
+}
+
+
+.nav-item a {
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+
+}
+
+.nav-item a:hover {
+  background-color: #5EB319;
+  transform: scale(1.1);
+}
+
+.tooltip {
+  visibility: hidden;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px 10px;
+  position: absolute;
+  z-index: 1;
+  top: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #333 transparent;
+}
+
+/* Mostrar el tooltip cuando el usuario pasa el cursor por encima del ítem */
+.nav-item:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.content {
+  padding-top: 60px;
+  margin-left: 0;
+}
