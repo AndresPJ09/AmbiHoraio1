@@ -60,7 +60,6 @@ export class UserperfileComponent implements OnInit {
 
   async loadUserData() {
     await this.loadUser();
-    console.log(this.user);
     this.username = this.user.username;
     this.password = this.user.password;
     this.profileImageUrl = this.user.photo
@@ -77,15 +76,15 @@ export class UserperfileComponent implements OnInit {
 
         this.http.get(`${this.updatePasswordUrl}/${userId}`).subscribe(
           (response: any) => {
+            console.log('User response:', response); 
             this.user.id = response.id;
+            this.user.photo = response.photo;
             this.user.username = response.username;
             this.user.personId = response.personId;
             this.user.password = response.password;
-            this.user.photo = response.photo;
             this.roles = response.roles;
 
-            localStorage.setItem('personId', response.personId.toString());
-            localStorage.setItem('profileImageUrl', this.profileImageUrl as string); 
+            localStorage.setItem('profileImageUrl', response.photo);
 
             resolve();
           },
@@ -106,7 +105,7 @@ export class UserperfileComponent implements OnInit {
     const personId = localStorage.getItem('personId');
     if (personId) {
       this.http.get<any>(`${this.personApiUrl}/${personId}`).subscribe(
-        (person) => { 
+        (person) => {
           this.person = {
             ...person,
           };
@@ -150,9 +149,8 @@ export class UserperfileComponent implements OnInit {
     }
   }
 
-
   saveChanges() {
-    this.updateUser(); 
+    this.updateUser();
   }
 
   saveChangess() {
@@ -162,16 +160,17 @@ export class UserperfileComponent implements OnInit {
   updateUser() {
     const userData = JSON.parse(localStorage.getItem('menu') || '');
     const updatedData = {
-      id: userData.menu[0].userID,
-      username: this.username,
-      password: this.password,
-      personId: this.user.personId,
-      photo: this.user.photo, 
-      roles: this.roles
-    };
 
+        id: userData.menu[0].userID,
+        photo: this.profileImageUrl,
+        username: this.username,
+        password: this.password,
+        personId: this.user.personId,
+        roles: this.roles
+    };
+    console.log('Updated Data:', updatedData);
     const apiUrl = `${this.updatePasswordUrl}/`;
-    this.http.put(apiUrl, updatedData).subscribe(
+    this.http.patch(apiUrl, updatedData).subscribe(
       (response: any) => {
         Swal.fire({
           title: 'Éxito',

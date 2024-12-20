@@ -1,26 +1,36 @@
-import { CanActivateFn } from '@angular/router';
-import { inject } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
-export const authGuard: CanActivateFn = (route, state) => {
-  const authService = inject(AuthService); // Inyecta el servicio de autenticación
+@Injectable({
+  providedIn: 'root'
 
-  // Verifica si el token está presente en el localStorage
-  if (authService.isAuthenticated()) {
-    // Verifica si el menú también está presente
-    const menu = localStorage.getItem("menu");
+})
 
-    if (menu) {
-      // Si el menú está presente, permite el acceso
-      return true;
-    } else {
-      // Si el menú no está presente, redirige al login
-      window.location.href = '/login';
-      return false;
+export class AuthGuard implements CanActivate {
+
+  constructor(public _authService: AuthService,
+    public router: Router) { }
+
+    canActivate(
+      next: ActivatedRouteSnapshot,
+      state: RouterStateSnapshot
+    ): Observable<boolean> | Promise<boolean> | boolean {
+      if (this._authService.isLoggedIn()) {
+        const currentRoute = state.url;
+    
+        // Redirigir al dashboard si intenta acceder a la página de login
+        if (currentRoute === '/login') {
+          this.router.navigate(['/dashboard/home']);
+          return false;
+        }
+        return true;
+      } else {
+        // Redirigir al login si no está autenticado
+        this.router.navigate(['/login']);
+        return false;
+      }
     }
-  } else {
-    // Si no está autenticado, redirige al login
-    window.location.href = '/login'; 
-    return false;
-  }
-};
+    
+}

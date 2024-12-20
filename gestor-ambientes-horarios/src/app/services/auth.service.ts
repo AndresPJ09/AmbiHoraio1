@@ -1,24 +1,22 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
+  constructor() {}
 
-  constructor() { }
-
-  // Método para verificar si el usuario está autenticado
-  isAuthenticated(): boolean {
-    return localStorage.getItem('token') !== null && localStorage.getItem('menu') !== null;
+  isLoggedIn(): boolean {
+    const userData = localStorage.getItem('menu');
+    return !!userData; // Devuelve true si el usuario está autenticado
   }
 
-  // Método para obtener el token (opcional)
-  getToken(): string | null {
-    return localStorage.getItem('token');
+  logout(): void {
+    localStorage.removeItem('menu');
+    localStorage.removeItem('redirectUrl');
   }
 
-  // Método para obtener el menú (opcional)
-  getMenu(): any | null {
-    return JSON.parse(localStorage.getItem('menu') || 'null');
+  getRedirectUrl(): string {
+    return localStorage.getItem('redirectUrl') || '/dashboard/home';
   }
 }

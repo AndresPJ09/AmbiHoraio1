@@ -94,7 +94,7 @@
         <tbody>
             <tr *ngFor="let user of users">
                 <td>{{ user.username }}</td>
-                <td>{{ user.password }}</td>
+                <td>{{ user.password ? '********' : 'No definida' }}</td>
                 <td>{{ getPersonName(user.personId) }}</td>
                 <td>{{ user.roleString || 'Ninguno' }}</td>
                 <td>{{ user.state ? 'Activo' : 'Inactivo' }}</td>

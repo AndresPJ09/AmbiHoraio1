@@ -23,7 +23,7 @@ export class LoginComponent {
 
   private apiUrl = 'http://localhost:5062/login'; 
 
-  constructor(private http: HttpClient, private router: Router, ) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
@@ -52,7 +52,11 @@ export class LoginComponent {
               }
             }
           }).then(() => {
-            this.router.navigate(['/dashboard/home']); // Redirección tras la alerta
+            this.router.navigate(['/dashboard/home']).then(() => {
+              // Reemplazar el historial del navegador para evitar volver al login
+              window.history.replaceState({}, '', '/dashboard/home');
+            });
+             // Redirección tras la alerta
           });
           
         } else {

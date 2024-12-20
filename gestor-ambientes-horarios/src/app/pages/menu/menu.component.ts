@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { UserService } from '../userperfile/user.service';
 
 @Component({
   selector: 'app-menu',
@@ -15,6 +16,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 })
 export class MenuComponent implements OnInit {
   username: string = '';
+  
   user: any = { id: 0, username: '', password: '', photo: '', personId: 0, state: true };
   users: any[] = [];
   person: any = { id: 0, name: '', last_name: '', email: '', identification: '', state: true };
@@ -24,28 +26,33 @@ export class MenuComponent implements OnInit {
   unreadCount = 0;
   menuOpen = false;
   profileImageUrl: string | null = null;
-
+ 
   private updatePasswordUrl = 'http://localhost:5062/api/user';
-
   
   private activeAccordion: string | undefined;
   @ViewChildren('collapse') collapses!: QueryList<ElementRef>;
 
 
-  constructor(private router: Router, private http: HttpClient) { }
+  constructor(private userService: UserService, private router: Router, private http: HttpClient) { }
 
   ngOnInit(): void {
     this.loadMenu();
     this.loadUserData();
+    this.userService.profileImageUrl$.subscribe(imageUrl => {
+      this.profileImageUrl = imageUrl;
+    });
   }
+  
+  loadProfileImage() {
+    this.profileImageUrl = localStorage.getItem('profileImageUrl');
+  }
+
 
   async loadUserData() {
     await this.loadUser();
     this.username = this.user.username;
-    if (this.user.photo) {
-      this.profileImageUrl = `data:image/jpeg;base64,${this.user.photoBase64}`;
-    }
-  }
+    this.profileImageUrl = this.user.photo;
+}
 
   toggleMenu(): void {
     this.menuOpen = !this.menuOpen;
