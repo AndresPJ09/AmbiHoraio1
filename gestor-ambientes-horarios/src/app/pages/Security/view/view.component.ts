@@ -2,12 +2,16 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-view',
   standalone: true,
-  imports: [HttpClientModule, FormsModule, CommonModule],
+  imports: [HttpClientModule, FormsModule, CommonModule, NgSelectModule, MatInputModule, MatAutocompleteModule, NgbTypeaheadModule],
   templateUrl: './view.component.html',
   styleUrl: './view.component.scss'
 })
@@ -16,7 +20,6 @@ export class ViewComponent implements OnInit {
   view: any = { id: 0, name: '', description: '', route: '', moduleId: 0, state: false };
   modules: any[] = [];  // Lista de módulos
   isModalOpen = false;
-  filteredViews: any[] = [];
   filteredModules: any[] = [];
   isDropdownOpen = false;
   isEditing = false;
@@ -48,12 +51,31 @@ export class ViewComponent implements OnInit {
     this.http.get<any[]>(this.modulesUrl).subscribe(
       (modules) => {
         this.modules = modules;
+        console.log(this,modules)
       },
       (error) => {
-        console.error('Error fetching modulos:', error);
+        console.error('Error fetching modules:', error);
       }
     );
   }
+
+  searchmodules(event: any): void {
+    const term = event.target.value.toLowerCase();
+    this.filteredModules = this.modules.filter(module => 
+      module.name.toLowerCase().includes(term)
+    );
+  }
+
+  onmoduleSelect(event: any): void {
+    const selectedmodule = this.modules.find(module => 
+      module.name === event.option.value
+    );
+    if (selectedmodule) {
+        this.view.moduleId = selectedmodule.id;
+        this.view.moduleName = selectedmodule.name;
+        this.filteredModules = [];
+    }
+}
 
   getModuleName(moduleId: number): string {
     const module = this.modules.find(mod => mod.id === moduleId);
@@ -72,7 +94,7 @@ export class ViewComponent implements OnInit {
   }
 
   onSubmit(form: NgForm): void {
-    if (!this.view.moduloId) {
+    if (!this.view.moduleId) {
       Swal.fire('Error', 'Debe seleccionar un módulo válido.', 'error');
       return;
     }
@@ -93,7 +115,11 @@ export class ViewComponent implements OnInit {
   }
   
   editViews(view: any): void {
-    this.view = { ...view };
+    this.view = { ...view,};
+    const selectedmodule = this.modules.find(mod => mod.id === this.view.moduleId);
+     if (selectedmodule) {
+        this.view.moduleName = selectedmodule.name; 
+    }
     this.isEditing = true;
     this.openModal();
   }

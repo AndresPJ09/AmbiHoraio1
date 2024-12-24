@@ -30,11 +30,20 @@
                     </div>
 
                     <div class="col">
-                        <label for="moduleId" class="form-label">Modulo:</label>
-                        <input type="text" class="form-control" id="moduleId" name="moduleId"
-                            [(ngModel)]="view.moduleId" required>
-                    </div>
+                        <!-- Modulo -->
+                        <label for="moduleName">Modulo:</label>
+                        <div class="form-label">
+                            <input type="text" class="form-control input-field" matInput [matAutocomplete]="auto"
+                                id="moduleName" name="moduleName" [(ngModel)]="view.moduleName"
+                                (input)="searchmodules($event)" required #moduleName="ngModel" />
+                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onmoduleSelect($event)">
+                                <mat-option *ngFor="let module of filteredModules" [value]="module.name">
+                                    {{ module.name }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
                 </div>
+            </div>
 
                 <div class="modal-body">
                     <div class="row">

@@ -32,13 +32,6 @@ export class PersonComponent implements OnInit {
     this.getPersons();
   }
 
-  ngAfterViewInit() {
-    // Inicializar tooltips
-    const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    tooltips.forEach(tooltip => new bootstrap.Tooltip(tooltip));
-  }
-
-
   getPersons(): void {
     this.http.get<any[]>(this.apiUrl).subscribe(
       (persons) => {

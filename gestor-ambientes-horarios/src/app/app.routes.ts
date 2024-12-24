@@ -14,6 +14,11 @@ import { ViewComponent } from './pages/Security/view/view.component';
 import { PersonComponent } from './pages/Security/person/person.component';
 import { UserperfileComponent } from './pages/userperfile/userperfile.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { InstructorComponent } from './pages/Parameter/instructor/instructor.component';
+import { NivelComponent } from './pages/Parameter/nivel/nivel.component';
+import { ProgramaComponent } from './pages/Parameter/programa/programa.component';
+import { CompetenciaComponent } from './pages/Parameter/competencia/competencia.component';
+import { AmbienteComponent } from './pages/Parameter/ambiente/ambiente.component';
 
 export const routes: Routes = [
 
@@ -41,7 +46,7 @@ export const routes: Routes = [
     {
         path: 'dashboard',
         component: DashboardComponent,
-        //canActivate: [AuthGuard],
+        canActivate: [AuthGuard],
         children: [
             { path: 'home', component: HomeComponent, },
             { path: 'menu', component: MenuComponent, },
@@ -50,12 +55,18 @@ export const routes: Routes = [
             { path: 'module', component: ModuleComponent, },
             { path: 'view', component: ViewComponent, },
             { path: 'person', component: PersonComponent, },
-            { path: 'userprofile', component: UserperfileComponent, }
+            { path: 'userprofile', component: UserperfileComponent, },
+            { path: 'instructor', component: InstructorComponent, },
+            { path: 'nivel', component: NivelComponent, },
+            { path: 'programa', component: ProgramaComponent, },
+            { path: 'competencia', component: CompetenciaComponent, },
+            { path: 'ambiente', component: AmbienteComponent, }
         ]
     },
     {
         path: '**',
-        component: NotFoundComponent, // Componente para manejar 404
-    }
+        canActivate: [AuthGuard],
+        component: NotFoundComponent // Mostrar 404 solo si está autenticado
+      }
 
 ];

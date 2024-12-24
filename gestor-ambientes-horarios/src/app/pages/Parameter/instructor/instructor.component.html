@@ -1,0 +1,163 @@
+<div class="container">
+
+    <!-- Modal para agregar/editar instructor -->
+    <div id="instructorModal" class="modal" [ngClass]="{'show-modal': isModalOpen}">
+        <div class="modal-content">
+            <span class="close" (click)="closeModal()">&times;</span>
+            <h2>{{ instructor.id === 0 ? 'Agregar instructor' : 'Editar instructor' }}</h2>
+
+            <hr class="modal-border">
+
+            <form #instructorForm="ngForm" (ngSubmit)="onSubmit(instructorForm)" novalidate>
+                <input type="hidden" name="id" [(ngModel)]="instructor.id">
+
+                <div class="row">
+                    <div class="col">
+                        <label for="nombres" class="form-label">Nombres:</label>
+                        <input type="text" class="form-control" id="nombres" name="nombres"
+                            [(ngModel)]="instructor.nombres" required>
+                    </div>
+
+                    <div class="col">
+                        <label for="apellidos" class="form-label">Apellidos:</label>
+                        <input type="text" class="form-control" id="apellidos" name="apellidos"
+                            [(ngModel)]="instructor.apellidos" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="foto" class="form-label">Foto:</label>
+                        <input type="file" class="form-control" id="foto" name="foto" [(ngModel)]="instructor.foto"
+                            accept="image/*">
+                    </div>
+
+                    <div class="col">
+                        <label for="identificacion" class="form-label">Identificación:</label>
+                        <input type="text" class="form-control" id="identificacion" name="identificacion"
+                            [(ngModel)]="instructor.identificacion" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="vinculo" class="form-label">Vinculo:</label>
+                        <input type="text" class="form-control" id="vinculo" name="vinculo"
+                            [(ngModel)]="instructor.vinculo" required>
+                    </div>
+
+                    <div class="col">
+                        <label for="especialidad" class="form-label">Especialidad:</label>
+                        <input type="text" class="form-control" id="especialidad" name="especialidad"
+                            [(ngModel)]="instructor.especialidad" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="correo" class="form-label">Correo:</label>
+                        <input type="email" class="form-control" id="correo" name="correo"
+                            [(ngModel)]="instructor.correo" required>
+                    </div>
+
+                    <div class="col">
+                        <label for="fecha_inicio" class="form-label">Fecha de Inicio:</label>
+                        <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio"
+                            [(ngModel)]="instructor.fecha_inicio" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="periodo" class="form-label">Periodo:</label>
+                        <input type="text" class="form-control" id="periodo" name="periodo"
+                            [(ngModel)]="instructor.periodo" required>
+                    </div>
+
+                        <div class="col">
+                            <label for="horaIngreso" class="form-label">Hora de ingreso:</label>
+                            <input type="time" class="form-control" id="horaIngreso" name="hora_ingreso" [(ngModel)]="instructor.hora_ingreso" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col">
+                            <label for="horaEgreso" class="form-label">Hora de egreso:</label>
+                            <input type="time" class="form-control" id="horaEgreso" name="hora_egreso" [(ngModel)]="instructor.hora_egreso" required>
+                        </div>
+                    
+
+                    <div class="col" *ngIf="instructor.id !== 0">
+                        <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
+                            [(ngModel)]="instructor.state" [attr.data-bs-toggle]="'tooltip'"
+                            [attr.data-bs-placement]="'top'" [attr.title]="instructor.state ? 'Activo' : 'Inactivo'" />
+                        <label class="form-check-label" for="state">Estado</label>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="instructorForm.invalid">
+                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- Título con estilo -->
+    <h2 class="title">Lista de Instrutores</h2>
+
+    <!-- Botón para abrir el modal de agregar instructores -->
+    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
+        Instructor</button>
+
+    <!-- Tabla para mostrar los registros de instructores -->
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Fotos</th>
+                <th>Idnetificaciones</th>
+                <th>Vinculos</th>
+                <th>Especialidades</th>
+                <th>Correos</th>
+                <th>Fechas de inicio</th>
+                <th>Periodos</th>
+                <th>Fecha de ingreso</th>
+                <th>Fecha de egreso</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let instructor of instructores">
+                <td>{{ instructor.nombres }}</td>
+                <td>{{ instructor.apellidos }}</td>
+                <td>{{ instructor.foto }}</td>
+                <td>{{ instructor.identificacion }}</td>
+                <td>{{ instructor.vinculo }}</td>
+                <td>{{ instructor.especialidad }}</td>
+                <td>{{ instructor.correo }}</td>
+                <td>{{ instructor.fecha_inicio }}</td>
+                <td>{{ instructor.periodo }}</td>
+                <td>{{ formatTime(instructor.hora_ingreso) }}</td>
+                <td>{{ formatTime(instructor.hora_egreso) }}</td>
+
+                <td>{{ instructor.state ? 'Activo' : 'Inactivo' }}</td>
+                <td>
+                    <button class="btn-icon edit" (click)="editInstructores(instructor)" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-icon delete" (click)="deleteInstructores(instructor.id)" title="Eliminar">
+                        <i class="bi bi-trash3-fill"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
