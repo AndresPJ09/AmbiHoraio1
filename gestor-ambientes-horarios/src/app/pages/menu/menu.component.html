@@ -11,7 +11,10 @@
          id="dropdownMenuLink" 
          aria-expanded="false"
          (click)="$event.preventDefault()">
-        <img [src]="profileImageUrl" alt="" class="profile-pic">
+         <img [src]="profileImageUrl || 'assets/person-circle.svg'" 
+             alt="Foto de perfil" 
+             class="profile-pic"
+             (error)="profileImageUrl = 'assets/person-circle.svg'">
         <span class="username">{{ username }}</span>
         <i class="fas fa-chevron-down dropdown-arrow"></i>
       </a>

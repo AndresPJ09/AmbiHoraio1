@@ -1,1 +1,82 @@
-<p>competencia works!</p>
+<div class="container">
+
+    <!-- Modal para agregar/editar competencia -->
+    <div id="competenciaModal" class="modal" [ngClass]="{'show-modal': isModalOpen}">
+        <div class="modal-content">
+            <span class="close" (click)="closeModal()">&times;</span>
+            <h2>{{ competencia.id === 0 ? 'Agregar competencia' : 'Editar competencia' }}</h2>
+
+            <hr class="modal-border">
+
+            <form #competenciaForm="ngForm" (ngSubmit)="onSubmit(competenciaForm)" novalidate>
+                <input type="hidden" name="id" [(ngModel)]="competencia.id">
+
+                <div class="row">
+                    <div class="col">
+                        <label for="codigo" class="form-label">Codigo:</label>
+                        <input type="text" class="form-control" id="codigo" name="codigo"
+                            [(ngModel)]="competencia.codigo" required>
+                    </div>
+
+                    <div class="col">
+                        <label for="nombre" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre"
+                            [(ngModel)]="competencia.nombre" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col" *ngIf="competencia.id !== 0">
+                        <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
+                            [(ngModel)]="competencia.state" [attr.data-bs-toggle]="'tooltip'"
+                            [attr.data-bs-placement]="'top'" [attr.title]="competencia.state ? 'Activo' : 'Inactivo'" />
+                        <label class="form-check-label" for="state">Estado</label>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="competenciaForm.invalid">
+                            {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Título con estilo -->
+    <h2 class="title">Lista de competencias</h2>
+
+    <!-- Botón para abrir el modal de agregar competenciaes -->
+    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
+        competencia</button>
+
+    <!-- Tabla para mostrar los registros de competenciaes -->
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Códigos</th>
+                <th>Nombres</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let competencia of competencias">
+                <td>{{ competencia.codigo }}</td>
+                <td>{{ competencia.nombre }}</td>
+                <td>{{ competencia.state ? 'Activo' : 'Inactivo' }}</td>
+                <td>
+                    <button class="btn-icon edit" (click)="editCompetencias(competencia)" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-icon delete" (click)="deleteCompetencias(competencia.id)" title="Eliminar">
+                        <i class="bi bi-trash3-fill"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

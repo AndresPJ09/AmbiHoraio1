@@ -1,1 +1,93 @@
-<p>nivel works!</p>
+<div class="container">
+
+    <!-- Modal para agregar/editar nivel -->
+    <div id="nivelModal" class="modal" [ngClass]="{'show-modal': isModalOpen}">
+        <div class="modal-content">
+            <span class="close" (click)="closeModal()">&times;</span>
+            <h2>{{ nivel.id === 0 ? 'Agregar nivel' : 'Editar nivel' }}</h2>
+
+            <hr class="modal-border">
+
+            <form #nivelForm="ngForm" (ngSubmit)="onSubmit(nivelForm)" novalidate>
+                <input type="hidden" name="id" [(ngModel)]="nivel.id">
+
+                <div class="row">
+                    <div class="col">
+                        <label for="codigo" class="form-label">Codigo:</label>
+                        <input type="text" class="form-control" id="codigo" name="codigo" [(ngModel)]="nivel.codigo" required>
+                    </div>
+
+                    <div class="col">
+                        <label for="nombre" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" [(ngModel)]="nivel.nombre" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="duracion" class="form-label">Duración:</label>
+                        <input type="time" class="form-control" id="duracion" name="duracion" [(ngModel)]="nivel.duracion" required>
+                    </div>
+
+                      <div class="col" *ngIf="nivel.id !== 0">
+                        <input 
+                          type="checkbox" 
+                          class="form-check-input bulk-select-checkbox" 
+                          id="state" 
+                          name="state" 
+                          [(ngModel)]="nivel.state" 
+                          [attr.data-bs-toggle]="'tooltip'" 
+                          [attr.data-bs-placement]="'top'"
+                          [attr.title]="nivel.state ? 'Activo' : 'Inactivo'" />
+                        <label class="form-check-label" for="state">Estado</label>
+                      </div>
+                    </div>
+                  
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="nivelForm.invalid">
+                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                </div>
+         
+            </form>
+        </div>
+    </div>
+
+    <!-- Título con estilo -->
+    <h2 class="title">Lista de Niveles</h2>
+
+    <!-- Botón para abrir el modal de agregar niveles -->
+    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar Nivel</button>
+
+    <!-- Tabla para mostrar los registros de niveles -->
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Códigos</th>
+                <th>Nombres</th>
+                <th>Duraciones</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let nivel of niveles">
+                <td>{{ nivel.codigo }}</td>
+                <td>{{ nivel.nombre }}</td>
+                <td>{{ nivel.duracion }}</td>
+                <td>{{ nivel.state ? 'Activo' : 'Inactivo' }}</td>
+                <td>
+                    <button class="btn-icon edit" (click)="editNiveles(nivel)" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-icon delete" (click)="deleteNiveles(nivel.id)" title="Eliminar">
+                        <i class="bi bi-trash3-fill"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

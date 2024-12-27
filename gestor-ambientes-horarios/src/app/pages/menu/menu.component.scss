@@ -288,8 +288,15 @@
 
     .username {
       font-weight: bold;
+      color: #0c0c0c;
       margin-right: 8px; 
     }
+
+    .username:hover {
+      font-weight: bold;
+      color: #ffffff;
+    }
+
     .dropdown-arrow {
       transition: transform 0.3s ease; 
     }
@@ -358,7 +365,6 @@
   width: 100%;
   /* Asegura que ocupe el 100% del contenedor */
   box-sizing: border-box;
-  /* Incluye padding y bordes en el ancho */
   flex-wrap: wrap;
   /* Permite que los elementos bajen de línea si no caben */
 }
@@ -367,7 +373,6 @@
 .nav-item {
   display: inline-block;
   white-space: nowrap;
-  /* Evita que los elementos se rompan en líneas múltiples */
 }
 
 /* Ajustar íconos o imágenes del navbar */
@@ -382,9 +387,7 @@
 @media (max-width: 742px) {
   .nav-items {
     flex-direction: column;
-    /* Los elementos se apilan verticalmente */
     align-items: center;
-    /* Centra los elementos */
     gap: 15px;
   }
 }
@@ -410,7 +413,6 @@
   .nav-items img,
   .nav-items .menu-icon {
     height: 25px;
-    /* Íconos más pequeños */
   }
 }
 

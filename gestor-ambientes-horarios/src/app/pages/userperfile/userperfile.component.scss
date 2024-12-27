@@ -7,6 +7,15 @@
   font-size: 40px;
 }
 
+.title2 {
+  color: #5EB319;
+  text-align: left;
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 40px;
+}
+
+
 .container {
   position: relative;
 }
@@ -79,6 +88,12 @@
     /* Espacio más reducido debajo del label */
   }
 
+  .col-2 {
+    flex: 0 0 auto;
+    width: 16.66666667%;
+    margin-left: 555px;
+}
+
   input {
     width: 100%;
     padding: 0.5rem;
@@ -110,8 +125,8 @@
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-left: 486px;
   margin-top: 10px;
+  margin-left: 20px;
 
   &:hover {
     background-color: #579722;
@@ -130,6 +145,24 @@
   transition: background-color 0.3s ease;
   margin-left: 1150px;
   margin-top: 10px;
+
+  &:hover {
+    background-color: #579722;
+    color: #ffffff;
+    transform: translateY(-2px);
+  }
+}
+
+.save-btn3 {
+  background-color: #5EB319;
+  color: #000000;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+  margin-left: 995px;
 
   &:hover {
     background-color: #579722;
@@ -238,3 +271,73 @@
   padding-right: 45px;
 }
 /********/
+
+/* Modal container */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.show-modal {
+  display: block;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 13% auto;
+  padding: 20px;
+  width: 50%;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.row {
+  padding: 14px;
+}
+
+.close {
+  position: absolute;
+  top: -4px;
+  right: 10px;
+  font-size: 30px;
+  color: #000;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 5px;
+}
+
+.close:hover {
+  color: red; /* Optional: change color on hover */
+}
+
+/* Botones del modal de cerrar y agregar */
+.btn-secondary {
+  background-color: #ff0000;
+  /* Secondary grayish color */
+  color: rgb(0, 0, 0);
+  border: none;
+}
+
+.btn-secondary:hover {
+  background-color: #ff0000;
+  color: rgb(255, 255, 255);
+}
+
+.btn-primary {
+  background-color: #5EB319;
+  color: rgb(0, 0, 0);
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #5EB319;
+  color: rgb(255, 255, 255);
+}

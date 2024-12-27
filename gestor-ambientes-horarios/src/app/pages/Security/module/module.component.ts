@@ -5,16 +5,6 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import Swal from 'sweetalert2';
 
-interface Module {
-  id: number;
-  name: string;
-  description: string;
-  position: number | null;
-  state: boolean;
-  selected: boolean;
-  [key: string]: any; 
-}
-
 @Component({
   selector: 'app-module',
   standalone: true,
@@ -23,9 +13,8 @@ interface Module {
   styleUrl: './module.component.scss'
 })
 export class ModuleComponent implements OnInit {
-  modules: Module[] = [];
-  module: Module = { id: 0, name: '', description: '', position: null, state: true, selected: false };
-  filterModules: Module[] = [];
+  modules: any[] = [];
+  module: any = { id: 0, name: '', description: '', position: null, state: true };
   isModalOpen = false;
   isDropdownOpen = false;
   isEditing = false;
@@ -40,9 +29,9 @@ export class ModuleComponent implements OnInit {
   }
 
   getModules(): void {
-    this.http.get<Module[]>(this.apiUrl).subscribe(
+    this.http.get<any[]>(this.apiUrl).subscribe(
       (modules) => {
-        this.modules = modules.map(module => ({ ...module, selected: false }));
+        this.modules = modules.map(module => ({ ...module}));
         this.cdr.detectChanges();
       },
       (error) => {
@@ -69,7 +58,7 @@ export class ModuleComponent implements OnInit {
 
     if (this.module.id === 0) {
       // Crear nuevo módulo
-      this.http.post<Module>(this.apiUrl, this.module).subscribe(
+      this.http.post<any>(this.apiUrl, this.module).subscribe(
         (newModule) => {
           this.modules.push({ ...newModule, selected: false });
           this.closeModal();
@@ -99,7 +88,7 @@ export class ModuleComponent implements OnInit {
     }
   }
 
-  editModules(module: Module): void {
+  editModules(module: any): void {
     this.module = { ...module };
     this.openModal();
     this.isEditing = true;
@@ -131,6 +120,6 @@ export class ModuleComponent implements OnInit {
   }
 
   resetForm(): void {
-    this.module = { id: 0, name: '', description: '', position: null, state: false, selected: false };
+    this.module = { id: 0, name: '', description: '', position: null, state: true };
   }
 }

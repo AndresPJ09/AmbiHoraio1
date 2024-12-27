@@ -16,7 +16,7 @@ import { UserService } from '../userperfile/user.service';
 })
 export class MenuComponent implements OnInit {
   username: string = '';
-  
+
   user: any = { id: 0, username: '', password: '', photo: '', personId: 0, state: true };
   users: any[] = [];
   person: any = { id: 0, name: '', last_name: '', email: '', identification: '', state: true };
@@ -25,10 +25,11 @@ export class MenuComponent implements OnInit {
   menu: any[] = [];
   unreadCount = 0;
   menuOpen = false;
-  profileImageUrl: string | null = null;
- 
-  private updatePasswordUrl = 'http://localhost:5062/api/user';
   
+  profileImageUrl: string | null = null;
+
+  private updatePasswordUrl = 'http://localhost:5062/api/user';
+
   private activeAccordion: string | undefined;
   @ViewChildren('collapse') collapses!: QueryList<ElementRef>;
 
@@ -42,17 +43,15 @@ export class MenuComponent implements OnInit {
       this.profileImageUrl = imageUrl;
     });
   }
-  
+
   loadProfileImage() {
     this.profileImageUrl = localStorage.getItem('profileImageUrl');
   }
 
-
   async loadUserData() {
     await this.loadUser();
     this.username = this.user.username;
-    this.profileImageUrl = this.user.photo;
-}
+  }
 
   toggleMenu(): void {
     this.menuOpen = !this.menuOpen;
@@ -63,19 +62,23 @@ export class MenuComponent implements OnInit {
       const storedData = localStorage.getItem('menu');
       const parsedData = storedData ? JSON.parse(storedData) : null;
 
-      if (parsedData && parsedData.menu && parsedData.menu[0].userID) {
+      if (parsedData?.menu?.[0]?.userID) {
         const userId = parsedData.menu[0].userID;
+
 
         this.http.get(`${this.updatePasswordUrl}/${userId}`).subscribe(
           (response: any) => {
             this.user.id = response.id;
             this.user.username = response.username;
-            this.user.personId = response.personId;
-            this.user.password = response.password;
-            this.user.photo = response.photo;
-            this.roles = response.roles;
-
             localStorage.setItem('personId', response.personId.toString());
+
+            // Actualizamos la imagen de perfil
+            if (response.photoBase64) {
+              this.profileImageUrl = 'data:image/jpeg;base64,' + response.photoBase64;
+            } else {
+              // Imagen por defecto si no hay foto
+              this.profileImageUrl = 'assets/person-circle.svg';
+            }
 
             resolve();
           },
@@ -118,7 +121,7 @@ export class MenuComponent implements OnInit {
       cancelButtonText: 'Cancelar',
       reverseButtons: true,
 
-      confirmButtonColor: '#36c236',
+      confirmButtonColor: '#5EB319',
       cancelButtonColor: '#ff0000',
     }).then((result) => {
       if (result.isConfirmed) {

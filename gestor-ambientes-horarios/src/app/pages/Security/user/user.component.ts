@@ -143,7 +143,11 @@ export class UserComponent implements OnInit {
   }
 
   editUsers(user: any): void {
-    this.user = { ...user, roles: user.roles.map((role: any) => ({ id: role.id, textoMostrar: role.textoMostrar })) };
+    this.user = { ...user,   roles: user.roles 
+      ? user.roles.map((role: any) => ({ id: role.id, textoMostrar: role.textoMostrar })) 
+      : []
+  };
+
     const selectedperson = this.persons.find(per => per.id === this.user.personId);
     if (selectedperson) {
         this.user.personName = selectedperson.name; 

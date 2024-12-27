@@ -28,8 +28,9 @@
                 <div class="row">
                     <div class="col">
                         <label for="foto" class="form-label">Foto:</label>
-                        <input type="file" class="form-control" id="foto" name="foto" [(ngModel)]="instructor.foto"
-                            accept="image/*">
+                        <input type="file" class="form-control" id="foto" name="foto" accept="image/*"
+                            (change)="onFileSelected($event)">
+
                     </div>
 
                     <div class="col">
@@ -61,7 +62,7 @@
                     </div>
 
                     <div class="col">
-                        <label for="fecha_inicio" class="form-label">Fecha de Inicio:</label>
+                        <label for="fecha_inicio" class="form-label  input-field">Fecha de Inicio:</label>
                         <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio"
                             [(ngModel)]="instructor.fecha_inicio" required>
                     </div>
@@ -74,18 +75,20 @@
                             [(ngModel)]="instructor.periodo" required>
                     </div>
 
-                        <div class="col">
-                            <label for="horaIngreso" class="form-label">Hora de ingreso:</label>
-                            <input type="time" class="form-control" id="horaIngreso" name="hora_ingreso" [(ngModel)]="instructor.hora_ingreso" required>
-                        </div>
+                    <div class="col">
+                        <label for="horaIngreso" class="form-label">Hora de ingreso:</label>
+                        <input type="time" class="form-control" id="horaIngreso" name="hora_ingreso"
+                            [(ngModel)]="instructor.hora_ingreso" required>
                     </div>
-                    
-                    <div class="row">
-                        <div class="col">
-                            <label for="horaEgreso" class="form-label">Hora de egreso:</label>
-                            <input type="time" class="form-control" id="horaEgreso" name="hora_egreso" [(ngModel)]="instructor.hora_egreso" required>
-                        </div>
-                    
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="horaEgreso" class="form-label">Hora de egreso:</label>
+                        <input type="time" class="form-control" id="horaEgreso" name="hora_egreso"
+                            [(ngModel)]="instructor.hora_egreso" required>
+                    </div>
+
 
                     <div class="col" *ngIf="instructor.id !== 0">
                         <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"

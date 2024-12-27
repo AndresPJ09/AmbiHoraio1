@@ -14,15 +14,28 @@ import Swal from 'sweetalert2';
 })
 export class InstructorComponent implements OnInit {
   instructores: any[] = [];
-  instructor: any = { id: 0, nombres: '', apellidos: '', foto: '', identificacion: '', vinculo: '', especialidad: '', correo: '', fecha_inicio: new Date().toISOString().slice(0, 10), periodo: '', hora_ingreso: '', hora_egreso: '', state: true };
+  instructor: any = {
+    id: 0,
+    nombres: '',
+    apellidos: '',
+    foto: null,
+    identificacion: '',
+    vinculo: '',
+    especialidad: '',
+    correo: '',
+    fecha_inicio: new Date().toISOString().slice(0, 10),
+    periodo: '',
+    hora_ingreso: '',
+    hora_egreso: '',
+    state: true
+  };
   isModalOpen = false;
-  filteredInstructores: any[] = [];
   isDropdownOpen = false;
   isEditing = false;
 
   private apiUrl = 'http://localhost:5062/api/Instructor';
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.getInstructores();
@@ -31,16 +44,30 @@ export class InstructorComponent implements OnInit {
   formatTime(date: string): string {
     const time = new Date(date);
     return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  }  
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+
+      // Aquí puedes manejar el archivo seleccionado, por ejemplo, convertirlo a Base64
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.instructor.foto = reader.result as string; // Guarda la imagen como Base64 en el modelo
+      };
+      reader.readAsDataURL(file);
+    }
+  }
 
   getInstructores(): void {
     this.http.get<any[]>(this.apiUrl).subscribe(
       (instructores) => {
         this.instructores = instructores.map(instructor => ({
           ...instructor,
-          fecha_inicio: new Date(instructor.fecha_inicio).toISOString().slice(0, 10),
-          selected: false
+          fecha_inicio: new Date(instructor.fecha_inicio).toISOString().slice(0, 10)
         }));
+        this.cdr.detectChanges();
       },
       (error) => {
         console.error('Error fetching instructores:', error);
@@ -56,30 +83,46 @@ export class InstructorComponent implements OnInit {
     this.isModalOpen = false;
     this.resetForm();
     this.isEditing = false;
-    this.filteredInstructores = [];
   }
 
   onSubmit(form: NgForm): void {
-    
     this.instructor.fecha_inicio = new Date(this.instructor.fecha_inicio).toISOString();
 
     if (this.instructor.id === 0) {
       this.http.post(this.apiUrl, this.instructor).subscribe(() => {
         this.getInstructores();
         this.closeModal();
-        Swal.fire('Éxito', 'Instructor creada exitosamente!', 'success');
+        Swal.fire('Éxito', 'Instructor creado exitosamente!', 'success');
+      }, (error) => {
+        console.error('Error al crear el instructor:', error);
+        Swal.fire('Error', 'No se pudo crear el instructor.', 'error');
       });
     } else {
       this.http.put(this.apiUrl, this.instructor).subscribe(() => {
         this.getInstructores();
         this.closeModal();
-        Swal.fire('Éxito', 'Instructor actualizada exitosamente!', 'success');
+        Swal.fire('Éxito', 'Instructor actualizado exitosamente!', 'success');
+      }, (error) => {
+        console.error('Error al actualizar el instructor:', error);
+        Swal.fire('Error', 'No se pudo actualizar el instructor.', 'error');
       });
     }
-  }  
+  }
+
+  extractTime(dateTime: string): string {
+    if (!dateTime) return '';
+    const date = new Date(dateTime);
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
 
   editInstructores(instructor: any): void {
-    this.instructor = { ...instructor, fecha_inicio: new Date(instructor.fecha_inicio).toISOString().slice(0, 10) };
+    this.instructor = {
+      ...instructor, fecha_inicio: new Date(instructor.fecha_inicio).toISOString().slice(0, 10),
+      hora_ingreso: this.extractTime(instructor.hora_ingreso),
+      hora_egreso: this.extractTime(instructor.hora_egreso)
+    };
     this.isEditing = true;
     this.openModal();
   }
@@ -104,7 +147,6 @@ export class InstructorComponent implements OnInit {
   }
 
   resetForm(): void {
-    this.instructor = {  id: 0, nombres: '', apellidos: '', foto: '', identificacion: '', vinculo: '', especialidad: '', correo: '', fecha_inicio: new Date().toISOString().slice(0, 10), periodo: '', hora_ingreso: '', hora_egreso: '', state: true };
-    this.filteredInstructores = [];
+    this.instructor = { id: 0, nombres: '', apellidos: '', foto: '', identificacion: '', vinculo: '', especialidad: '', correo: '', fecha_inicio: new Date().toISOString().slice(0, 10), periodo: '', hora_ingreso: '', hora_egreso: '', state: true };
   }
 }
