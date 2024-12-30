@@ -50,6 +50,7 @@ export class ProgramaComponent implements OnInit {
     this.http.get<any[]>(this.nivelesUrl).subscribe(
       (niveles) => {
         this.niveles = niveles;
+        this.filteredNiveles = niveles; 
       },
       (error) => {
         console.error('Error fetching niveles:', error);
@@ -59,9 +60,13 @@ export class ProgramaComponent implements OnInit {
 
   searchNiveles(event: any): void {
     const term = event.target.value.toLowerCase();
-    this.filteredNiveles = this.niveles.filter(nivel => 
-      nivel.nombre.toLowerCase().includes(term)
-    );
+    if (term) {
+      this.filteredNiveles = this.niveles.filter(nivel => 
+        nivel.nombre.toLowerCase().includes(term)
+      );
+    } else {
+      this.filteredNiveles = this.niveles; // Mostrar todos los resultados si no hay término
+    }
   }
 
   onNivelselect(event: any): void {

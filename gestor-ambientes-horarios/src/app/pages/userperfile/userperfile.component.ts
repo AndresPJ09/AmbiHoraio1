@@ -210,7 +210,7 @@ export class UserperfileComponent implements OnInit {
       return;
     }
     const passwordData = {
-      id: this.user.id,
+      userId: this.user.id,
       currentPassword: this.currentPassword, // Enviamos la contraseña actual
       newPassword: this.newPassword,
       roles: this.roles,
@@ -218,7 +218,7 @@ export class UserperfileComponent implements OnInit {
     };
     console.log('Updated Data Pswword:', passwordData);
 
-    this.http.put(`${this.updatePasswordUrl}`, passwordData).subscribe(
+    this.http.patch(`${this.updatePasswordUrl}/ChangePassword`, passwordData).subscribe(
       (response: any) => {
         console.log('Password updated successfully:', response); 
         this.closeModal();

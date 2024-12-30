@@ -14,35 +14,31 @@
                 <div class="row">
                     <div class="col">
                         <label for="name" class="form-label">Nombre:</label>
-                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="module.name" required>
+                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="module.name"
+                            required>
                     </div>
 
                     <div class="col">
                         <label for="description" class="form-label">Descripción:</label>
-                        <input type="text" class="form-control" id="description" name="description" [(ngModel)]="module.description" required>
+                        <input type="text" class="form-control" id="description" name="description"
+                            [(ngModel)]="module.description" required>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col">
                         <label for="position" class="form-label">Posición:</label>
-                        <input type="position" class="form-control" id="position" name="position" [(ngModel)]="module.position" required>
+                        <input type="position" class="form-control" id="position" name="position"
+                            [(ngModel)]="module.position" required>
                     </div>
 
-                      <div class="col" *ngIf="module.id !== 0">
-                        <input 
-                          type="checkbox" 
-                          class="form-check-input bulk-select-checkbox" 
-                          id="state" 
-                          name="state" 
-                          [(ngModel)]="module.state" 
-                          [attr.data-bs-toggle]="'tooltip'" 
-                          [attr.data-bs-placement]="'top'"
-                          [attr.title]="module.state ? 'Activo' : 'Inactivo'" />
+                    <div class="col" *ngIf="module.id !== 0">
+                        <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
+                            [(ngModel)]="module.state" [attr.data-bs-toggle]="'tooltip'"
+                            [attr.data-bs-placement]="'top'" [attr.title]="module.state ? 'Activo' : 'Inactivo'" />
                         <label class="form-check-label" for="state">Estado</label>
-                      </div>
                     </div>
-                  
+                </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
@@ -50,7 +46,6 @@
                         {{ isEditing ? 'Actualizar' : 'Guardar' }}
                     </button>
                 </div>
-         
             </form>
         </div>
     </div>
@@ -59,7 +54,8 @@
     <h2 class="title">Lista de Módulos</h2>
 
     <!-- Botón para abrir el modal de agregar módulos -->
-    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar Módulo</button>
+    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
+        Módulo</button>
 
     <!-- Tabla para mostrar los registros de módulos -->
     <table class="table table-bordered table-hover table-striped">

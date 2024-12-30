@@ -66,6 +66,7 @@ export class UserComponent implements OnInit {
     this.http.get<any[]>(this.personsUrl).subscribe(
       (persons) => {
         this.persons = persons;
+        this.filteredPersons = persons; 
       },
       (error) => {
         console.error('Error fetching persons:', error);
@@ -75,9 +76,13 @@ export class UserComponent implements OnInit {
 
   searchpersons(event: any): void {
     const term = event.target.value.toLowerCase();
-    this.filteredPersons = this.persons.filter(person => 
-      person.name.toLowerCase().includes(term)
-    );
+    if (!term) {
+      this.filteredPersons = this.persons;
+    } else {
+      this.filteredPersons = this.persons.filter(person => 
+        person.name.toLowerCase().includes(term)
+      );
+    }
   }
 
   onpersonSelect(event: any): void {

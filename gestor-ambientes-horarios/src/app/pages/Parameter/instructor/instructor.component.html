@@ -28,10 +28,14 @@
                 <div class="row">
                     <div class="col">
                         <label for="foto" class="form-label">Foto:</label>
-                        <input type="file" class="form-control" id="foto" name="foto" accept="image/*"
+                        <input type="file" class="form-control" id="foto" name="foto" accept="image/*" #foto
                             (change)="onFileSelected($event)">
-
-                    </div>
+                            
+                        <!-- Image preview and Remove button -->
+                        <div *ngIf="selectedImage" class="image-preview-container">
+                            <img [src]="selectedImage" alt="Image preview" class="image-preview" />
+                            <button type="button" class="button2" (click)="removeImage()">Remove Image</button>
+                        </div>
 
                     <div class="col">
                         <label for="identificacion" class="form-label">Identificación:</label>
@@ -71,8 +75,15 @@
                 <div class="row">
                     <div class="col">
                         <label for="periodo" class="form-label">Periodo:</label>
-                        <input type="text" class="form-control" id="periodo" name="periodo"
-                            [(ngModel)]="instructor.periodo" required>
+                        <select class="form-control" id="periodo" name="periodo" [(ngModel)]="instructor.periodo" required>
+                            <option value="T1-1">T1-1 (22-ene - 28-feb)</option>
+                            <option value="T1-2">T1-2 (29-feb - 6-abr)</option>
+                            <option value="T2-1">T2-1 (15-abr - 22-may)</option>
+                            <option value="T2-2">T2-2 (23-may - 29-jun)</option>
+                            <option value="T3-1">T3-1 (8-jul - 14-ago)</option>
+                            <option value="T3-2">T3-2 (15-ago - 20-sep)</option>
+                            <option value="T4">T4 (30-sep - 14-dic)</option>
+                          </select>
                     </div>
 
                     <div class="col">
@@ -105,8 +116,16 @@
                         {{ isEditing ? 'Actualizar' : 'Guardar' }}
                     </button>
                 </div>
-
+                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal para ver la imagen en grande -->
+    <div id="imageModal" class="modal2" [ngClass]="{'show-modal': isImageModalOpen}">
+        <div class="modal-content2">
+            <span class="close2" (click)="closeImageModal()">&times;</span>
+            <img [src]="selectedImage" alt="Imagen del Instructor" class="modal-image">
         </div>
     </div>
 
@@ -140,7 +159,14 @@
             <tr *ngFor="let instructor of instructores">
                 <td>{{ instructor.nombres }}</td>
                 <td>{{ instructor.apellidos }}</td>
-                <td>{{ instructor.foto }}</td>
+                <td>
+                    <!-- Mostrar la foto si está disponible -->
+                    <img *ngIf="instructor.foto" [src]="'data:image/jpeg;base64,' + instructor.foto" alt="Foto"
+                        style="width: 50px; height: 50px; object-fit: cover;" (click)="openImageModal(instructor.foto)">
+                    <!-- Si no hay foto, mostrar un ícono o texto alternativo -->
+                    <span *ngIf="!instructor.foto">No disponible</span>
+                </td>
+
                 <td>{{ instructor.identificacion }}</td>
                 <td>{{ instructor.vinculo }}</td>
                 <td>{{ instructor.especialidad }}</td>

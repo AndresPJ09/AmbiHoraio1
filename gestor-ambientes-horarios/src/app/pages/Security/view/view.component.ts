@@ -51,7 +51,7 @@ export class ViewComponent implements OnInit {
     this.http.get<any[]>(this.modulesUrl).subscribe(
       (modules) => {
         this.modules = modules;
-        console.log(this,modules)
+        this.filteredModules = modules; 
       },
       (error) => {
         console.error('Error fetching modules:', error);
@@ -61,9 +61,13 @@ export class ViewComponent implements OnInit {
 
   searchmodules(event: any): void {
     const term = event.target.value.toLowerCase();
-    this.filteredModules = this.modules.filter(module => 
-      module.name.toLowerCase().includes(term)
-    );
+    if (!term) {
+      this.filteredModules = this.modules;
+    } else {
+      this.filteredModules = this.modules.filter(module => 
+        module.name.toLowerCase().includes(term)
+      );
+    }
   }
 
   onmoduleSelect(event: any): void {

@@ -1,9 +1,9 @@
 <div class="container">
-    <!-- Modal para agregar/editar vista -->
+    <!-- Modal para agregar/editar programa -->
     <div id="programaModal" class="modal" [ngClass]="{'show-modal': isModalOpen}">
         <div class="modal-content">
             <span class="close" (click)="closeModal()">&times;</span>
-            <h2>{{ programa.id === 0 ? 'Agregar vista' : 'Editar vista' }}</h2>
+            <h2>{{ programa.id === 0 ? 'Agregar programa' : 'Editar programa' }}</h2>
             <hr class="modal-border">
 
             <form #programaForm="ngForm" (ngSubmit)="onSubmit(programaForm)" novalidate>
@@ -12,8 +12,10 @@
                 <div class="row">
                     <div class="col">
                         <label for="nombre" class="form-label">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" [(ngModel)]="programa.nombre" required>
+                        <input type="text" class="form-control" id="nombre" name="nombre" [(ngModel)]="programa.nombre"
+                            required>
                     </div>
+
 
                     <div class="col">
                         <!-- Nivel -->
@@ -28,61 +30,62 @@
                                 </mat-option>
                             </mat-autocomplete>
                         </div>
-                </div>
-            </div>
+                    </div>
 
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col" *ngIf="programa.id !== 0">
-                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
-                                [(ngModel)]="programa.state" [attr.data-bs-toggle]="'tooltip'"
-                                [attr.data-bs-placement]="'top'" [attr.title]="programa.state ? 'Activo' : 'Inactivo'" />
-                            <label class="form-check-label" for="state">Estado</label>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col" *ngIf="programa.id !== 0">
+                                <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state"
+                                    name="state" [(ngModel)]="programa.state" [attr.data-bs-toggle]="'tooltip'"
+                                    [attr.data-bs-placement]="'top'"
+                                    [attr.title]="programa.state ? 'Activo' : 'Inactivo'" />
+                                <label class="form-check-label" for="state">Estado</label>
+                            </div>
+                        </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                                <button type="submit" class="btn btn-primary" [disabled]="programaForm.invalid">
+                                    {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" [disabled]="programaForm.invalid">
-                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
-                    </button>
-                </div>
             </form>
         </div>
     </div>
 
-    <!-- Título con estilo -->
-    <h2 class="title">Lista de programas</h2>
+<!-- Título con estilo -->
+<h2 class="title">Lista de programas</h2>
 
-    <!-- Botón para abrir el modal de agregar vista -->
-    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
-        comeptencia</button>
+<!-- Botón para abrir el modal de agregar vista -->
+<button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
+    comeptencia</button>
 
-    <!-- Tabla para mostrar los registros de vistas -->
-    <table class="table table-bordered table-hover table-striped">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Nivel</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let programa of programas">
-                <td>{{ programa.nombre }}</td>
-                <td>{{ getNivelNombre(programa.nivelId) }}</td>
-                <td>{{ programa.state ? 'Activo' : 'Inactivo' }}</td>
-                <td>
-                    <button class="btn-icon edit" (click)="editProgramas(programa)" title="Editar">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn-icon delete" (click)="deleteProgramas(programa.id)" title="Eliminar">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+<!-- Tabla para mostrar los registros de vistas -->
+<table class="table table-bordered table-hover table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Nivel</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let programa of programas">
+            <td>{{ programa.nombre }}</td>
+            <td>{{ getNivelNombre(programa.nivelId) }}</td>
+            <td>{{ programa.state ? 'Activo' : 'Inactivo' }}</td>
+            <td>
+                <button class="btn-icon edit" (click)="editProgramas(programa)" title="Editar">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn-icon delete" (click)="deleteProgramas(programa.id)" title="Eliminar">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
 </div>
