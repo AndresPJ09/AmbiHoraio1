@@ -91,7 +91,7 @@ onSubmit(form: NgForm): void {
       },
       (error) => {
         console.error('Error al crear rol:', error);
-        Swal.fire('Error', 'Hubo un problema al crear el rol.', 'error');
+        Swal.fire('Error', error.error.message || 'Hubo un problema al crear el rol.', 'error');
       }
     );
   } else {
@@ -102,7 +102,7 @@ onSubmit(form: NgForm): void {
       },
       (error) => {
         console.error('Error al actualizar rol:', error);
-        Swal.fire('Error', 'Hubo un problema al actualizar el rol.', 'error');
+       Swal.fire('Error', error.error.message || 'Hubo un problema al actualizar el rol.', 'error');
       }
     );
   }

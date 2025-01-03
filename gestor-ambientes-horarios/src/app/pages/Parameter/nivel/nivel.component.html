@@ -26,7 +26,15 @@
                 <div class="row">
                     <div class="col">
                         <label for="duracion" class="form-label">Duración:</label>
-                        <input type="time" class="form-control" id="duracion" name="duracion" [(ngModel)]="nivel.duracion" required>
+                        <input
+                        id="duracion"
+                        type="text"
+                        class="form-control"
+                        [(ngModel)]="nivel.duracion"
+                        name="duracion"
+                        placeholder="Especifique duración (por ejemplo, '27 meses' o '40 horas')"
+                        required
+                      />
                     </div>
 
                       <div class="col" *ngIf="nivel.id !== 0">

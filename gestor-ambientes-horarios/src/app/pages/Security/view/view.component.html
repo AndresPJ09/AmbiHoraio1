@@ -12,13 +12,13 @@
                 <div class="row">
                     <div class="col">
                         <label for="name" class="form-label">Nombre:</label>
-                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="view.name" required>
+                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="view.name" required maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                     </div>
 
                     <div class="col">
                         <label for="description" class="form-label">Descripción:</label>
                         <input type="text" class="form-control" id="description" name="description"
-                            [(ngModel)]="view.description" required>
+                            [(ngModel)]="view.description" required maxlength="100" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                     </div>
                 </div>
 
@@ -26,7 +26,10 @@
                     <div class="col">
                         <label for="route" class="form-label">Ruta:</label>
                         <input type="route" class="form-control" id="route" name="route" [(ngModel)]="view.route"
-                            required>
+                            required pattern="^/[a-zA-Z]+$"
+                            data-bs-toggle="tooltip" 
+                            data-bs-placement="top"
+                            title="La ruta debe comenzar con '/' y solo contener letras después de él.">
                     </div>
 
                     <div class="col">

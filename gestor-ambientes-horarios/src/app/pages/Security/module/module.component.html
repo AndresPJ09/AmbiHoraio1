@@ -15,21 +15,21 @@
                     <div class="col">
                         <label for="name" class="form-label">Nombre:</label>
                         <input type="text" class="form-control" id="name" name="name" [(ngModel)]="module.name"
-                            required>
+                            required maxlength="25" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                     </div>
 
                     <div class="col">
                         <label for="description" class="form-label">Descripción:</label>
                         <input type="text" class="form-control" id="description" name="description"
-                            [(ngModel)]="module.description" required>
+                            [(ngModel)]="module.description" required maxlength="100" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col">
                         <label for="position" class="form-label">Posición:</label>
-                        <input type="position" class="form-control" id="position" name="position"
-                            [(ngModel)]="module.position" required>
+                        <input type="number" class="form-control" id="position" name="position"
+                            [(ngModel)]="module.position" required maxlength="10" pattern="^\d{1,5}$">
                     </div>
 
                     <div class="col" *ngIf="module.id !== 0">

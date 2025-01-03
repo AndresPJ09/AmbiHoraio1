@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
 export class ViewComponent implements OnInit {
   views: any[] = [];
   view: any = { id: 0, name: '', description: '', route: '', moduleId: 0, state: false };
-  modules: any[] = [];  // Lista de módulos
+  modules: any[] = []; 
   isModalOpen = false;
   filteredModules: any[] = [];
   isDropdownOpen = false;
@@ -38,7 +38,6 @@ export class ViewComponent implements OnInit {
     this.http.get<any[]>(this.apiUrl).subscribe(
       (views) => {
         this.views = views;
-        //this.filterViews();
         this.cdr.detectChanges();
       },
       (error) => {
@@ -108,12 +107,20 @@ export class ViewComponent implements OnInit {
         this.getViews();
         this.closeModal();
         Swal.fire('Éxito', 'Vista creada exitosamente.', 'success');
+      },
+      (error) => {
+        console.error('Error al actualizar vista:', error);
+        Swal.fire('Error', error.message, 'error');  
       });
     } else {
       this.http.put(this.apiUrl, this.view).subscribe(() => {
-        this.getViews();
-        this.closeModal();
+        this.getViews();  
+        this.closeModal(); 
         Swal.fire('Éxito', 'Vista actualizada exitosamente.', 'success');
+      },
+      (error) => {
+        console.error('Error al actualizar vista:', error);
+        Swal.fire('Error', error.message, 'error');  
       });
     }
   }

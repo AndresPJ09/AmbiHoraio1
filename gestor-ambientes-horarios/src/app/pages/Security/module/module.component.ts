@@ -18,6 +18,7 @@ export class ModuleComponent implements OnInit {
   isModalOpen = false;
   isDropdownOpen = false;
   isEditing = false;
+  errorMessages: any = {};
 
   private apiUrl = 'http://localhost:5062/api/Module';
 
@@ -51,13 +52,7 @@ export class ModuleComponent implements OnInit {
   }
 
   onSubmit(form: NgForm): void {
-    if (this.module.name.trim() === '' || this.module.description.trim() === '') {
-      Swal.fire('Error', 'Por favor, complete todos los campos requeridos.', 'error');
-      return;
-    }
-
     if (this.module.id === 0) {
-      // Crear nuevo módulo
       this.http.post<any>(this.apiUrl, this.module).subscribe(
         (newModule) => {
           this.modules.push({ ...newModule, selected: false });
@@ -66,11 +61,10 @@ export class ModuleComponent implements OnInit {
         },
         (error) => {
           console.error('Error creando módulo:', error);
-          Swal.fire('Error', 'Hubo un problema al crear el módulo.', 'error');
+          Swal.fire('Error', error.error.message, 'error');
         }
       );
     } else {
-      // Actualizar módulo existente
       this.http.put(this.apiUrl, this.module).subscribe(
         () => {
           const index = this.modules.findIndex(m => m.id === this.module.id);
@@ -82,7 +76,7 @@ export class ModuleComponent implements OnInit {
         },
         (error) => {
           console.error('Error actualizando módulo:', error);
-          Swal.fire('Error', 'Hubo un problema al actualizar el módulo.', 'error');
+          Swal.fire('Error', error.error.message, 'error');
         }
       );
     }

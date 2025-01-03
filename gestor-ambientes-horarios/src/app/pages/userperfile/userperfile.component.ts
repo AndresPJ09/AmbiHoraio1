@@ -33,7 +33,9 @@ export class UserperfileComponent implements OnInit {
   confirmPassword: string = '';
   isEditable: boolean = false;
   profileImageUrl: string | ArrayBuffer | null = null;
-  showPassword: boolean = false;
+  showCurrentPassword: boolean = false;
+  showNewPassword: boolean = false;
+  showConfirmPassword: boolean = false;
   isModalOpen = false;
 
   private personApiUrl = 'http://localhost:5062/api/Person';
@@ -47,23 +49,37 @@ export class UserperfileComponent implements OnInit {
     this.loadUserData();
   }
 
-  
+  resetForm(): void {
+    this.currentPassword = '';
+    this.newPassword = '';
+    this.confirmPassword = '';
+  }
+
+  toggleCurrentPasswordVisibility(): void {
+    this.showCurrentPassword = !this.showCurrentPassword;
+  }
+
+  toggleNewPasswordVisibility(): void {
+    this.showNewPassword = !this.showNewPassword;
+  }
+
+  toggleConfirmPasswordVisibility(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
   openModal(): void {
     this.isModalOpen = true;
   }
 
   closeModal(): void {
     this.isModalOpen = false;
+    this.resetForm();
   }
 
   subscribeToProfileImage() {
     this.userService.profileImageUrl$.subscribe(imageUrl => {
       this.profileImageUrl = imageUrl;
     });
-  }
-
-  togglePasswordVisibility(): void {
-    this.showPassword = !this.showPassword;
   }
 
   async loadUserData() {
@@ -83,13 +99,13 @@ export class UserperfileComponent implements OnInit {
         this.http.get(`${this.updatePasswordUrl}/${userId}`).subscribe(
           (response: any) => {
             console.log('User response:', response);
-              this.user.id = response.id,
+            this.user.id = response.id,
               this.user.username = response.username,
               this.user.password = response.password
-              this.user.personId = response.personId,
+            this.user.personId = response.personId,
               this.roles = response.roles;
-  
-            
+
+
 
             // Actualizamos la imagen de perfil
             if (response.photoBase64) {
@@ -156,7 +172,7 @@ export class UserperfileComponent implements OnInit {
       reader.readAsDataURL(file);
     }
   }
-  
+
   saveChanges() {
     this.updateUser();
   }
@@ -172,16 +188,17 @@ export class UserperfileComponent implements OnInit {
     const updatedData = {
       id: userData.menu[0].userID,
       username: this.username,
-      photoBase64: this.user.photoBase64, 
+      photoBase64: this.user.photoBase64,
       personId: this.user.personId,
       roles: this.roles,
-      state: true 
+      state: true
     };
+
     console.log('Updated Data USER:', updatedData);
     const apiUrl = `${this.updatePasswordUrl}/`;
     this.http.put(apiUrl, updatedData).subscribe(
       (response: any) => {
-        console.log('User updated successfully:', response); 
+        console.log('User updated successfully:', response);
         Swal.fire({
           title: 'Éxito',
           text: 'Usuario actualizado correctamente.',
@@ -214,13 +231,13 @@ export class UserperfileComponent implements OnInit {
       currentPassword: this.currentPassword, // Enviamos la contraseña actual
       newPassword: this.newPassword,
       roles: this.roles,
-      
+
     };
     console.log('Updated Data Pswword:', passwordData);
 
     this.http.patch(`${this.updatePasswordUrl}/ChangePassword`, passwordData).subscribe(
       (response: any) => {
-        console.log('Password updated successfully:', response); 
+        console.log('Password updated successfully:', response);
         this.closeModal();
         Swal.fire({
           title: 'Éxito',
@@ -274,5 +291,5 @@ export class UserperfileComponent implements OnInit {
       }
     );
   }
-  
+
 }

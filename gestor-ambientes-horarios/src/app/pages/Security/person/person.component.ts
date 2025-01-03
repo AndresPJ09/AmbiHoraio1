@@ -32,6 +32,7 @@ export class PersonComponent implements OnInit {
     this.getPersons();
   }
 
+
   getPersons(): void {
     this.http.get<any[]>(this.apiUrl).subscribe(
       (persons) => {
@@ -58,20 +59,33 @@ export class PersonComponent implements OnInit {
     const personToSave = { ...this.person };
   
     if (this.person.id === 0) {
-      this.http.post(this.apiUrl, personToSave).subscribe(() => {
-        this.getPersons();
-        this.closeModal();
-        Swal.fire('Éxito', 'Persona creada exitosamente!', 'success');
-      });
+      // Si la persona no tiene ID (es un nuevo registro)
+      this.http.post<any>(this.apiUrl, personToSave).subscribe(
+        (newPerson) => {
+          this.getPersons(); // Actualiza la lista de personas
+          this.closeModal();  // Cierra el modal
+          Swal.fire('Éxito', '¡Persona creada exitosamente!', 'success'); 
+        },
+        (error) => {
+          console.error('Error creando persona:', error);
+          Swal.fire('Error', error.error.message || 'Ocurrió un error al crear la persona.', 'error');
+        }
+      );
     } else {
-      this.http.put(this.apiUrl, personToSave).subscribe(() => {
-        this.getPersons();
-        this.closeModal();
-        Swal.fire('Éxito', 'Persona actualizada exitosamente!', 'success');
-      });
+      this.http.put(this.apiUrl, personToSave).subscribe(
+        () => {
+          this.getPersons(); 
+          this.closeModal()
+          Swal.fire('Éxito', '¡Persona actualizada exitosamente!', 'success'); 
+        },
+        (error) => {
+          console.error('Error actualizando persona:', error);
+          Swal.fire('Error', error.error.message || 'Ocurrió un error al actualizar la persona.', 'error');
+        }
+      );
     }
-  }  
-
+  }
+  
   editPersons(person: any): void {
     this.person = { ...person };
     this.isEditing = true;

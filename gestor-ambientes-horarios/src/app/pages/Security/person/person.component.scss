@@ -260,3 +260,14 @@
   .form-check-label {
     margin-left: 12px;
 }
+
+/* Estilo personalizado para los tooltips */
+.tooltip-inner {
+    background-color: #5bc0de; /* Color de fondo */
+    color: white; /* Color del texto */
+    font-size: 0.9em; /* Tamaño de la fuente */
+}
+
+.tooltip-arrow {
+    border-top-color: #5bc0de; /* Color de la flecha */
+}

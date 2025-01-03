@@ -12,12 +12,12 @@
                 <div class="row">
                     <div class="col">
                         <label for="name" class="form-label">Nombre:</label>
-                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="role.name" required>
+                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="role.name" required maxlength="15" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                     </div>
 
                     <div class="col">
                         <label for="description" class="form-label">Descripción:</label>
-                        <input type="text" class="form-control" id="description" name="description" [(ngModel)]="role.description" required>
+                        <input type="text" class="form-control" id="description" name="description" [(ngModel)]="role.description" required maxlength="100" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                     </div>
                 </div>
 

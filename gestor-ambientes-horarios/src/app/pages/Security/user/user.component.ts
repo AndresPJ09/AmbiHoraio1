@@ -137,12 +137,18 @@ export class UserComponent implements OnInit {
         this.getUsers();
         this.closeModal();
         Swal.fire('Éxito', 'Usuario creado exitosamente!', 'success');
+      }, error => {
+        console.error('Error al actualizar usuario:', error);
+        Swal.fire('Error', error.message, 'error'); 
       });
     } else {
       this.http.put(this.apiUrl, userToSave).subscribe(() => {
-        this.getUsers();
-        this.closeModal();
+        this.getUsers();  
+        this.closeModal();  
         Swal.fire('Éxito', 'Usuario actualizado exitosamente!', 'success');
+      }, error => {
+        console.error('Error al actualizar usuario:', error);
+        Swal.fire('Error', error.message, 'error'); 
       });
     }
   }
