@@ -19,6 +19,13 @@ import { NivelComponent } from './pages/Parameter/nivel/nivel.component';
 import { ProgramaComponent } from './pages/Parameter/programa/programa.component';
 import { CompetenciaComponent } from './pages/Parameter/competencia/competencia.component';
 import { AmbienteComponent } from './pages/Parameter/ambiente/ambiente.component';
+import { ActividadComponent } from './pages/operational/actividad/actividad.component';
+import { ProyectoComponent } from './pages/operational/proyecto/proyecto.component';
+import { FichaComponent } from './pages/operational/ficha/ficha.component';
+import { HorarioComponent } from './pages/operational/horario/horario.component';
+import { InstructorHorarioComponent } from './pages/operational/instructor-horario/instructor-horario.component';
+import { ConsolidadoHorarioComponent } from './pages/operational/consolidado-horario/consolidado-horario.component';
+import { ConsolidadoAmbienteComponent } from './pages/operational/consolidado-ambiente/consolidado-ambiente.component';
 
 export const routes: Routes = [
 
@@ -60,7 +67,14 @@ export const routes: Routes = [
             { path: 'nivel', component: NivelComponent, },
             { path: 'programa', component: ProgramaComponent, },
             { path: 'competencia', component: CompetenciaComponent, },
-            { path: 'ambiente', component: AmbienteComponent, }
+            { path: 'ambiente', component: AmbienteComponent, },
+            { path: 'actividad', component: ActividadComponent, },
+            { path: 'proyecto', component: ProyectoComponent, },
+            { path: 'ficha', component: FichaComponent, },
+            { path: 'horario', component: HorarioComponent, },
+            { path: 'instructorHorario', component: InstructorHorarioComponent, },
+            { path: 'consolidadoHorario', component: ConsolidadoHorarioComponent, },
+            { path: 'consolidadoAmbiente', component: ConsolidadoAmbienteComponent, }
         ]
     },
     {

@@ -29,23 +29,47 @@ export class CreatAccountComponent implements OnInit {
 
   termsAccepted = false;
   isLoading: boolean = false;
+  showPassword: boolean = false;
+  passwordError: string | null = null;
 
   private personApiUrl = 'http://localhost:5062/api/Person';
   private userApiUrl = 'http://localhost:5062/api/User';
 
   private personId: number | null = null;
 
-  constructor(private http: HttpClient,  private cdr: ChangeDetectorRef, private router: Router) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef, private router: Router) { }
 
   ngOnInit(): void {
     const storedPerson = sessionStorage.getItem('person');
+    this.clearSessionData();
 
     if (storedPerson) {
       this.person = JSON.parse(storedPerson);
     }
   }
-  
-   onSubmit(): void {
+
+  onSubmit(): void {
+    // Validar el nombre de usuario antes de enviar los datos
+    if (!this.user.username) {
+      Swal.fire('Error', 'El nombre de usuario no puede estar vacío.', 'error');
+      return;
+    }
+
+    // Validar el correo electrónico
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    if (!emailPattern.test(this.person.email)) {
+      Swal.fire('Error', 'El correo debe ser válido y terminar en @gmail.com', 'error');
+      return;
+    }
+
+    // Validar la contraseña antes de enviar los datos
+    this.validatePassword(this.user.password);
+
+    if (this.passwordError) {
+      Swal.fire('Error', 'No se puede crear la cuenta. Verifique la contraseña.', 'error');
+      return;
+    }
+
     if (!this.termsAccepted) {
       Swal.fire('Advertencia', 'Debe aceptar los términos y condiciones.', 'warning');
       return;
@@ -62,7 +86,7 @@ export class CreatAccountComponent implements OnInit {
       error: () => {
         this.isLoading = false;
         Swal.fire('Error', 'Hubo un problema al enviar los datos de la persona', 'error');
-        
+
       }
     });
   }
@@ -135,22 +159,48 @@ export class CreatAccountComponent implements OnInit {
 
     setTimeout(() => {
       this.router.navigate(['/login']);
-      this.isLoading = false; 
+      this.isLoading = false;
     }, 1000);
   }
 
   redirectToTerms() {
     this.isLoading = true;
-  
+
     setTimeout(() => {
-      window.open('/terms', '_blank'); 
-      this.isLoading = false; 
+      window.open('/terms', '_blank');
+      this.isLoading = false;
     }, 1000);
   }
 
+  validatePassword(password: string): void {
+    const minLength = 8;
+    const maxLength = 15;
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const hasMinLength = password.length >= minLength;
+    const hasMaxLength = password.length <= maxLength;
+
+    if (!hasMinLength) {
+      this.passwordError = `La contraseña debe tener al menos ${minLength} caracteres.`;
+    } else if (!hasMaxLength) {
+      this.passwordError = `La contraseña no debe superar los ${maxLength} caracteres.`;
+    } else if (!hasUppercase) {
+      this.passwordError = 'La contraseña debe contener al menos 1 letra mayúscula.';
+    } else if (!hasSpecialChar) {
+      this.passwordError = 'La contraseña debe contener al menos 1 carácter especial.';
+    } else {
+      this.passwordError = null;
+    }
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+
   clearSessionData(): void {
     this.person = {
-      name: '', last_name: '', email: '',  identification: ''
+      name: '', last_name: '', email: '', identification: ''
     };
     this.user = { username: '', password: '', roles: [] };
     this.termsAccepted = false;

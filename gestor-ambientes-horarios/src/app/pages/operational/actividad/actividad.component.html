@@ -1,1 +1,137 @@
-<p>actividad works!</p>
+<div class="container">
+    <!-- Modal para agregar/editar actividad -->
+    <div id="actividadModal" class="modal" [ngClass]="{'show-modal': isModalOpen}">
+        <div class="modal-content">
+            <span class="close" (click)="closeModal()">&times;</span>
+            <h2>{{ actividad.id === 0 ? 'Agregar actividad' : 'Editar actividad' }}</h2>
+            <hr class="modal-border">
+
+            <form #actividadForm="ngForm" (ngSubmit)="onSubmit(actividadForm)" novalidate>
+                <input type="hidden" name="id" [(ngModel)]="actividad.id">
+
+                <div class="row">
+                    <div class="col">
+                        <label for="actividad_proyecto" class="form-label">Actividad del proyecto:</label>
+                        <input type="text" class="form-control" id="actividad_proyecto" name="actividad_proyecto"
+                            [(ngModel)]="actividad.actividad_proyecto" required maxlength="50"
+                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                    </div>
+
+                    <div class="col">
+                        <label for="result_aprendizaje" class="form-label">Resultado de aprendizaje:</label>
+                        <input type="text" class="form-control" id="result_aprendizaje" name="result_aprendizaje" [(ngModel)]="actividad.result_aprendizaje"
+                            required maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="fecha_inicio_Ac" class="form-label">Fecha de inicio:</label>
+                        <input type="date" class="form-control" id="fecha_inicio_Ac" name="fecha_inicio_Ac" [(ngModel)]="actividad.name"
+                            required maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                    </div>
+
+                    <div class="col">
+                        <label for="Fecha_fin_Ac" class="form-label">Fecha de fin:</label>
+                        <input type="date" class="form-control" id="Fecha_fin_Ac" name="Fecha_fin_Ac" [(ngModel)]="actividad.name"
+                            required maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="name" class="form-label">Estado de RAP:</label>
+                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="actividad.name"
+                            required maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                    </div>
+
+                    <div class="col">
+                        <label for="Num_semanasEstado_RAP" class="form-label">Número de semanas:</label>
+                        <input type="text" class="form-control" id="Num_semanasEstado_RAP" name="Num_semanasEstado_RAP" [(ngModel)]="actividad.name"
+                            required maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                    </div>
+                </div>
+
+                <div class="row">
+                <div class="col">
+                    <!-- Competencia -->
+                    <label for="competenciaNombre">Competencia:</label>
+                    <div class="form-label">
+                        <input type="text" class="form-control input-field" matInput [matAutocomplete]="auto"
+                            id="competenciaNombre" name="competenciaNombre" [(ngModel)]="actividad.competenciaNombre"
+                            (input)="searchcompetencias($event)" required #competenciaNombre="ngModel" />
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="oncompetenciaSelect($event)">
+                            <mat-option *ngFor="let competencia of filteredCompetencias" [value]="competencia.nombre">
+                                {{ competencia.nombre }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col" *ngIf="actividad.id !== 0">
+                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
+                                [(ngModel)]="actividad.state" [attr.data-bs-toggle]="'tooltip'"
+                                [attr.data-bs-placement]="'top'"
+                                [attr.title]="actividad.state ? 'Activo' : 'Inactivo'" />
+                            <label class="form-check-label" for="state">Estado</label>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                            <button type="submit" class="btn btn-primary" [disabled]="actividadForm.invalid">
+                                {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Título con estilo -->
+    <h2 class="title">Lista de actividades</h2>
+
+    <!-- Botón para abrir el modal de agregar actividad -->
+    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
+        actividad</button>
+
+    <!-- Tabla para mostrar los registros de actividads -->
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Actividad del proyecto</th>
+                <th>Competencia</th>
+                <th>Resultado de aprendizaje</th>
+                <th>Fecha de inicio</th>
+                <th>Fecha de fin</th>
+                <th>Estado de RAP</th>
+                <th>Número de semanas</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let actividad of actividades">
+                <td>{{ actividad.actividad_proyecto }}</td>
+                <td>{{ actividad.result_aprendizaje }}</td>
+                <td>{{ actividad.fecha_inicio_Ac }}</td>
+                <td>{{ actividad.Fecha_fin_Ac }}</td>
+                <td>{{ actividad.Estado_RAP }}</td>
+                <td>{{ actividad.Num_semanas }}</td>
+                <td>{{ getCompetenciaNombre(actividad.competenciaId) }}</td>
+                <td>{{ actividad.state ? 'Activo' : 'Inactivo' }}</td>
+                <td>
+                    <button class="btn-icon edit" (click)="editActividades(actividad)" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-icon delete" (click)="deleteActividades(actividad.id)" title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
