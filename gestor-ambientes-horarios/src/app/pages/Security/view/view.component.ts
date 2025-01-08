@@ -17,7 +17,7 @@ import Swal from 'sweetalert2';
 })
 export class ViewComponent implements OnInit {
   views: any[] = [];
-  view: any = { id: 0, name: '', description: '', route: '', moduleId: 0, state: false };
+  view: any = { id: 0, name: '', description: '', route: '', moduleId: 0, state: true };
   modules: any[] = []; 
   isModalOpen = false;
   filteredModules: any[] = [];
@@ -50,7 +50,8 @@ export class ViewComponent implements OnInit {
     this.http.get<any[]>(this.modulesUrl).subscribe(
       (modules) => {
         this.modules = modules;
-        this.filteredModules = modules; 
+        this.filteredModules = modules;
+        console.log(this.modules);
       },
       (error) => {
         console.error('Error fetching modules:', error);

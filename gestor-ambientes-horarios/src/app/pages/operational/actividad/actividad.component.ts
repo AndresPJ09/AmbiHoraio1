@@ -17,7 +17,7 @@ import Swal from 'sweetalert2';
 })
 export class ActividadComponent implements OnInit {
   actividades: any[] = [];
-  actividad: any = { id: 0, actividad_proyecto: '', result_aprendizaje: '', fecha_inicio_Ac: '', Fecha_fin_Ac: '', Estado_RAP: '', Num_semanas: '', CompetenciaId: 0, state: false };
+  actividad: any = { id: 0, actividad_proyecto: '', result_aprendizaje: '', fecha_inicio_Ac: new Date().toISOString().slice(0, 10), fecha_fin_Ac: new Date().toISOString().slice(0, 10), estado_RAP: '', num_semanas: '', competenciaId: 0, state: true };
   competencias: any[] = [];
   isModalOpen = false;
   filteredCompetencias: any[] = [];
@@ -37,7 +37,11 @@ export class ActividadComponent implements OnInit {
   getActividades(): void {
     this.http.get<any[]>(this.apiUrl).subscribe(
       (actividades) => {
-        this.actividades = actividades;
+        this.actividades = actividades.map(actividad => ({
+          ...actividad,
+          fecha_inicio_Ac: new Date(actividad.fecha_inicio_Ac).toISOString().slice(0, 10),
+          fecha_fin_Ac: new Date(actividad.fecha_fin_Ac).toISOString().slice(0, 10)
+        }));
         this.cdr.detectChanges();
       },
       (error) => {
@@ -47,10 +51,11 @@ export class ActividadComponent implements OnInit {
   }
 
   getCompetencias(): void {
-    this.http.get<any[]>(this.apiUrl).subscribe(
+    this.http.get<any[]>(this.competenciasUrl).subscribe(
       (competencias) => {
         this.competencias = competencias;
-        this.filteredCompetencias = competencias; 
+        this.filteredCompetencias = competencias;
+        console.log(this.competencias);
       },
       (error) => {
         console.error('Error fetching competencias:', error);
@@ -63,22 +68,22 @@ export class ActividadComponent implements OnInit {
     if (!term) {
       this.filteredCompetencias = this.competencias;
     } else {
-      this.filteredCompetencias = this.competencias.filter(competencia => 
+      this.filteredCompetencias = this.competencias.filter(competencia =>
         competencia.nombre.toLowerCase().includes(term)
       );
     }
   }
 
   oncompetenciaSelect(event: any): void {
-    const selectedcompetencia = this.competencias.find(competencia => 
+    const selectedcompetencia = this.competencias.find(competencia =>
       competencia.nombre === event.option.value
     );
     if (selectedcompetencia) {
-        this.actividad.competenciaId = selectedcompetencia.id;
-        this.actividad.competenciaNombre = selectedcompetencia.nombre;
-        this.filteredCompetencias = [];
+      this.actividad.competenciaId = selectedcompetencia.id;
+      this.actividad.competenciaNombre = selectedcompetencia.nombre;
+      this.filteredCompetencias = [];
     }
-}
+  }
 
   getCompetenciaNombre(competenciaId: number): string {
     const competencia = this.competencias.find(comp => comp.id === competenciaId);
@@ -97,6 +102,8 @@ export class ActividadComponent implements OnInit {
   }
 
   onSubmit(form: NgForm): void {
+    this.actividad.fecha_inicio_Ac = new Date(this.actividad.fecha_inicio_Ac).toISOString();
+    this.actividad.fecha_fin_Ac = new Date(this.actividad.fecha_fin_Ac).toISOString();
     if (this.actividad.id === 0) {
       this.http.post(this.apiUrl, this.actividad).subscribe(() => {
         this.getActividades();
@@ -121,7 +128,14 @@ export class ActividadComponent implements OnInit {
   }
 
   editActividades(actividad: any): void {
-    this.actividad = { ...actividad, };
+    this.actividad = {
+      ...actividad, fecha_inicio_Ac: new Date(actividad.fecha_inicio_Ac).toISOString().slice(0, 10),
+      fecha_fin_Ac: new Date(actividad.fecha_fin_Ac).toISOString().slice(0, 10)
+    };
+    const selectedcompetencia = this.competencias.find(comp => comp.id === this.actividad.competenciaId);
+    if (selectedcompetencia) {
+      this.actividad.competenciaNombre = selectedcompetencia.nombre;
+    }
     this.isEditing = true;
     this.openModal();
   }
@@ -149,9 +163,8 @@ export class ActividadComponent implements OnInit {
     });
   }
 
-
   resetForm(): void {
-    this.actividad = { id: 0, actividad_proyecto: '', result_aprendizaje: '', fecha_inicio_Ac: '', Fecha_fin_Ac: '', Estado_RAP: '', Num_semanas: '', CompetenciaId: 0, state: false };
+    this.actividad = { id: 0, actividad_proyecto: '', result_aprendizaje: '', fecha_inicio_Ac: new Date().toISOString().slice(0, 10), fecha_fin_Ac: new Date().toISOString().slice(0, 10), estado_RAP: '', num_semanas: '', competenciaId: 0, state: true };
     this.filteredCompetencias = [];
   }
 

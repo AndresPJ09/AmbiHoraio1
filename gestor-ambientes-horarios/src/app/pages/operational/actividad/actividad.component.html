@@ -19,74 +19,82 @@
 
                     <div class="col">
                         <label for="result_aprendizaje" class="form-label">Resultado de aprendizaje:</label>
-                        <input type="text" class="form-control" id="result_aprendizaje" name="result_aprendizaje" [(ngModel)]="actividad.result_aprendizaje"
-                            required maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                        <input type="text" class="form-control" id="result_aprendizaje" name="result_aprendizaje"
+                            [(ngModel)]="actividad.result_aprendizaje" required maxlength="50"
+                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col">
                         <label for="fecha_inicio_Ac" class="form-label">Fecha de inicio:</label>
-                        <input type="date" class="form-control" id="fecha_inicio_Ac" name="fecha_inicio_Ac" [(ngModel)]="actividad.name"
-                            required maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                        <input type="date" class="form-control" id="fecha_inicio_Ac" name="fecha_inicio_Ac"
+                            [(ngModel)]="actividad.fecha_inicio_Ac" required>
                     </div>
 
                     <div class="col">
-                        <label for="Fecha_fin_Ac" class="form-label">Fecha de fin:</label>
-                        <input type="date" class="form-control" id="Fecha_fin_Ac" name="Fecha_fin_Ac" [(ngModel)]="actividad.name"
-                            required maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                        <label for="fecha_fin_Ac" class="form-label">Fecha de fin:</label>
+                        <input type="date" class="form-control" id="fecha_fin_Ac" name="fecha_fin_Ac"
+                            [(ngModel)]="actividad.fecha_fin_Ac" required>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col">
-                        <label for="name" class="form-label">Estado de RAP:</label>
-                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="actividad.name"
-                            required maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                        <label for="estado_RAP" class="form-label">Estado de RAP:</label>
+                        <select class="form-control" id="estado_RAP" name="estado_RAP"
+                            [(ngModel)]="actividad.estado_RAP" required>
+                            <option value="" disabled selected>Seleccione un estado</option>
+                            <option value="En ejecución">En ejecución</option>
+                            <option value="Evaluado">Evaluado</option>
+                        </select>
                     </div>
 
+
                     <div class="col">
-                        <label for="Num_semanasEstado_RAP" class="form-label">Número de semanas:</label>
-                        <input type="text" class="form-control" id="Num_semanasEstado_RAP" name="Num_semanasEstado_RAP" [(ngModel)]="actividad.name"
-                            required maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                        <label for="num_semanas" class="form-label">Número de semanas:</label>
+                        <input type="text" class="form-control" id="num_semanas" name="num_semanas"
+                            [(ngModel)]="actividad.num_semanas" required>
                     </div>
                 </div>
 
                 <div class="row">
-                <div class="col">
-                    <!-- Competencia -->
-                    <label for="competenciaNombre">Competencia:</label>
-                    <div class="form-label">
-                        <input type="text" class="form-control input-field" matInput [matAutocomplete]="auto"
-                            id="competenciaNombre" name="competenciaNombre" [(ngModel)]="actividad.competenciaNombre"
-                            (input)="searchcompetencias($event)" required #competenciaNombre="ngModel" />
-                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="oncompetenciaSelect($event)">
-                            <mat-option *ngFor="let competencia of filteredCompetencias" [value]="competencia.nombre">
-                                {{ competencia.nombre }}
-                            </mat-option>
-                        </mat-autocomplete>
+                    <div class="col-md-6">
+                        <label for="competenciaNombre" class="form-label">Competencia:</label>
+                        <div>
+                            <input type="text" class="form-control input-field" matInput [matAutocomplete]="auto"
+                                id="competenciaNombre" name="competenciaNombre"
+                                [(ngModel)]="actividad.competenciaNombre" (input)="searchcompetencias($event)" required
+                                #competenciaNombre="ngModel" />
+                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="oncompetenciaSelect($event)">
+                                <mat-option *ngFor="let competencia of filteredCompetencias"
+                                    [value]="competencia.nombre">
+                                    {{ competencia.nombre }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
                     </div>
 
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col" *ngIf="actividad.id !== 0">
+                    <div class="col-md-6">
+                        <label for="state" class="form-label">Estado:</label>
+                        <div>
                             <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
                                 [(ngModel)]="actividad.state" [attr.data-bs-toggle]="'tooltip'"
                                 [attr.data-bs-placement]="'top'"
                                 [attr.title]="actividad.state ? 'Activo' : 'Inactivo'" />
-                            <label class="form-check-label" for="state">Estado</label>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
-                            <button type="submit" class="btn btn-primary" [disabled]="actividadForm.invalid">
-                                {{ isEditing ? 'Actualizar' : 'Guardar' }}
-                            </button>
+                            <label class="form-check-label" for="state">{{ actividad.state ? 'Activo' : 'Inactivo'
+                                }}</label>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="actividadForm.invalid">
+                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                </div>
             </form>
         </div>
     </div>
@@ -118,9 +126,9 @@
                 <td>{{ actividad.actividad_proyecto }}</td>
                 <td>{{ actividad.result_aprendizaje }}</td>
                 <td>{{ actividad.fecha_inicio_Ac }}</td>
-                <td>{{ actividad.Fecha_fin_Ac }}</td>
-                <td>{{ actividad.Estado_RAP }}</td>
-                <td>{{ actividad.Num_semanas }}</td>
+                <td>{{ actividad.fecha_fin_Ac }}</td>
+                <td>{{ actividad.estado_RAP }}</td>
+                <td>{{ actividad.num_semanas }}</td>
                 <td>{{ getCompetenciaNombre(actividad.competenciaId) }}</td>
                 <td>{{ actividad.state ? 'Activo' : 'Inactivo' }}</td>
                 <td>
