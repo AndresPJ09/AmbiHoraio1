@@ -55,7 +55,6 @@ export class ActividadComponent implements OnInit {
       (competencias) => {
         this.competencias = competencias;
         this.filteredCompetencias = competencias;
-        console.log(this.competencias);
       },
       (error) => {
         console.error('Error fetching competencias:', error);
@@ -111,7 +110,7 @@ export class ActividadComponent implements OnInit {
         Swal.fire('Éxito', 'Actividad creada exitosamente.', 'success');
       },
         (error) => {
-          console.error('Error al actualizar vista:', error);
+          console.error('Error al actualizar actividad:', error);
           Swal.fire('Error', error.message, 'error');
         });
     } else {

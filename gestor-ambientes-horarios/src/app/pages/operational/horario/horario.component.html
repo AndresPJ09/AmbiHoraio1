@@ -1,1 +1,89 @@
-<p>horario works!</p>
+<div class="container">
+    <!-- Modal para agregar/editar horario -->
+    <div id="horarioModal" class="modal" [ngClass]="{'show-modal': isModalOpen}">
+        <div class="modal-content">
+            <span class="close" (click)="closeModal()">&times;</span>
+            <h2>{{ horario.id === 0 ? 'Agregar horario' : 'Editar horario' }}</h2>
+            <hr class="modal-border">
+
+            <form #horarioForm="ngForm" (ngSubmit)="onSubmit(horarioForm)" novalidate>
+                <input type="hidden" name="id" [(ngModel)]="horario.id">
+
+                <div class="row">
+                    <div class="col">
+                        <label for="nombre" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre"
+                            [(ngModel)]="horario.nombre" required maxlength="50"
+                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                    </div>
+
+                <div class="row">
+                    <div class="col" *ngIf="horario.id !== 0">
+                        <label for="state" class="form-label">Estado:</label>
+                        <div>
+                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
+                                [(ngModel)]="horario.state" [attr.data-bs-toggle]="'tooltip'"
+                                [attr.data-bs-placement]="'top'"
+                                [attr.title]="horario.state ? 'Activo' : 'Inactivo'" />
+                            <label class="form-check-label" for="state">{{ horario.state ? 'Activo' : 'Inactivo'
+                                }}</label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="horarioForm.invalid">
+                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Título con estilo -->
+    <h2 class="title">Lista de horarios</h2>
+
+    <!-- Botón para abrir el modal de agregar horario -->
+    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
+        horario</button>
+
+    <!-- Tabla para mostrar los registros de horarios -->
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Gestor</th>
+                <th>Jornada programada</th>
+                <th>Validación</th>
+                <th>Horas</th>
+                <th>Hora de ingreso</th>
+                <th>Hora de salida</th>
+                <th>Observaciones</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let horario of horarios">
+                <td>{{ horario.nombre }}</td>
+                <td>{{ horario.jornada_tecnica }}</td>
+                <td>{{ horario.validacion }}</td>
+                <td>{{ horario.horas }}</td>
+                <td>{{ horario.hora_ingreso }}</td>
+                <td>{{ horario.hora_egreso }}</td>
+                <td>{{ horario.observaciones }}</td>
+                <td>{{ horario.state ? 'Activo' : 'Inactivo' }}</td>
+                <td>
+                    <button class="btn-icon edit" (click)="editHorario(horario)" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-icon delete" (click)="deleteHorario(horario.id)" title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

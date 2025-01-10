@@ -75,7 +75,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col" *ngIf="actividad.id !== 0">
                         <label for="state" class="form-label">Estado:</label>
                         <div>
                             <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
@@ -111,12 +111,12 @@
         <thead>
             <tr>
                 <th>Actividad del proyecto</th>
-                <th>Competencia</th>
                 <th>Resultado de aprendizaje</th>
                 <th>Fecha de inicio</th>
                 <th>Fecha de fin</th>
                 <th>Estado de RAP</th>
                 <th>Número de semanas</th>
+                <th>Competencia</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>

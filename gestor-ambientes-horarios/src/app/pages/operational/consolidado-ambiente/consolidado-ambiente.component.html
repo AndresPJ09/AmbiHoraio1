@@ -1,1 +1,34 @@
-<p>consolidado-ambiente works!</p>
+<div class="container">
+ 
+    <!-- Título con estilo -->
+    <h2 class="title">Lista de consolidado de ambientes</h2>
+
+    <!-- Tabla para mostrar los registros de consolidado de ambientes -->
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Gestor</th>
+                <th>Instructor</th>
+                <th>Ambiente</th>
+                <th>Ficha</th>
+                <th>Programa</th>
+                <th>Nivel</th>
+                <th>Observaciones</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let consolidadoAmbiente of consoAmbiente">
+                <td>{{ consolidadoAmbiente.actividadId }}</td>
+                <td>{{ consolidadoAmbiente.observaciones }}</td>
+                <td>{{ consolidadoAmbiente.state ? 'Activo' : 'Inactivo' }}</td>
+                <td>
+                    <button class="btn-icon edit" (click)="editConsoAmbiente(consolidadoAmbiente)" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

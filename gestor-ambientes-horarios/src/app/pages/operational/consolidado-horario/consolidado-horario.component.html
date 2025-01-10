@@ -1,1 +1,34 @@
-<p>consolidado-horario works!</p>
+<div class="container">
+ 
+    <!-- Título con estilo -->
+    <h2 class="title">Lista de consolidado de horarios</h2>
+
+    <!-- Tabla para mostrar los registros de consolidado de horarios -->
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Gestor</th>
+                <th>Programa</th>
+                <th>Nivel</th>
+                <th>Ficha</th>
+                <th>Horario</th>
+                <th>Competencia</th>
+                <th>Observaciones</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let consolidadoHorario of consoHorarios">
+                <td>{{ consolidadoHorario.actividadId }}</td>
+                <td>{{ consolidadoHorario.observaciones }}</td>
+                <td>{{ consolidadoHorario.state ? 'Activo' : 'Inactivo' }}</td>
+                <td>
+                    <button class="btn-icon edit" (click)="editConsoHorario(consolidadoHorario)" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

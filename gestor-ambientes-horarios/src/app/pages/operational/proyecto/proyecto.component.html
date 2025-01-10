@@ -1,1 +1,123 @@
-<p>proyecto works!</p>
+<div class="container">
+    <!-- Modal para agregar/editar proyecto -->
+    <div id="proyectoModal" class="modal" [ngClass]="{'show-modal': isModalOpen}">
+        <div class="modal-content">
+            <span class="close" (click)="closeModal()">&times;</span>
+            <h2>{{ proyecto.id === 0 ? 'Agregar proyecto' : 'Editar proyecto' }}</h2>
+            <hr class="modal-border">
+
+            <form #proyectoForm="ngForm" (ngSubmit)="onSubmit(proyectoForm)" novalidate>
+                <input type="hidden" name="id" [(ngModel)]="proyecto.id">
+
+                <div class="row">
+                    <div class="col">
+                        <label for="nombre" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre"
+                            [(ngModel)]="proyecto.nombre" required maxlength="50"
+                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                    </div>
+
+                    <div class="col">
+                        <label for="jornada_tecnica" class="form-label">Jornada técnica:</label>
+                        <select
+                            class="form-control"
+                            id="jornada_tecnica"
+                            name="jornada_tecnica"
+                            [(ngModel)]="proyecto.jornada_tecnica"
+                            required>
+                            <option value="" disabled selected>Seleccione una opción</option>
+                            <option value="MAÑANA">MAÑANA</option>
+                            <option value="TARDE">TARDE</option>
+                            <option value="NOCHE">NOCHE</option>
+                            <option value="FIN DE SEMANA">FIN DE SEMANA</option>
+                        </select>
+                    </div> 
+                </div>                    
+
+                <div class="row">
+                    <div class="col">
+                        <label for="fase" class="form-label">Fase:</label>
+                        <input type="text" class="form-control" id="fase" name="fase"
+                            [(ngModel)]="proyecto.fase" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="actividadNombre" class="form-label">Actividad:</label>
+                        <div>
+                            <input type="text" class="form-control input-field" matInput [matAutocomplete]="auto"
+                                id="actividadNombre" name="actividadNombre"
+                                [(ngModel)]="proyecto.actividadNombre" (input)="searchactividades($event)" required
+                                #actividadNombre="ngModel" />
+                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onactividadSelect($event)">
+                                <mat-option *ngFor="let actividad of filteredActividades"
+                                    [value]="actividad.actividad_proyecto">
+                                    {{ actividad.actividad_proyecto }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col" *ngIf="proyecto.id !== 0">
+                        <label for="state" class="form-label">Estado:</label>
+                        <div>
+                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
+                                [(ngModel)]="proyecto.state" [attr.data-bs-toggle]="'tooltip'"
+                                [attr.data-bs-placement]="'top'"
+                                [attr.title]="proyecto.state ? 'Activo' : 'Inactivo'" />
+                            <label class="form-check-label" for="state">{{ proyecto.state ? 'Activo' : 'Inactivo'
+                                }}</label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="proyectoForm.invalid">
+                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Título con estilo -->
+    <h2 class="title">Lista de proyectos</h2>
+
+    <!-- Botón para abrir el modal de agregar proyecto -->
+    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
+        proyecto</button>
+
+    <!-- Tabla para mostrar los registros de proyectos -->
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Jornada tecnica</th>
+                <th>Actividad</th>
+                <th>Fase</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let proyecto of proyectos">
+                <td>{{ proyecto.nombre }}</td>
+                <td>{{ proyecto.jornada_tecnica }}</td>
+                <td>{{ getActividadNombre(proyecto.actividadId) }}</td>
+                <td>{{ proyecto.fase }}</td>
+                <td>{{ proyecto.state ? 'Activo' : 'Inactivo' }}</td>
+                <td>
+                    <button class="btn-icon edit" (click)="editProyecto(proyecto)" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-icon delete" (click)="deleteProyecto(proyecto.id)" title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

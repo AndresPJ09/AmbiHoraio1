@@ -76,13 +76,14 @@
                     <div class="col">
                         <label for="periodo" class="form-label">Periodo:</label>
                         <select class="form-control" id="periodo" name="periodo" [(ngModel)]="instructor.periodo" required>
-                            <option value="T1-1">T1-1 (22-ene - 28-feb)</option>
-                            <option value="T1-2">T1-2 (29-feb - 6-abr)</option>
-                            <option value="T2-1">T2-1 (15-abr - 22-may)</option>
-                            <option value="T2-2">T2-2 (23-may - 29-jun)</option>
-                            <option value="T3-1">T3-1 (8-jul - 14-ago)</option>
-                            <option value="T3-2">T3-2 (15-ago - 20-sep)</option>
-                            <option value="T4">T4 (30-sep - 14-dic)</option>
+                            <option value="" disabled selected>Seleccione una opción</option>
+                            <option>T1-1 (22-ene - 28-feb)</option>
+                            <option>T1-2 (29-feb - 6-abr)</option>
+                            <option>T2-1 (15-abr - 22-may)</option>
+                            <option>T2-2 (23-may - 29-jun)</option>
+                            <option>T3-1 (8-jul - 14-ago)</option>
+                            <option>T3-2 (15-ago - 20-sep)</option>
+                            <option>T4 (30-sep - 14-dic)</option>
                           </select>
                     </div>
 
@@ -140,17 +141,17 @@
     <table class="table table-bordered table-hover table-striped">
         <thead>
             <tr>
-                <th>Nombres</th>
-                <th>Apellidos</th>
-                <th>Fotos</th>
-                <th>Idnetificaciones</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Foto</th>
+                <th>Idnetificacion</th>
                 <th>Vinculos</th>
-                <th>Especialidades</th>
+                <th>Especialidad</th>
                 <th>Correos</th>
-                <th>Fechas de inicio</th>
-                <th>Periodos</th>
-                <th>Fecha de ingreso</th>
-                <th>Fecha de egreso</th>
+                <th>Fecha de inicio</th>
+                <th>Periodo</th>
+                <th>Hora de ingreso</th>
+                <th>Hora de egreso</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>

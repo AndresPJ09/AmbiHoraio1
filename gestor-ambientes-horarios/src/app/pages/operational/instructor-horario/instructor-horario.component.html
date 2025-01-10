@@ -1,1 +1,29 @@
-<p>instructor-horario works!</p>
+<div class="container">
+ 
+    <!-- Título con estilo -->
+    <h2 class="title">Lista de Horario de instructores</h2>
+
+    <!-- Tabla para mostrar los registros de consolidado de horarios -->
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Dias</th>
+                <th>Programa</th>
+                <th>Nivel</th>
+                <th>Ficha</th>
+                <th>Ambiente</th>
+                <th>Competencia</th>
+                <th>Observaciones</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let instructorHorario of instruHorarios">
+                <td>{{ instructorHorario.actividadId }}</td>
+                <td>{{ instructorHorario.observaciones }}</td>
+                <td>{{ instructorHorario.state ? 'Activo' : 'Inactivo' }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
