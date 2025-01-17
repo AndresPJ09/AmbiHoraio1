@@ -17,7 +17,7 @@ import Swal from 'sweetalert2';
 })
 export class ActividadComponent implements OnInit {
   actividades: any[] = [];
-  actividad: any = { id: 0, actividad_proyecto: '', result_aprendizaje: '', fecha_inicio_Ac: new Date().toISOString().slice(0, 10), fecha_fin_Ac: new Date().toISOString().slice(0, 10), estado_RAP: '', num_semanas: '', competenciaId: 0, state: true };
+  actividad: any = { id: 0, actividad_proyecto: '', competenciaId: 0, fecha_inicio_Ac: new Date().toISOString().slice(0, 10), fecha_fin_Ac: new Date().toISOString().slice(0, 10), num_semanas: '', state: true };
   competencias: any[] = [];
   isModalOpen = false;
   filteredCompetencias: any[] = [];
@@ -32,6 +32,25 @@ export class ActividadComponent implements OnInit {
   ngOnInit(): void {
     this.getActividades();
     this.getCompetencias();
+    this.calculateWeeks();
+  }
+
+  calculateWeeks(): void {
+    const fechaInicio = new Date(this.actividad.fecha_inicio_Ac);
+    const fechaFin = new Date(this.actividad.fecha_fin_Ac);
+
+    // Calcular la diferencia en milisegundos
+    const diffInMilliseconds = fechaFin.getTime() - fechaInicio.getTime();
+    // Convertir a semanas
+    const weeks = Math.ceil(diffInMilliseconds / (1000 * 60 * 60 * 24 * 7));
+
+    // Asignar el número de semanas
+    this.actividad.num_semanas = weeks > 0 ? weeks.toString() : '0';
+  }
+
+  // Llama esta función cada vez que se actualizan las fechas
+  onDateChange(): void {
+    this.calculateWeeks();
   }
 
   getActividades(): void {
@@ -68,25 +87,25 @@ export class ActividadComponent implements OnInit {
       this.filteredCompetencias = this.competencias;
     } else {
       this.filteredCompetencias = this.competencias.filter(competencia =>
-        competencia.nombre.toLowerCase().includes(term)
+        competencia.descripcion.toLowerCase().includes(term)
       );
     }
   }
 
   oncompetenciaSelect(event: any): void {
     const selectedcompetencia = this.competencias.find(competencia =>
-      competencia.nombre === event.option.value
+      competencia.descripcion === event.option.value
     );
     if (selectedcompetencia) {
       this.actividad.competenciaId = selectedcompetencia.id;
-      this.actividad.competenciaNombre = selectedcompetencia.nombre;
+      this.actividad.competenciaNombre = selectedcompetencia.descripcion;
       this.filteredCompetencias = [];
     }
   }
 
   getCompetenciaNombre(competenciaId: number): string {
     const competencia = this.competencias.find(comp => comp.id === competenciaId);
-    return competencia ? competencia.nombre : 'Desconocido';
+    return competencia ? competencia.descripcion : 'Desconocido';
   }
 
   openModal(): void {
@@ -133,7 +152,7 @@ export class ActividadComponent implements OnInit {
     };
     const selectedcompetencia = this.competencias.find(comp => comp.id === this.actividad.competenciaId);
     if (selectedcompetencia) {
-      this.actividad.competenciaNombre = selectedcompetencia.nombre;
+      this.actividad.competenciaNombre = selectedcompetencia.descripcion;
     }
     this.isEditing = true;
     this.openModal();
@@ -163,8 +182,9 @@ export class ActividadComponent implements OnInit {
   }
 
   resetForm(): void {
-    this.actividad = { id: 0, actividad_proyecto: '', result_aprendizaje: '', fecha_inicio_Ac: new Date().toISOString().slice(0, 10), fecha_fin_Ac: new Date().toISOString().slice(0, 10), estado_RAP: '', num_semanas: '', competenciaId: 0, state: true };
+    this.actividad = { id: 0, actividad_proyecto: '', competenciaId: 0, fecha_inicio_Ac: new Date().toISOString().slice(0, 10), fecha_fin_Ac: new Date().toISOString().slice(0, 10), num_semanas: '', state: true  };
     this.filteredCompetencias = [];
+    this.calculateWeeks();
   }
 
 }

@@ -30,94 +30,80 @@
                         <label for="foto" class="form-label">Foto:</label>
                         <input type="file" class="form-control" id="foto" name="foto" accept="image/*" #foto
                             (change)="onFileSelected($event)">
-                            
+
                         <!-- Image preview and Remove button -->
                         <div *ngIf="selectedImage" class="image-preview-container">
                             <img [src]="selectedImage" alt="Image preview" class="image-preview" />
                             <button type="button" class="button2" (click)="removeImage()">Remove Image</button>
                         </div>
 
-                    <div class="col">
-                        <label for="identificacion" class="form-label">Identificación:</label>
-                        <input type="text" class="form-control" id="identificacion" name="identificacion"
-                            [(ngModel)]="instructor.identificacion" required>
+                        <div class="col">
+                            <label for="identificacion" class="form-label">Identificación:</label>
+                            <input type="text" class="form-control" id="identificacion" name="identificacion"
+                                [(ngModel)]="instructor.identificacion" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label for="vinculo" class="form-label">Vinculo:</label>
+                            <input type="text" class="form-control" id="vinculo" name="vinculo"
+                                [(ngModel)]="instructor.vinculo" required>
+                        </div>
+
+                        <div class="col">
+                            <label for="especialidad" class="form-label">Especialidad:</label>
+                            <input type="text" class="form-control" id="especialidad" name="especialidad"
+                                [(ngModel)]="instructor.especialidad" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label for="correo" class="form-label">Correo:</label>
+                            <input type="email" class="form-control" id="correo" name="correo"
+                                [(ngModel)]="instructor.correo" required>
+                        </div>
+
+                        <div class="col">
+                            <label for="fecha_inicio" class="form-label  input-field">Fecha de Inicio:</label>
+                            <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio"
+                                [(ngModel)]="instructor.fecha_inicio" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <label for="horaIngreso" class="form-label">Hora de ingreso:</label>
+                            <input type="time" class="form-control" id="horaIngreso" name="hora_ingreso"
+                                [(ngModel)]="instructor.hora_ingreso" required>
+                        </div>
+
+                        <div class="col">
+                            <label for="horaEgreso" class="form-label">Hora de egreso:</label>
+                            <input type="time" class="form-control" id="horaEgreso" name="hora_egreso"
+                                [(ngModel)]="instructor.hora_egreso" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col" *ngIf="instructor.id !== 0">
+                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
+                                [(ngModel)]="instructor.state" [attr.data-bs-toggle]="'tooltip'"
+                                [attr.data-bs-placement]="'top'"
+                                [attr.title]="instructor.state ? 'Activo' : 'Inactivo'" />
+                            <label class="form-check-label" for="state">Estado</label>
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                            <button type="submit" class="btn btn-primary" [disabled]="instructorForm.invalid">
+                                {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                            </button>
+                        </div>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col">
-                        <label for="vinculo" class="form-label">Vinculo:</label>
-                        <input type="text" class="form-control" id="vinculo" name="vinculo"
-                            [(ngModel)]="instructor.vinculo" required>
-                    </div>
-
-                    <div class="col">
-                        <label for="especialidad" class="form-label">Especialidad:</label>
-                        <input type="text" class="form-control" id="especialidad" name="especialidad"
-                            [(ngModel)]="instructor.especialidad" required>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <label for="correo" class="form-label">Correo:</label>
-                        <input type="email" class="form-control" id="correo" name="correo"
-                            [(ngModel)]="instructor.correo" required>
-                    </div>
-
-                    <div class="col">
-                        <label for="fecha_inicio" class="form-label  input-field">Fecha de Inicio:</label>
-                        <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio"
-                            [(ngModel)]="instructor.fecha_inicio" required>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <label for="periodo" class="form-label">Periodo:</label>
-                        <select class="form-control" id="periodo" name="periodo" [(ngModel)]="instructor.periodo" required>
-                            <option value="" disabled selected>Seleccione una opción</option>
-                            <option>T1-1 (22-ene - 28-feb)</option>
-                            <option>T1-2 (29-feb - 6-abr)</option>
-                            <option>T2-1 (15-abr - 22-may)</option>
-                            <option>T2-2 (23-may - 29-jun)</option>
-                            <option>T3-1 (8-jul - 14-ago)</option>
-                            <option>T3-2 (15-ago - 20-sep)</option>
-                            <option>T4 (30-sep - 14-dic)</option>
-                          </select>
-                    </div>
-
-                    <div class="col">
-                        <label for="horaIngreso" class="form-label">Hora de ingreso:</label>
-                        <input type="time" class="form-control" id="horaIngreso" name="hora_ingreso"
-                            [(ngModel)]="instructor.hora_ingreso" required>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <label for="horaEgreso" class="form-label">Hora de egreso:</label>
-                        <input type="time" class="form-control" id="horaEgreso" name="hora_egreso"
-                            [(ngModel)]="instructor.hora_egreso" required>
-                    </div>
-
-
-                    <div class="col" *ngIf="instructor.id !== 0">
-                        <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
-                            [(ngModel)]="instructor.state" [attr.data-bs-toggle]="'tooltip'"
-                            [attr.data-bs-placement]="'top'" [attr.title]="instructor.state ? 'Activo' : 'Inactivo'" />
-                        <label class="form-check-label" for="state">Estado</label>
-                    </div>
-                </div>
-
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" [disabled]="instructorForm.invalid">
-                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
-                    </button>
-                </div>
-                 </div>
             </form>
         </div>
     </div>
@@ -149,7 +135,6 @@
                 <th>Especialidad</th>
                 <th>Correos</th>
                 <th>Fecha de inicio</th>
-                <th>Periodo</th>
                 <th>Hora de ingreso</th>
                 <th>Hora de egreso</th>
                 <th>Estado</th>
@@ -173,7 +158,6 @@
                 <td>{{ instructor.especialidad }}</td>
                 <td>{{ instructor.correo }}</td>
                 <td>{{ instructor.fecha_inicio }}</td>
-                <td>{{ instructor.periodo }}</td>
                 <td>{{ formatTime(instructor.hora_ingreso) }}</td>
                 <td>{{ formatTime(instructor.hora_egreso) }}</td>
 

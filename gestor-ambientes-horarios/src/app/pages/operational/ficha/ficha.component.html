@@ -13,18 +13,18 @@
                     <div class="col">
                         <label for="codigo" class="form-label">Código:</label>
                         <input type="text" class="form-control" id="codigo" name="codigo"
-                            [(ngModel)]="ficha.codigo" required maxlength="50"
+                            [(ngModel)]="ficha.codigo" placeholder="Escribir un código" required maxlength="50"
                             pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                     </div>
 
                     <div class="col-md-6">
                         <label for="programaNombre" class="form-label">Programa:</label>
                         <div>
-                            <input type="text" class="form-control input-field" matInput [matAutocomplete]="auto"
+                            <input type="text" class="form-control input-field" matInput [matAutocomplete]="autoProgramas"
                                 id="programaNombre" name="programaNombre"
                                 [(ngModel)]="ficha.programaNombre" (input)="searchPrograma($event)" placeholder="Buscar programa" required
                                 #programaNombre="ngModel" />
-                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onProgramaSelect($event)">
+                            <mat-autocomplete #autoProgramas="matAutocomplete" (optionSelected)="onProgramaSelect($event)">
                                 <mat-option *ngFor="let programa of filteredProgramas"
                                     [value]="programa.nombre">
                                     {{ programa.nombre }}
@@ -38,11 +38,11 @@
                 <div class="col">
                     <label for="ambienteNombre" class="form-label">Ambiente:</label>
                     <div>
-                        <input type="text" class="form-control input-field" matInput [matAutocomplete]="auto"
+                        <input type="text" class="form-control input-field" matInput [matAutocomplete]="autoAmbientes"
                             id="ambienteNombre" name="ambienteNombre"
                             [(ngModel)]="ficha.ambienteNombre" (input)="searchAmbiente($event)" placeholder="Buscar ambiente" required
                             #ambienteNombre="ngModel" />
-                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onAmbienteSelect($event)">
+                        <mat-autocomplete #autoAmbientes="matAutocomplete" (optionSelected)="onAmbienteSelect($event)">
                             <mat-option *ngFor="let ambiente of filteredAmbientes"
                                 [value]="ambiente.nombre">
                                 {{ ambiente.nombre }}
@@ -51,14 +51,37 @@
                     </div>
                 </div>
 
+
+                    <div class="col">
+                        <label for="fecha_inicio" class="form-label">Fecha de inicio:</label>
+                        <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio"
+                            [(ngModel)]="ficha.fecha_inicio" required>
+                    </div>
+                </div>
+
+                    <div class="row">
+                    <div class="col">
+                        <label for="fecha_fin" class="form-label">Fecha de fin:</label>
+                        <input type="date" class="form-control" id="fecha_fin" name="fecha_fin"
+                            [(ngModel)]="ficha.fecha_fin" required>
+                    </div>
+
+                    <div class="col">
+                        <label for="fin_lectiva" class="form-label">Fin de lectiva:</label>
+                        <input type="date" class="form-control" id="fin_lectiva" name="fin_lectiva"
+                            [(ngModel)]="ficha.fin_lectiva" required>
+                    </div>
+                </div>
+
+                <div class="row">
             <div class="col">
                 <label for="proyectoNombre" class="form-label">Proyecto:</label>
                 <div>
-                    <input type="text" class="form-control input-field" matInput [matAutocomplete]="auto"
+                    <input type="text" class="form-control input-field" matInput [matAutocomplete]="autoProyectos"
                         id="proyectoNombre" name="proyectoNombre"
                         [(ngModel)]="ficha.proyectoNombre" (input)="searchProyecto($event)" placeholder="Buscar proyecto" required
                         #proyectoNombre="ngModel" />
-                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onProyectoSelect($event)">
+                    <mat-autocomplete #autoProyectos="matAutocomplete" (optionSelected)="onProyectoSelect($event)">
                         <mat-option *ngFor="let proyecto of filteredProyectos"
                             [value]="proyecto.nombre">
                             {{ proyecto.nombre }}
@@ -66,9 +89,14 @@
                     </mat-autocomplete>
                 </div>
             </div>
-        </div>
 
-                <div class="row">
+        <div class="col">
+            <label for="num_semanas" class="form-label">Número de semanas:</label>
+            <input type="text" class="form-control" id="num_semanas" name="num_semanas"
+                [(ngModel)]="ficha.num_semanas" required>
+        </div>
+    </div>
+
                     <div class="col" *ngIf="ficha.id !== 0">
                         <label for="state" class="form-label">Estado:</label>
                         <div>
@@ -80,7 +108,6 @@
                                 }}</label>
                         </div>
                     </div>
-                </div>
 
 
                 <div class="modal-footer">
@@ -105,10 +132,13 @@
         <thead>
             <tr>
                 <th>Código</th>
-                <th>Gestor</th>
                 <th>Programa</th>
-                <th>Ambiente</th>
                 <th>Proyecto</th>
+                <th>Fecha de inicio</th>
+                <th>Fecha de fin</th>
+                <th>Fin de lectiva</th>
+                <th>Númerode semanas</th>
+                <th>Cupo</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>
@@ -116,10 +146,13 @@
         <tbody>
             <tr *ngFor="let ficha of fichas">
                 <td>{{ ficha.codigo }}</td>
-                <td>{{ getUserNombre(ficha.userId) }}</td>
                 <td>{{ getProgramaNombre(ficha.programaId) }}</td>
-                <td>{{ getAmbienteNombre(ficha.ambienteId) }}</td>
                 <td>{{ getProyectoNombre(ficha.proyectoId) }}</td>
+                <td>{{ ficha.fecha_inicio }}</td>
+                <td>{{ ficha.fecha_fin }}</td>
+                <td>{{ ficha.fin_lectiva }}</td>
+                <td>{{ ficha.num_semanas }}</td>
+                <td>{{ ficha.cupo }}</td>
                 <td>{{ ficha.state ? 'Activo' : 'Inactivo' }}</td>
                 <td>
                     <button class="btn-icon edit" (click)="editFicha(ficha)" title="Editar">

@@ -18,43 +18,23 @@
                     </div>
 
                     <div class="col">
-                        <label for="result_aprendizaje" class="form-label">Resultado de aprendizaje:</label>
-                        <input type="text" class="form-control" id="result_aprendizaje" name="result_aprendizaje"
-                            [(ngModel)]="actividad.result_aprendizaje" required maxlength="50"
-                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col">
-                        <label for="fecha_inicio_Ac" class="form-label">Fecha de inicio:</label>
+                        <label for="fecha_inicio_Ac" class="form-label">Fecha de inicio actividad:</label>
                         <input type="date" class="form-control" id="fecha_inicio_Ac" name="fecha_inicio_Ac"
-                            [(ngModel)]="actividad.fecha_inicio_Ac" required>
-                    </div>
-
-                    <div class="col">
-                        <label for="fecha_fin_Ac" class="form-label">Fecha de fin:</label>
-                        <input type="date" class="form-control" id="fecha_fin_Ac" name="fecha_fin_Ac"
-                            [(ngModel)]="actividad.fecha_fin_Ac" required>
+                            [(ngModel)]="actividad.fecha_inicio_Ac" (change)="onDateChange()" required>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col">
-                        <label for="estado_RAP" class="form-label">Estado de RAP:</label>
-                        <select class="form-control" id="estado_RAP" name="estado_RAP"
-                            [(ngModel)]="actividad.estado_RAP" required>
-                            <option value="" disabled selected>Seleccione un estado</option>
-                            <option value="En ejecución">En ejecución</option>
-                            <option value="Evaluado">Evaluado</option>
-                        </select>
+                        <label for="fecha_fin_Ac" class="form-label">Fecha de fin actividad:</label>
+                        <input type="date" class="form-control" id="fecha_fin_Ac" name="fecha_fin_Ac"
+                            [(ngModel)]="actividad.fecha_fin_Ac" (change)="onDateChange()" required>
                     </div>
-
 
                     <div class="col">
                         <label for="num_semanas" class="form-label">Número de semanas:</label>
                         <input type="text" class="form-control" id="num_semanas" name="num_semanas"
-                            [(ngModel)]="actividad.num_semanas" required>
+                            [(ngModel)]="actividad.num_semanas" readonly>
                     </div>
                 </div>
 
@@ -68,8 +48,8 @@
                                 #competenciaNombre="ngModel" />
                             <mat-autocomplete #auto="matAutocomplete" (optionSelected)="oncompetenciaSelect($event)">
                                 <mat-option *ngFor="let competencia of filteredCompetencias"
-                                    [value]="competencia.nombre">
-                                    {{ competencia.nombre }}
+                                    [value]="competencia.descripcion">
+                                    {{ competencia.descripcion }}
                                 </mat-option>
                             </mat-autocomplete>
                         </div>
@@ -111,12 +91,10 @@
         <thead>
             <tr>
                 <th>Actividad del proyecto</th>
-                <th>Resultado de aprendizaje</th>
+                <th>Competencias</th>
                 <th>Fecha de inicio</th>
                 <th>Fecha de fin</th>
-                <th>Estado de RAP</th>
                 <th>Número de semanas</th>
-                <th>Competencia</th>
                 <th>Estado</th>
                 <th>Acciones</th>
             </tr>
@@ -124,12 +102,10 @@
         <tbody>
             <tr *ngFor="let actividad of actividades">
                 <td>{{ actividad.actividad_proyecto }}</td>
-                <td>{{ actividad.result_aprendizaje }}</td>
+                <td>{{ getCompetenciaNombre(actividad.competenciaId) }}</td>
                 <td>{{ actividad.fecha_inicio_Ac }}</td>
                 <td>{{ actividad.fecha_fin_Ac }}</td>
-                <td>{{ actividad.estado_RAP }}</td>
                 <td>{{ actividad.num_semanas }}</td>
-                <td>{{ getCompetenciaNombre(actividad.competenciaId) }}</td>
                 <td>{{ actividad.state ? 'Activo' : 'Inactivo' }}</td>
                 <td>
                     <button class="btn-icon edit" (click)="editActividades(actividad)" title="Editar">

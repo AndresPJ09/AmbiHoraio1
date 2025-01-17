@@ -24,7 +24,6 @@ export class InstructorComponent implements OnInit {
     especialidad: '',
     correo: '',
     fecha_inicio: new Date().toISOString().slice(0, 10),
-    periodo: '',
     hora_ingreso: '',
     hora_egreso: '',
     state: true
@@ -152,8 +151,8 @@ export class InstructorComponent implements OnInit {
       ...instructor,
 
       fecha_inicio: new Date(instructor.fecha_inicio).toISOString().slice(0, 10),
-      hora_ingreso: new Date(instructor.hora_ingreso).toISOString().slice(11, 16),
-      hora_egreso: new Date(instructor.hora_egreso).toISOString().slice(11, 16),
+      hora_ingreso: this.extractTime(instructor.hora_ingreso),
+      hora_egreso: this.extractTime(instructor.hora_egreso),
       foto: instructor.foto ? instructor.foto : null
     };
 
@@ -186,7 +185,7 @@ export class InstructorComponent implements OnInit {
   }
 
   resetForm(): void {
-    this.instructor = { id: 0, nombres: '', apellidos: '', foto: '', identificacion: '', vinculo: '', especialidad: '', correo: '', fecha_inicio: new Date().toISOString().slice(0, 10), periodo: '', hora_ingreso: '', hora_egreso: '', state: true };
+    this.instructor = { id: 0, nombres: '', apellidos: '', foto: '', identificacion: '', vinculo: '', especialidad: '', correo: '', fecha_inicio: new Date().toISOString().slice(0, 10), hora_ingreso: '', hora_egreso: '', state: true };
     this.selectedImage = null;
     this.removeImage();
     if (this.fileInput?.nativeElement) {

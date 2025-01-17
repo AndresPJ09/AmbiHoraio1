@@ -36,8 +36,10 @@ export class FichaComponent implements OnInit {
   filteredProgramas: any[] = [];
   filteredAmbientes: any[] = [];
   filteredProyectos: any[] = [];
+  filteredNumSemanas: any[] = [];
   isDropdownOpen = false;
   isEditing = false;
+  numSemanasPorProyecto: { [proyectoId: number]: string[] } = {};
 
   private apiUrl = 'http://localhost:5062/api/Ficha';
   private usersUrl = 'http://localhost:5062/api/User';
@@ -60,8 +62,8 @@ export class FichaComponent implements OnInit {
       (fichas) => {
         this.fichas = fichas.map(ficha => ({
           ...ficha,
-          fecha_inicio_Ac: new Date(ficha.fecha_inicio).toISOString().slice(0, 10),
-          fecha_fin_Ac: new Date(ficha.fecha_fin).toISOString().slice(0, 10),
+          fecha_inicio: new Date(ficha.fecha_inicio).toISOString().slice(0, 10),
+          fecha_fin: new Date(ficha.fecha_fin).toISOString().slice(0, 10),
           fin_lectiva: new Date(ficha.fin_lectiva).toISOString().slice(0, 10)
         }));
         this.cdr.detectChanges();
@@ -101,6 +103,7 @@ export class FichaComponent implements OnInit {
       (proyectos) => {
         this.proyectos = proyectos;
         this.filteredProyectos = proyectos;
+        console.log(this.proyectos);
       },
       (error) => {
         console.error('Error fetching proyectos:', error);
@@ -113,8 +116,6 @@ export class FichaComponent implements OnInit {
       (programas) => {
         this.programas = programas;
         this.filteredProgramas = programas;
-        
-        console.log("dsds", this.programas);
       },
       (error) => {
         console.error('Error fetching programas:', error);
@@ -310,6 +311,7 @@ export class FichaComponent implements OnInit {
     this.filteredUsers = [];
     this.filteredAmbientes = [];
     this.filteredProyectos = [];
+    this.filteredNumSemanas = [];
     this.filteredProgramas = [];
   }
 }

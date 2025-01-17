@@ -125,7 +125,7 @@ export class ProyectoComponent implements OnInit {
     this.proyecto = {...proyecto };
     const selectedactividad = this.actividades.find(acti => acti.id === this.proyecto.actividadId);
     if (selectedactividad) {
-      this.proyecto.actividadNombre = selectedactividad.nombre;
+      this.proyecto.actividadNombre = selectedactividad.actividad_proyecto;
     }
     this.isEditing = true;
     this.openModal();
