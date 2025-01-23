@@ -25,8 +25,8 @@
 
                 <div class="row">
                     <div class="col">
-                        <label for="cupo" class="form-label">Capacidad:</label>
-                        <input type="cupo" class="form-control" id="cupo" name="cupo" [(ngModel)]="ambiente.cupo" required>
+                        <label for="capacidad" class="form-label">Capacidad:</label>
+                        <input type="capacidad" class="form-control" id="capacidad" name="capacidad" [(ngModel)]="ambiente.capacidad" required>
                     </div>
 
                       <div class="col" *ngIf="ambiente.id !== 0">
@@ -76,7 +76,7 @@
             <tr *ngFor="let ambiente of ambientes">
                 <td>{{ ambiente.codigo }}</td>
                 <td>{{ ambiente.nombre }}</td>
-                <td>{{ ambiente.cupo }}</td>
+                <td>{{ ambiente.capacidad }}</td>
                 <td>{{ ambiente.state ? 'Activo' : 'Inactivo' }}</td>
                 <td>
                     <button class="btn-icon edit" (click)="editAmbientes(ambiente)" title="Editar">

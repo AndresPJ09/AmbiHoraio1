@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
 })
 export class AmbienteComponent implements OnInit {
   ambientes: any[] = [];
-  ambiente: any = { id: 0, codigo: '', nombre: '', cupo: '', state: true };
+  ambiente: any = { id: 0, codigo: '', nombre: '', capacidad: '', state: true };
   isModalOpen = false;
   isDropdownOpen = false;
   isEditing = false;
@@ -108,7 +108,7 @@ export class AmbienteComponent implements OnInit {
   }
 
   resetForm(): void {
-    this.ambiente ={ id: 0, codigo: '', nombre: '', cupo: '', state: true };
+    this.ambiente ={ id: 0, codigo: '', nombre: '', capacidad: '', state: true };
   }
 }
 

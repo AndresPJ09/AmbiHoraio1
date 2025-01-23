@@ -12,21 +12,20 @@
                 <div class="row">
                     <div class="col">
                         <label for="codigo" class="form-label">Código:</label>
-                        <input type="text" class="form-control" id="codigo" name="codigo"
-                            [(ngModel)]="ficha.codigo" placeholder="Escribir un código" required maxlength="50"
-                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                        <input type="text" class="form-control" id="codigo" name="codigo" [(ngModel)]="ficha.codigo"
+                            placeholder="Escribir un código" required>
                     </div>
 
                     <div class="col-md-6">
                         <label for="programaNombre" class="form-label">Programa:</label>
                         <div>
-                            <input type="text" class="form-control input-field" matInput [matAutocomplete]="autoProgramas"
-                                id="programaNombre" name="programaNombre"
-                                [(ngModel)]="ficha.programaNombre" (input)="searchPrograma($event)" placeholder="Buscar programa" required
-                                #programaNombre="ngModel" />
-                            <mat-autocomplete #autoProgramas="matAutocomplete" (optionSelected)="onProgramaSelect($event)">
-                                <mat-option *ngFor="let programa of filteredProgramas"
-                                    [value]="programa.nombre">
+                            <input type="text" class="form-control input-field" matInput
+                                [matAutocomplete]="autoProgramas" id="programaNombre" name="programaNombre"
+                                [(ngModel)]="ficha.programaNombre" (input)="searchPrograma($event)"
+                                placeholder="Buscar programa" required #programaNombre="ngModel" />
+                            <mat-autocomplete #autoProgramas="matAutocomplete"
+                                (optionSelected)="onProgramaSelect($event)">
+                                <mat-option *ngFor="let programa of filteredProgramas" [value]="programa.nombre">
                                     {{ programa.nombre }}
                                 </mat-option>
                             </mat-autocomplete>
@@ -35,35 +34,35 @@
                 </div>
 
                 <div class="row">
-                <div class="col">
-                    <label for="ambienteNombre" class="form-label">Ambiente:</label>
-                    <div>
-                        <input type="text" class="form-control input-field" matInput [matAutocomplete]="autoAmbientes"
-                            id="ambienteNombre" name="ambienteNombre"
-                            [(ngModel)]="ficha.ambienteNombre" (input)="searchAmbiente($event)" placeholder="Buscar ambiente" required
-                            #ambienteNombre="ngModel" />
-                        <mat-autocomplete #autoAmbientes="matAutocomplete" (optionSelected)="onAmbienteSelect($event)">
-                            <mat-option *ngFor="let ambiente of filteredAmbientes"
-                                [value]="ambiente.nombre">
-                                {{ ambiente.nombre }}
-                            </mat-option>
-                        </mat-autocomplete>
+                    <div class="col">
+                        <label for="proyectoNombre" class="form-label">Proyecto:</label>
+                        <div>
+                            <input type="text" class="form-control input-field" matInput
+                                [matAutocomplete]="autoProyectos" id="proyectoNombre" name="proyectoNombre"
+                                [(ngModel)]="ficha.proyectoNombre" (input)="searchProyecto($event)"
+                                placeholder="Buscar proyecto" required #proyectoNombre="ngModel" />
+                            <mat-autocomplete #autoProyectos="matAutocomplete"
+                                (optionSelected)="onProyectoSelect($event)">
+                                <mat-option *ngFor="let proyecto of filteredProyectos" [value]="proyecto.nombre">
+                                    {{ proyecto.nombre }}
+                                </mat-option>
+                            </mat-autocomplete>
+                        </div>
                     </div>
-                </div>
 
 
                     <div class="col">
                         <label for="fecha_inicio" class="form-label">Fecha de inicio:</label>
                         <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio"
-                            [(ngModel)]="ficha.fecha_inicio" required>
+                            [(ngModel)]="ficha.fecha_inicio" (change)="onDateChange()" required>
                     </div>
                 </div>
 
-                    <div class="row">
+                <div class="row">
                     <div class="col">
                         <label for="fecha_fin" class="form-label">Fecha de fin:</label>
                         <input type="date" class="form-control" id="fecha_fin" name="fecha_fin"
-                            [(ngModel)]="ficha.fecha_fin" required>
+                            [(ngModel)]="ficha.fecha_fin" (change)="onDateChange()" required>
                     </div>
 
                     <div class="col">
@@ -73,49 +72,42 @@
                     </div>
                 </div>
 
+
                 <div class="row">
-            <div class="col">
-                <label for="proyectoNombre" class="form-label">Proyecto:</label>
-                <div>
-                    <input type="text" class="form-control input-field" matInput [matAutocomplete]="autoProyectos"
-                        id="proyectoNombre" name="proyectoNombre"
-                        [(ngModel)]="ficha.proyectoNombre" (input)="searchProyecto($event)" placeholder="Buscar proyecto" required
-                        #proyectoNombre="ngModel" />
-                    <mat-autocomplete #autoProyectos="matAutocomplete" (optionSelected)="onProyectoSelect($event)">
-                        <mat-option *ngFor="let proyecto of filteredProyectos"
-                            [value]="proyecto.nombre">
-                            {{ proyecto.nombre }}
-                        </mat-option>
-                    </mat-autocomplete>
+                    <div class="col">
+                        <label for="num_semanas" class="form-label">Número de semanas:</label>
+                        <input type="text" class="form-control" id="num_semanas" name="num_semanas"
+                            [(ngModel)]="ficha.num_semanas" required>
+                    </div>
+
+
+                    <div class="col">
+                        <label for="cupo" class="form-label">Cupo:</label>
+                        <input type="text" class="form-control" id="cupo" name="cupo" [(ngModel)]="ficha.cupo"
+                            placeholder="Escribir disponibilidad de cupo" required>
+                    </div>
                 </div>
-            </div>
 
-        <div class="col">
-            <label for="num_semanas" class="form-label">Número de semanas:</label>
-            <input type="text" class="form-control" id="num_semanas" name="num_semanas"
-                [(ngModel)]="ficha.num_semanas" required>
-        </div>
-    </div>
-
+                <div class="row">
                     <div class="col" *ngIf="ficha.id !== 0">
                         <label for="state" class="form-label">Estado:</label>
                         <div>
                             <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
                                 [(ngModel)]="ficha.state" [attr.data-bs-toggle]="'tooltip'"
-                                [attr.data-bs-placement]="'top'"
-                                [attr.title]="ficha.state ? 'Activo' : 'Inactivo'" />
+                                [attr.data-bs-placement]="'top'" [attr.title]="ficha.state ? 'Activo' : 'Inactivo'" />
                             <label class="form-check-label" for="state">{{ ficha.state ? 'Activo' : 'Inactivo'
                                 }}</label>
                         </div>
                     </div>
 
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" [disabled]="fichaForm.invalid">
-                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
-                    </button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                            <button type="submit" class="btn btn-primary" [disabled]="fichaForm.invalid">
+                                {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                            </button>
+                    </div>
                 </div>
+                
             </form>
         </div>
     </div>

@@ -1,9 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
 declare var bootstrap: any;
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+
+
 
 @Component({
   selector: 'app-person',
@@ -11,7 +16,10 @@ declare var bootstrap: any;
   imports: [
     HttpClientModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
   ],
   templateUrl: './person.component.html',
   styleUrl: './person.component.scss'
@@ -20,29 +28,54 @@ export class PersonComponent implements OnInit {
   persons: any[] = [];
   person: any = { id: 0, name: '', last_name: '', email: '', identification: '', state: true };
   isModalOpen = false;
-  filteredPersons: any[] = [];
   isDropdownOpen = false;
   isEditing = false;
+  isLoading: boolean = false;
+  searchTerm: string = '';
+  displayedColumns: string[] = ['name', 'last_name', 'email', 'identification', 'state', 'actions'];
+  dataSource = new MatTableDataSource<any>(this.persons);
+
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  @ViewChild(MatSort) sort: MatSort | undefined;
 
   private apiUrl = 'http://localhost:5062/api/Person';
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.getPersons();
   }
+
+  ngAfterViewInit() {
+    if (this.paginator && this.sort) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
+  }
+
+  // Método para aplicar el filtro
+  applyFilter(): void {
+    this.dataSource.filter = this.searchTerm.trim().toLowerCase();
+  }
+  
 
 
   getPersons(): void {
     this.http.get<any[]>(this.apiUrl).subscribe(
       (persons) => {
         this.persons = persons;
+        this.dataSource.data = this.persons;  // Actualiza la tabla
+        if (this.paginator) {
+          this.paginator.pageIndex = 0; // Restablece la página
+          this.dataSource.paginator = this.paginator;
+        }
       },
       (error) => {
         console.error('Error fetching persons:', error);
       }
     );
   }
+
 
   openModal(): void {
     this.isModalOpen = true;
@@ -52,19 +85,18 @@ export class PersonComponent implements OnInit {
     this.isModalOpen = false;
     this.resetForm();
     this.isEditing = false;
-    this.filteredPersons = [];
   }
 
   onSubmit(form: NgForm): void {
     const personToSave = { ...this.person };
-  
+
     if (this.person.id === 0) {
       // Si la persona no tiene ID (es un nuevo registro)
       this.http.post<any>(this.apiUrl, personToSave).subscribe(
         (newPerson) => {
           this.getPersons(); // Actualiza la lista de personas
           this.closeModal();  // Cierra el modal
-          Swal.fire('Éxito', '¡Persona creada exitosamente!', 'success'); 
+          Swal.fire('Éxito', '¡Persona creada exitosamente!', 'success');
         },
         (error) => {
           console.error('Error creando persona:', error);
@@ -74,9 +106,9 @@ export class PersonComponent implements OnInit {
     } else {
       this.http.put(this.apiUrl, personToSave).subscribe(
         () => {
-          this.getPersons(); 
+          this.getPersons();
           this.closeModal()
-          Swal.fire('Éxito', '¡Persona actualizada exitosamente!', 'success'); 
+          Swal.fire('Éxito', '¡Persona actualizada exitosamente!', 'success');
         },
         (error) => {
           console.error('Error actualizando persona:', error);
@@ -85,7 +117,7 @@ export class PersonComponent implements OnInit {
       );
     }
   }
-  
+
   editPersons(person: any): void {
     this.person = { ...person };
     this.isEditing = true;
@@ -112,7 +144,6 @@ export class PersonComponent implements OnInit {
   }
 
   resetForm(): void {
-    this.person = {  id: 0, name: '', last_name: '', email: '', identification: '', state: true};
-    this.filteredPersons = [];
+    this.person = { id: 0, name: '', last_name: '', email: '', identification: '', state: true };
   }
 }

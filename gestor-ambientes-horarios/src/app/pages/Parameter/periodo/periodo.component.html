@@ -1,0 +1,78 @@
+<div class="container">
+
+    <!-- Modal para agregar/editar periodo -->
+    <div id="periodoModal" class="modal" [ngClass]="{'show-modal': isModalOpen}">
+        <div class="modal-content">
+            <span class="close" (click)="closeModal()">&times;</span>
+            <h2>{{ periodo.id === 0 ? 'Agregar periodo' : 'Editar periodo' }}</h2>
+
+            <hr class="modal-border">
+
+            <form #periodoForm="ngForm" (ngSubmit)="onSubmit(periodoForm)" novalidate>
+                <input type="hidden" name="id" [(ngModel)]="periodo.id">
+
+                <div class="row">
+                    <div class="col">
+                        <label for="mes" class="form-label">Mes:</label>
+                        <input type="month" class="form-control" id="mes" name="mes" [(ngModel)]="periodo.mes" required>
+                    </div>
+
+
+                      <div class="col" *ngIf="periodo.id !== 0">
+                        <input 
+                          type="checkbox" 
+                          class="form-check-input bulk-select-checkbox" 
+                          id="state" 
+                          name="state" 
+                          [(ngModel)]="periodo.state" 
+                          [attr.data-bs-toggle]="'tooltip'" 
+                          [attr.data-bs-placement]="'top'"
+                          [attr.title]="periodo.state ? 'Activo' : 'Inactivo'" />
+                        <label class="form-check-label" for="state">Estado</label>
+                      </div>
+                    </div>
+                  
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="periodoForm.invalid">
+                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                </div>
+         
+            </form>
+        </div>
+    </div>
+
+    <!-- Título con estilo -->
+    <h2 class="title">Lista de Periodos</h2>
+
+    <!-- Botón para abrir el modal de agregar periodos -->
+    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar Periodo</button>
+
+    <!-- Tabla para mostrar los registros de periodos -->
+    <table class="table table-bordered table-hover table-striped">
+        <thead>
+            <tr>
+                <th>Mes</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let periodo of periodos">
+                <td>{{ periodo.mes }}</td>
+                <td>{{ periodo.state ? 'Activo' : 'Inactivo' }}</td>
+                <td>
+                    <button class="btn-icon edit" (click)="editPeriodos(periodo)" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-icon delete" (click)="deletePeriodos(periodo.id)" title="Eliminar">
+                        <i class="bi bi-trash3-fill"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

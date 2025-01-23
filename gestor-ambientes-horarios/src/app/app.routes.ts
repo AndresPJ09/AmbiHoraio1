@@ -26,6 +26,8 @@ import { HorarioComponent } from './pages/operational/horario/horario.component'
 import { InstructorHorarioComponent } from './pages/operational/instructor-horario/instructor-horario.component';
 import { ConsolidadoHorarioComponent } from './pages/operational/consolidado-horario/consolidado-horario.component';
 import { ConsolidadoAmbienteComponent } from './pages/operational/consolidado-ambiente/consolidado-ambiente.component';
+import { PeriodoComponent } from './pages/Parameter/periodo/periodo.component';
+import { RapComponent } from './pages/operational/rap/rap.component';
 
 export const routes: Routes = [
 
@@ -74,7 +76,9 @@ export const routes: Routes = [
             { path: 'horario', component: HorarioComponent, },
             { path: 'instructorHorario', component: InstructorHorarioComponent, },
             { path: 'consolidadoHorario', component: ConsolidadoHorarioComponent, },
-            { path: 'consolidadoAmbiente', component: ConsolidadoAmbienteComponent, }
+            { path: 'consolidadoAmbiente', component: ConsolidadoAmbienteComponent, },
+            { path: 'periodo', component: PeriodoComponent, },
+            { path: 'rap', component: RapComponent, }
         ]
     },
     {

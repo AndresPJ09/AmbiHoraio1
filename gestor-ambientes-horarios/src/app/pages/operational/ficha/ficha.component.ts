@@ -18,7 +18,8 @@ import Swal from 'sweetalert2';
 export class FichaComponent implements OnInit {
   fichas: any[] = [];
   ficha: any = { 
-    id: 0, codigo: '', 
+    id: 0,
+    codigo: '', 
     userId: 0, 
     programaId: 0, 
     ambienteId: 0, 
@@ -26,7 +27,9 @@ export class FichaComponent implements OnInit {
     fecha_inicio: new Date().toISOString().slice(0, 10), 
     fecha_fin: new Date().toISOString().slice(0, 10), 
     fin_lectiva: new Date().toISOString().slice(0, 10), 
-    num_semanas: '', state: true };
+    num_semanas: '',
+    cupo: '',
+    state: true };
   users: any[] = [];
   programas: any[] = [];
   ambientes: any[] = [];
@@ -55,6 +58,25 @@ export class FichaComponent implements OnInit {
     this.getProgramas();
     this.getAmbientes();
     this.getProyectos();
+    this.calculateWeeks();
+  }
+
+  calculateWeeks(): void {
+    const fechaInicio = new Date(this.ficha.fecha_inicio);
+    const fechaFin = new Date(this.ficha.fecha_fin);
+
+    // Calcular la diferencia en milisegundos
+    const diffInMilliseconds = fechaFin.getTime() - fechaInicio.getTime();
+    // Convertir a semanas
+    const weeks = Math.ceil(diffInMilliseconds / (1000 * 60 * 60 * 24 * 7));
+
+    // Asignar el número de semanas
+    this.ficha.num_semanas = weeks > 0 ? weeks.toString() : '0';
+  }
+
+  // Llama esta función cada vez que se actualizan las fechas
+  onDateChange(): void {
+    this.calculateWeeks();
   }
 
   getFichas(): void {
@@ -299,7 +321,8 @@ export class FichaComponent implements OnInit {
 
   resetForm(): void {
     this.  ficha = { 
-      id: 0, codigo: '', 
+      id: 0,
+      codigo: '', 
       userId: 0, 
       programaId: 0, 
       ambienteId: 0, 
@@ -307,11 +330,14 @@ export class FichaComponent implements OnInit {
       fecha_inicio: new Date().toISOString().slice(0, 10), 
       fecha_fin: new Date().toISOString().slice(0, 10), 
       fin_lectiva: new Date().toISOString().slice(0, 10), 
-      num_semanas: '', state: true };
+      num_semanas: '',
+      cupo: '',
+      state: true };
     this.filteredUsers = [];
     this.filteredAmbientes = [];
     this.filteredProyectos = [];
     this.filteredNumSemanas = [];
     this.filteredProgramas = [];
+    this.calculateWeeks();
   }
 }

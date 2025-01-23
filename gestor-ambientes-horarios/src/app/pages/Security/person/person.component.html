@@ -1,4 +1,5 @@
 <div class="container">
+
     <!-- Modal para agregar/editar persona -->
     <div id="personModal" class="modal" [ngClass]="{'show-modal': isModalOpen}">
         <div class="modal-content">
@@ -12,46 +13,45 @@
                 <div class="row">
                     <div class="col">
                         <label for="name" class="form-label">Nombre:</label>
-                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="person.name" required maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="person.name" required
+                            maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                     </div>
 
                     <div class="col">
                         <label for="last_name" class="form-label">Apellido:</label>
-                        <input type="text" class="form-control" id="last_name" name="last_name" [(ngModel)]="person.last_name" required maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                        <input type="text" class="form-control" id="last_name" name="last_name"
+                            [(ngModel)]="person.last_name" required maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col">
                         <label for="email" class="form-label">Email:</label>
-                        <input type="email" class="form-control" id="email" name="email" [(ngModel)]="person.email" required maxlength="100" 
-                               pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
-                               title="El email debe tener un @ y terminar en gmail.com"
-                               data-bs-toggle="tooltip" data-bs-placement="top">
+                        <input type="email" class="form-control" id="email" name="email" [(ngModel)]="person.email"
+                            required maxlength="100" pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
+                            title="El email debe tener un @ y terminar en gmail.com" data-bs-toggle="tooltip"
+                            data-bs-placement="top">
                     </div>
 
                     <div class="col">
                         <label for="identification" class="form-label">Identificación:</label>
-                        <input type="text" class="form-control" id="identification" name="identification" [(ngModel)]="person.identification" required maxlength="10" pattern="^\d{1,10}$" >
+                        <input type="text" class="form-control" id="identification" name="identification"
+                            [(ngModel)]="person.identification" required maxlength="10" pattern="^\d{1,10}$">
                     </div>
                 </div>
 
                 <div class="modal-body">
                     <div class="row">
-                      <div class="col" *ngIf="person.id !== 0">
-                        <input 
-                          type="checkbox" 
-                          class="form-check-input bulk-select-checkbox" 
-                          id="state" 
-                          name="state" 
-                          [(ngModel)]="person.state" 
-                          [attr.data-bs-toggle]="'tooltip'" 
-                          [attr.data-bs-placement]="'top'"
-                          [attr.title]="person.state ? 'Activo' : 'Inactivo'" />
-                        <label class="form-check-label" for="state">Estado</label>
-                      </div>
+                        <div class="col" *ngIf="person.id !== 0">
+                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
+                            [(ngModel)]="person.state" 
+                            [ngClass]="person.state ? 'state-active' : 'state-inactive'"
+                            [attr.data-bs-toggle]="'tooltip'" [attr.data-bs-placement]="'top'" [attr.title]="person.state ? 'Activo' : 'Inactivo'" />
+                        
+                            <label class="form-check-label" for="state">Estado</label>
+                        </div>
                     </div>
-                  </div>
+                </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
@@ -67,36 +67,66 @@
     <h2 class="title">Lista de Personas</h2>
 
     <!-- Botón para abrir el modal de agregar persona -->
-    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar Persona</button>
+    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
+        Persona</button>
+
+    <!-- Campo de búsqueda -->
+    <div class="search-container">
+        <input matInput placeholder="Buscar..." [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" />
+    </div>
+
 
     <!-- Tabla para mostrar los registros de personas -->
-    <table class="table table-bordered table-hover table-striped">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Email</th>
-                <th>Identificación</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let person of persons">
-                <td>{{ person.name }}</td>
-                <td>{{ person.last_name }}</td>
-                <td>{{ person.email }}</td>
-                <td>{{ person.identification }}</td>
-                <td>{{ person.state ? 'Activo' : 'Inactivo' }}</td>
-                <td>
-                    <button class="btn-icon edit" (click)="editPersons(person)" title="Editar">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn-icon delete" (click)="deletePersons(person.id)" title="Eliminar">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
+    <div class="table-container">
+    <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Nombre </th>
+            <td mat-cell *matCellDef="let person"> {{ person.name }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="last_name">
+            <th mat-header-cell *matHeaderCellDef> Apellido </th>
+            <td mat-cell *matCellDef="let person"> {{ person.last_name }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef> Email </th>
+            <td mat-cell *matCellDef="let person"> {{ person.email }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="identification">
+            <th mat-header-cell *matHeaderCellDef> Identificación </th>
+            <td mat-cell *matCellDef="let person"> {{ person.identification }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="state">
+            <th mat-header-cell *matHeaderCellDef> Estado </th>
+            <td mat-cell *matCellDef="let person">
+                <!-- Indicador de estado con color dinámico -->
+                <span [ngClass]="person.state ? 'state-indicator state-active' : 'state-indicator state-inactive'"></span>
+                {{ person.state ? 'Activo' : 'Inactivo' }}
+            </td>
+        </ng-container>
+        
+
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Acciones </th>
+            <td mat-cell *matCellDef="let person">
+                <button class="btn-icon edit" (click)="editPersons(person)" title="Editar">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn-icon delete" (click)="deletePersons(person.id)" title="Eliminar">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </ng-container>
+
+        <!-- Cabecera de la tabla -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+</div>
+
+    <!-- Paginación -->
+    <mat-paginator [length]="persons.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
 </div>
