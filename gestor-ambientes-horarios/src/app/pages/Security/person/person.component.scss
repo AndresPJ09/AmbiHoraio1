@@ -142,6 +142,7 @@
     /* Red */
 }
 
+/**** Estilos de inputs ****/
 .input-field {
     transition: background-color 0.3s ease;
 }
@@ -152,6 +153,7 @@
     outline: none !important;
     box-shadow: 0 0 5px rgba(68, 227, 42, 0.5);
 }
+/********/
 
 .btn-danger {
     background-color: #dc3545;
@@ -175,7 +177,6 @@
     background-color: #fff;
     height: 37px;
 }
-
 
 /* Estilo del contenedor de las opciones */
 .option-container {
@@ -243,22 +244,18 @@
 
 .bulk-select-checkbox:checked {
     background-color: #5EB319;
-    /* Color verde cuando está activado */
     border-color: #5EB319;
-    /* Borde verde cuando está activado */
 }
 
 .bulk-select-checkbox:checked+.form-check-label {
     color: #5EB319;
-    /* Cambiar color de la etiqueta a verde cuando está marcado */
+
 }
 
 /* Estilos para el tooltip */
 .tooltip-inner {
     background-color: #5EB319;
-    /* Fondo verde para el tooltip */
     color: white;
-    /* Color de texto blanco en el tooltip */
     font-size: 0.9em;
 }
 
@@ -271,30 +268,11 @@
     margin-left: 12px;
 }
 
-/* Estilo personalizado para los tooltips */
-.tooltip-inner {
-    background-color: #5bc0de;
-    /* Color de fondo */
-    color: white;
-    /* Color del texto */
-    font-size: 0.9em;
-    /* Tamaño de la fuente */
-}
-
-.tooltip-arrow {
-    border-top-color: #5bc0de;
-    /* Color de la flecha */
-}
-
-
 .container {
     padding-bottom: 20px;
     /* Ajustar el relleno inferior */
 }
 
-table {
-    width: 100%;
-}
 /**********/
 
 /* Estilo del círculo para el estado en la tabla */

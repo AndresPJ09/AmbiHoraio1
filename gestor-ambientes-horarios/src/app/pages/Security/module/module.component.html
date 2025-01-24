@@ -14,14 +14,15 @@
                 <div class="row">
                     <div class="col">
                         <label for="name" class="form-label">Nombre:</label>
-                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="module.name"
-                            required maxlength="25" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="module.name" required
+                            maxlength="25" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                     </div>
 
                     <div class="col">
                         <label for="description" class="form-label">Descripción:</label>
                         <input type="text" class="form-control" id="description" name="description"
-                            [(ngModel)]="module.description" required maxlength="100" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                            [(ngModel)]="module.description" required maxlength="100"
+                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                     </div>
                 </div>
 
@@ -34,8 +35,9 @@
 
                     <div class="col" *ngIf="module.id !== 0">
                         <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
-                            [(ngModel)]="module.state" [attr.data-bs-toggle]="'tooltip'"
-                            [attr.data-bs-placement]="'top'" [attr.title]="module.state ? 'Activo' : 'Inactivo'" />
+                        [(ngModel)]="module.state" 
+                        [ngClass]="module.state ? 'state-active' : 'state-inactive'"
+                        [attr.data-bs-toggle]="'tooltip'" [attr.data-bs-placement]="'top'" [attr.title]="module.state ? 'Activo' : 'Inactivo'" />
                         <label class="form-check-label" for="state">Estado</label>
                     </div>
                 </div>
@@ -57,33 +59,56 @@
     <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
         Módulo</button>
 
-    <!-- Tabla para mostrar los registros de módulos -->
-    <table class="table table-bordered table-hover table-striped">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Posición</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let module of modules">
-                <td>{{ module.name }}</td>
-                <td>{{ module.description }}</td>
-                <td>{{ module.position }}</td>
-                <td>{{ module.state ? 'Activo' : 'Inactivo' }}</td>
-                <td>
-                    <button class="btn-icon edit" (click)="editModules(module)" title="Editar">
-                        <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn-icon delete" (click)="deleteModules(module.id)" title="Eliminar">
-                        <i class="bi bi-trash3-fill"></i>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <!-- Campo de búsqueda -->
+    <div class="search-container">
+        <input matInput placeholder="Buscar..." [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" />
+    </div>
 
+    <!-- Tabla para mostrar los registros de módulos -->
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Nombre </th>
+            <td mat-cell *matCellDef="let module"> {{ module.name }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef> Descripción </th>
+            <td mat-cell *matCellDef="let module"> {{ module.description }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef> Posición </th>
+            <td mat-cell *matCellDef="let module"> {{ module.position }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="state">
+            <th mat-header-cell *matHeaderCellDef> Estado </th>
+            <td mat-cell *matCellDef="let module">
+                <!-- Indicador de estado con color dinámico -->
+                <span [ngClass]="module.state ? 'state-indicator state-active' : 'state-indicator state-inactive'"></span>
+                {{ module.state ? 'Activo' : 'Inactivo' }}
+            </td>
+        </ng-container>
+        
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Acciones </th>
+            <td mat-cell *matCellDef="let module">
+                <button class="btn-icon edit" (click)="editModules(module)" title="Editar">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn-icon delete" (click)="deleteModules(module.id)" title="Eliminar">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        </ng-container>
+
+        <!-- Cabecera de la tabla -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>
+
+    <!-- Paginación -->
+    <mat-paginator [length]="modules.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
 </div>

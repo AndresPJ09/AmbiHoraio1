@@ -12,7 +12,8 @@
                 <div class="row">
                     <div class="col">
                         <label for="name" class="form-label">Nombre:</label>
-                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="view.name" required maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                        <input type="text" class="form-control" id="name" name="name" [(ngModel)]="view.name" required
+                            maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                     </div>
 
                     <div class="col">
@@ -26,9 +27,7 @@
                     <div class="col">
                         <label for="route" class="form-label">Ruta:</label>
                         <input type="route" class="form-control" id="route" name="route" [(ngModel)]="view.route"
-                            required pattern="^/[a-zA-Z]+$"
-                            data-bs-toggle="tooltip" 
-                            data-bs-placement="top"
+                            required pattern="^/[a-zA-Z]+$" data-bs-toggle="tooltip" data-bs-placement="top"
                             title="La ruta debe comenzar con '/' y solo contener letras después de él.">
                     </div>
 
@@ -45,8 +44,8 @@
                                 </mat-option>
                             </mat-autocomplete>
                         </div>
+                    </div>
                 </div>
-            </div>
 
                 <div class="modal-body">
                     <div class="row">
@@ -76,26 +75,48 @@
     <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
         vista</button>
 
+    <!-- Campo de búsqueda -->
+    <div class="search-container">
+        <input matInput placeholder="Buscar..." [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" />
+    </div>
+
     <!-- Tabla para mostrar los registros de vistas -->
-    <table class="table table-bordered table-hover table-striped">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Route</th>
-                <th>Módulo</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let view of views">
-                <td>{{ view.name }}</td>
-                <td>{{ view.description }}</td>
-                <td>{{ view.route }}</td>
-                <td>{{ getModuleName(view.moduleId) }}</td>
-                <td>{{ view.state ? 'Activo' : 'Inactivo' }}</td>
-                <td>
+    <div class="table-container">
+        <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                <td mat-cell *matCellDef="let view"> {{ view.name }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef> Descripción </th>
+                <td mat-cell *matCellDef="let view"> {{ view.description }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="route">
+                <th mat-header-cell *matHeaderCellDef> Ruta </th>
+                <td mat-cell *matCellDef="let view"> {{ view.route }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="moduleId">
+                <th mat-header-cell *matHeaderCellDef> Módulo </th>
+                <td mat-cell *matCellDef="let view"> {{ getModuleName(view.moduleId) }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="state">
+                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                <td mat-cell *matCellDef="let view">
+                    <!-- Indicador de estado con color dinámico -->
+                    <span
+                        [ngClass]="view.state ? 'state-indicator state-active' : 'state-indicator state-inactive'"></span>
+                    {{ view.state ? 'Activo' : 'Inactivo' }}
+                </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                <td mat-cell *matCellDef="let view">
                     <button class="btn-icon edit" (click)="editViews(view)" title="Editar">
                         <i class="fas fa-edit"></i>
                     </button>
@@ -103,7 +124,14 @@
                         <i class="fas fa-trash"></i>
                     </button>
                 </td>
-            </tr>
-        </tbody>
-    </table>
+            </ng-container>
+
+            <!-- Cabecera de la tabla -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    <mat-paginator [length]="views.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
 </div>

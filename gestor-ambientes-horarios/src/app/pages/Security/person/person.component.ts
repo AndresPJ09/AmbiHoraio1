@@ -8,8 +8,6 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 
-
-
 @Component({
   selector: 'app-person',
   standalone: true,
@@ -57,16 +55,14 @@ export class PersonComponent implements OnInit {
   applyFilter(): void {
     this.dataSource.filter = this.searchTerm.trim().toLowerCase();
   }
-  
-
 
   getPersons(): void {
     this.http.get<any[]>(this.apiUrl).subscribe(
       (persons) => {
         this.persons = persons;
-        this.dataSource.data = this.persons;  // Actualiza la tabla
+        this.dataSource.data = this.persons;  
         if (this.paginator) {
-          this.paginator.pageIndex = 0; // Restablece la página
+          this.paginator.pageIndex = 0; 
           this.dataSource.paginator = this.paginator;
         }
       },
@@ -75,7 +71,6 @@ export class PersonComponent implements OnInit {
       }
     );
   }
-
 
   openModal(): void {
     this.isModalOpen = true;
@@ -89,13 +84,11 @@ export class PersonComponent implements OnInit {
 
   onSubmit(form: NgForm): void {
     const personToSave = { ...this.person };
-
     if (this.person.id === 0) {
-      // Si la persona no tiene ID (es un nuevo registro)
       this.http.post<any>(this.apiUrl, personToSave).subscribe(
         (newPerson) => {
-          this.getPersons(); // Actualiza la lista de personas
-          this.closeModal();  // Cierra el modal
+          this.getPersons();
+          this.closeModal(); 
           Swal.fire('Éxito', '¡Persona creada exitosamente!', 'success');
         },
         (error) => {
