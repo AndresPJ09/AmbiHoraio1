@@ -26,46 +26,48 @@
                 <div class="row">
                     <div class="col">
                         <!-- Persona -->
-                        <label for="personName">Persona:</label>
-                        <div class="form-label">
-                            <input type="text" class="form-control input-field" matInput [matAutocomplete]="auto"
-                                id="personName" name="personName" [(ngModel)]="user.personName"
-                                (input)="searchpersons($event)" required #personName="ngModel" />
-                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onpersonSelect($event)">
-                                <mat-option *ngFor="let person of filteredPersons" [value]="person.name">
-                                    {{ person.name }}
-                                </mat-option>
-                            </mat-autocomplete>
-                        </div>
+                        <label for="personName" class="form-label">Persona:</label>
+                        <input type="text" class="form-control" matInput [matAutocomplete]="auto" id="personName"
+                            name="personName" [(ngModel)]="user.personName" (input)="searchpersons($event)" required
+                            #personName="ngModel" />
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onpersonSelect($event)">
+                            <mat-option *ngFor="let person of filteredPersons" [value]="person.name">
+                                {{ person.name }}
+                            </mat-option>
+                        </mat-autocomplete>
                     </div>
 
                     <div class="col">
                         <!-- Roles Asociadas -->
-                        <label for="roles">Roles asociadas:</label>
-                        <div class="form-label">
+                        <label for="roles" class="form-label">Roles asociadas:</label>
+                        <div>
                             <p-multiSelect id="roles" name="roles" [options]="roles" [(ngModel)]="user.roles" required
                                 #rolesField="ngModel" optionLabel="name" placeholder="Selecciona roles"
                                 scrollHeight="250px" display="chip">
                             </p-multiSelect>
                         </div>
                     </div>
-                </div>
 
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col" *ngIf="user.id !== 0">
-                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
-                                [(ngModel)]="user.state" [attr.data-bs-toggle]="'tooltip'"
-                                [attr.data-bs-placement]="'top'" [attr.title]="user.state ? 'Activo' : 'Inactivo'" />
-                            <label class="form-check-label" for="state">Estado</label>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col" *ngIf="user.id !== 0">
+                                <label for="state" class="form-label">Estado:</label>
+                                <div>
+                                    <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state"
+                                        name="state" [(ngModel)]="user.state"
+                                        [ngClass]="user.state ? 'state-active' : 'state-inactive'" />
+                                    <label class="form-check-label" for="state">{{ user.state ? 'Activo' : 'Inactivo'
+                                        }}</label>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
-                        <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">
-                            {{ isEditing ? 'Actualizar' : 'Guardar' }}
-                        </button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                            <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">
+                                {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -111,7 +113,6 @@
                     {{ user.state ? 'Activo' : 'Inactivo' }}
                 </td>
             </ng-container>
-
 
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef> Acciones </th>

@@ -18,28 +18,25 @@
                     </div>
 
 
-                      <div class="col" *ngIf="periodo.id !== 0">
-                        <input 
-                          type="checkbox" 
-                          class="form-check-input bulk-select-checkbox" 
-                          id="state" 
-                          name="state" 
-                          [(ngModel)]="periodo.state" 
-                          [attr.data-bs-toggle]="'tooltip'" 
-                          [attr.data-bs-placement]="'top'"
-                          [attr.title]="periodo.state ? 'Activo' : 'Inactivo'" />
-                        <label class="form-check-label" for="state">Estado</label>
-                      </div>
+                    <div class="col" *ngIf="periodo.id !== 0">
+                        <label for="state" class="form-label">Estado:</label>
+                        <div>
+                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
+                                [(ngModel)]="periodo.state"
+                                [ngClass]="periodo.state ? 'state-active' : 'state-inactive'" />
+                            <label class="form-check-label" for="state">{{ periodo.state ? 'Activo' : 'Inactivo'
+                                }}</label>
+                        </div>
                     </div>
-                  
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" [disabled]="periodoForm.invalid">
-                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
-                    </button>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="periodoForm.invalid">
+                            {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                        </button>
+                    </div>
                 </div>
-         
             </form>
         </div>
     </div>
@@ -48,31 +45,65 @@
     <h2 class="title">Lista de Periodos</h2>
 
     <!-- Botón para abrir el modal de agregar periodos -->
-    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar Periodo</button>
+    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
+        Periodo</button>
+
+    <!-- Campo de búsqueda -->
+    <div class="search-container">
+        <input matInput placeholder="Buscar..." [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" />
+    </div>
 
     <!-- Tabla para mostrar los registros de periodos -->
-    <table class="table table-bordered table-hover table-striped">
-        <thead>
-            <tr>
-                <th>Mes</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let periodo of periodos">
-                <td>{{ periodo.mes }}</td>
-                <td>{{ periodo.state ? 'Activo' : 'Inactivo' }}</td>
-                <td>
+    <div class="table-container">
+        <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                <td mat-cell *matCellDef="let periodo"> {{ periodo.name }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fecha_fin">
+                <th mat-header-cell *matHeaderCellDef> Fecha de inicio </th>
+                <td mat-cell *matCellDef="let periodo"> {{ periodo.fecha_fin }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fecha_fin">
+                <th mat-header-cell *matHeaderCellDef> Fecha de finalización </th>
+                <td mat-cell *matCellDef="let periodo"> {{ periodo.fecha_fin }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ano">
+                <th mat-header-cell *matHeaderCellDef> Año </th>
+                <td mat-cell *matCellDef="let periodo"> {{ periodo.ano }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="state">
+                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                <td mat-cell *matCellDef="let periodo">
+                    <!-- Indicador de estado con color dinámico -->
+                    <span
+                        [ngClass]="periodo.state ? 'state-indicator state-active' : 'state-indicator state-inactive'"></span>
+                    {{ periodo.state ? 'Activo' : 'Inactivo' }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                <td mat-cell *matCellDef="let periodo">
                     <button class="btn-icon edit" (click)="editPeriodos(periodo)" title="Editar">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="btn-icon delete" (click)="deletePeriodos(periodo.id)" title="Eliminar">
-                        <i class="bi bi-trash3-fill"></i>
+                        <i class="fas fa-trash"></i>
                     </button>
                 </td>
-            </tr>
-        </tbody>
-    </table>
+            </ng-container>
 
+            <!-- Cabecera de la tabla -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    <mat-paginator [length]="periodos.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
 </div>

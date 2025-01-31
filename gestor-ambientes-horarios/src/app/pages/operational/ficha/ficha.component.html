@@ -18,7 +18,6 @@
 
                     <div class="col-md-6">
                         <label for="programaNombre" class="form-label">Programa:</label>
-                        <div>
                             <input type="text" class="form-control input-field" matInput
                                 [matAutocomplete]="autoProgramas" id="programaNombre" name="programaNombre"
                                 [(ngModel)]="ficha.programaNombre" (input)="searchPrograma($event)"
@@ -31,12 +30,10 @@
                             </mat-autocomplete>
                         </div>
                     </div>
-                </div>
 
                 <div class="row">
                     <div class="col">
                         <label for="proyectoNombre" class="form-label">Proyecto:</label>
-                        <div>
                             <input type="text" class="form-control input-field" matInput
                                 [matAutocomplete]="autoProyectos" id="proyectoNombre" name="proyectoNombre"
                                 [(ngModel)]="ficha.proyectoNombre" (input)="searchProyecto($event)"
@@ -48,8 +45,6 @@
                                 </mat-option>
                             </mat-autocomplete>
                         </div>
-                    </div>
-
 
                     <div class="col">
                         <label for="fecha_inicio" class="form-label">Fecha de inicio:</label>
@@ -83,31 +78,32 @@
 
                     <div class="col">
                         <label for="cupo" class="form-label">Cupo:</label>
-                        <input type="text" class="form-control" id="cupo" name="cupo" [(ngModel)]="ficha.cupo"
+                        <input type="number" class="form-control" id="cupo" name="cupo" [(ngModel)]="ficha.cupo"
                             placeholder="Escribir disponibilidad de cupo" required>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col" *ngIf="ficha.id !== 0">
-                        <label for="state" class="form-label">Estado:</label>
-                        <div>
-                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
-                                [(ngModel)]="ficha.state" [attr.data-bs-toggle]="'tooltip'"
-                                [attr.data-bs-placement]="'top'" [attr.title]="ficha.state ? 'Activo' : 'Inactivo'" />
-                            <label class="form-check-label" for="state">{{ ficha.state ? 'Activo' : 'Inactivo'
-                                }}</label>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col" *ngIf="ficha.id !== 0">
+                            <label for="state" class="form-label">Estado:</label>
+                            <div>
+                                <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state"
+                                    name="state" [(ngModel)]="ficha.state"
+                                    [ngClass]="ficha.state ? 'state-active' : 'state-inactive'"/>
+                                <label class="form-check-label" for="state">{{ ficha.state ? 'Activo' : 'Inactivo'
+                                    }}</label>
+                            </div>
                         </div>
                     </div>
 
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
-                            <button type="submit" class="btn btn-primary" [disabled]="fichaForm.invalid">
-                                {{ isEditing ? 'Actualizar' : 'Guardar' }}
-                            </button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="fichaForm.invalid">
+                            {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                        </button>
                     </div>
                 </div>
-                
             </form>
         </div>
     </div>
@@ -119,34 +115,66 @@
     <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
         ficha</button>
 
+    <!-- Campo de búsqueda -->
+    <div class="search-container">
+        <input matInput placeholder="Buscar..." [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" />
+    </div>
+
     <!-- Tabla para mostrar los registros de fichas -->
-    <table class="table table-bordered table-hover table-striped">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Programa</th>
-                <th>Proyecto</th>
-                <th>Fecha de inicio</th>
-                <th>Fecha de fin</th>
-                <th>Fin de lectiva</th>
-                <th>Númerode semanas</th>
-                <th>Cupo</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let ficha of fichas">
-                <td>{{ ficha.codigo }}</td>
-                <td>{{ getProgramaNombre(ficha.programaId) }}</td>
-                <td>{{ getProyectoNombre(ficha.proyectoId) }}</td>
-                <td>{{ ficha.fecha_inicio }}</td>
-                <td>{{ ficha.fecha_fin }}</td>
-                <td>{{ ficha.fin_lectiva }}</td>
-                <td>{{ ficha.num_semanas }}</td>
-                <td>{{ ficha.cupo }}</td>
-                <td>{{ ficha.state ? 'Activo' : 'Inactivo' }}</td>
-                <td>
+    <div class="table-container">
+        <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="codigo">
+                <th mat-header-cell *matHeaderCellDef> Código </th>
+                <td mat-cell *matCellDef="let ficha"> {{ ficha.codigo }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="programaId">
+                <th mat-header-cell *matHeaderCellDef> Programa </th>
+                <td mat-cell *matCellDef="let ficha"> {{ getProgramaNombre(ficha.programaId) }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="proyectoId">
+                <th mat-header-cell *matHeaderCellDef> Proyecto </th>
+                <td mat-cell *matCellDef="let ficha"> {{ getProyectoNombre(ficha.proyectoId) }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fecha_inicio">
+                <th mat-header-cell *matHeaderCellDef> Fecha de inicio </th>
+                <td mat-cell *matCellDef="let ficha"> {{ ficha.fecha_inicio }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fecha_fin">
+                <th mat-header-cell *matHeaderCellDef> Fecha de fin </th>
+                <td mat-cell *matCellDef="let ficha"> {{ ficha.fecha_fin }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="fin_lectiva">
+                <th mat-header-cell *matHeaderCellDef> Fin de lectiva </th>
+                <td mat-cell *matCellDef="let ficha"> {{ ficha.fin_lectiva }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="num_semanas">
+                <th mat-header-cell *matHeaderCellDef> Número de semanas </th>
+                <td mat-cell *matCellDef="let ficha"> {{ ficha.num_semanas }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="cupo">
+                <th mat-header-cell *matHeaderCellDef> Cupo </th>
+                <td mat-cell *matCellDef="let ficha"> {{ ficha.cupo }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="state">
+                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                <td mat-cell *matCellDef="let ficha">
+                    <span
+                        [ngClass]="ficha.state ? 'state-indicator state-active' : 'state-indicator state-inactive'"></span>
+                    {{ ficha.state ? 'Activo' : 'Inactivo' }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                <td mat-cell *matCellDef="let ficha">
                     <button class="btn-icon edit" (click)="editFicha(ficha)" title="Editar">
                         <i class="fas fa-edit"></i>
                     </button>
@@ -154,7 +182,14 @@
                         <i class="fas fa-trash"></i>
                     </button>
                 </td>
-            </tr>
-        </tbody>
-    </table>
+            </ng-container>
+
+            <!-- Cabecera y filas de la tabla -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    <mat-paginator [length]="fichas.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
 </div>

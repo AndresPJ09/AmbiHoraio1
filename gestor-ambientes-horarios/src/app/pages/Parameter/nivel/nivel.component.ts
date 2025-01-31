@@ -1,13 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormsModule, NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-nivel',
   standalone: true,
-  imports: [HttpClientModule, FormsModule, CommonModule],
+  imports: [
+    HttpClientModule,
+    FormsModule,
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
+  ],
   templateUrl: './nivel.component.html',
   styleUrl: './nivel.component.scss'
 })
@@ -17,6 +27,13 @@ export class NivelComponent implements OnInit {
   isModalOpen = false;
   isDropdownOpen = false;
   isEditing = false;
+  isLoading: boolean = false;
+  searchTerm: string = '';
+  displayedColumns: string[] = ['codigo', 'nombre', 'duracion', 'state', 'actions'];
+  dataSource = new MatTableDataSource<any>(this.niveles);
+
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  @ViewChild(MatSort) sort: MatSort | undefined;
 
   private apiUrl = 'http://localhost:5062/api/Nivel';
 
@@ -27,10 +44,27 @@ export class NivelComponent implements OnInit {
 
   }
 
+  ngAfterViewInit() {
+    if (this.paginator && this.sort) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
+  }
+
+  // Método para aplicar el filtro
+  applyFilter(): void {
+    this.dataSource.filter = this.searchTerm.trim().toLowerCase();
+  }
+
   getNiveles(): void {
     this.http.get<any[]>(this.apiUrl).subscribe(
       (niveles) => {
-        this.niveles = niveles.map(nivel => ({ ...nivel }));
+        this.niveles = niveles;
+        this.dataSource.data = this.niveles;  
+        if (this.paginator) {
+          this.paginator.pageIndex = 0; 
+          this.dataSource.paginator = this.paginator;
+        }
         this.cdr.detectChanges();
       },
       (error) => {

@@ -2,10 +2,12 @@
 .title {
     color: #5EB319;
     text-align: left;
-    margin-bottom: 20px;
+    margin-top: 100px;
+    margin-bottom: 110px;
     font-weight: bold;
     font-size: 40px;
 }
+
 /********/
 
 
@@ -15,6 +17,7 @@
     margin-bottom: 20px;
     border: none;
 }
+
 /********/
 
 /***** Modal container ****/
@@ -63,6 +66,7 @@
 .close:hover {
     color: red;
 }
+
 /********/
 
 /* Add space between Description and State */
@@ -210,7 +214,7 @@
     margin-top: 20px;
     display: flex;
     flex-direction: row;
-    
+
 }
 
 .top-container>* {
@@ -229,8 +233,8 @@
     cursor: pointer;
     transition: all 0.2s ease;
     background-color: white;
-    left: 13px;
-    margin-top: 39px;
+    margin-left: 9px;
+    margin-top: 9px;
 }
 
 .bulk-select-checkbox:checked {
@@ -258,6 +262,13 @@
     margin-right: 10px;
 }
 
+.modal-body {
+    position: relative;
+    flex: 1 1 auto;
+    margin-top: -40px;
+    margin-left: -14px;
+}
+
 /********/
 
 /**** Estilos ckeckbox para el tooltip ****/
@@ -279,34 +290,36 @@
 /********/
 
 /****Imgen****/
-
 .modal2 {
-    display: none; /* Inicialmente cerrado */
+    display: none;
+    /* Inicialmente cerrado */
     position: fixed;
-    z-index: 1; /* Por encima de otros elementos */
+    z-index: 1;
+    /* Por encima de otros elementos */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro */
-    overflow: auto; /* Hacer scroll si es necesario */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Fondo oscuro */
+    overflow: auto;
+    /* Hacer scroll si es necesario */
     padding-top: 60px;
 }
-
-
 
 .modal-image {
     width: 100%;
     height: auto;
-    max-height: 80vh; /* Para limitar la altura máxima */
-    object-fit: contain; /* Asegura que la imagen mantenga su proporción */
+    max-height: 80vh;
+    /* Para limitar la altura máxima */
+    object-fit: contain;
+    /* Asegura que la imagen mantenga su proporción */
 }
 
 /* Mostrar el modal cuando isImageModalOpen es verdadero */
 .modal2.show-modal {
     display: block;
 }
-
 
 /* Contenido del modal */
 .modal-content2 {
@@ -337,23 +350,21 @@
 
 /********/
 
-
-  
-  /* Styling for Image Preview */
-  .image-preview-container {
+/* Styling for Image Preview */
+.image-preview-container {
     margin-top: 10px;
     text-align: center;
-  }
-  
-  .image-preview {
+}
+
+.image-preview {
     width: 150px;
     height: 150px;
     object-fit: cover;
     border-radius: 10px;
     margin-bottom: 10px;
-  }
-  
-  .button2 {
+}
+
+.button2 {
     background-color: #ff4d4d;
     color: white;
     padding: 5px 10px;
@@ -363,8 +374,93 @@
     font-size: 14px;
     display: block;
     margin: 0 auto;
-  }
+}
 
-  .openImageModal {
+.openImageModal {
     cursor: pointer;
-  }
+}
+
+/* Estilo del círculo para el estado en la tabla */
+.state-indicator {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    /* Crea un círculo */
+    display: inline-block;
+    margin-right: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.state-active {
+    background-color: #5EB319;
+    /* Verde */
+}
+
+.state-inactive {
+    background-color: #FF0000;
+    /* Rojo */
+}
+
+/**********/
+
+/****Tabla y Search y Paginator****/
+.search-container {
+    margin-bottom: 20px;
+    max-width: 300px;
+    width: 100%;
+}
+
+.search-container :focus {
+    border: 1px solid #5EB319;
+    /* Borde verde cuando está en foco */
+    background-color: #f0f9f1;
+    /* Fondo muy suave cuando está en foco */
+    outline: none;
+    /* Elimina el borde azul predeterminado */
+}
+
+mat-paginator {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+input[matInput] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #afb8a8;
+    font-size: 14px;
+}
+
+.table-container {
+    overflow-x: auto;
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    }
+}
+
+/**********/

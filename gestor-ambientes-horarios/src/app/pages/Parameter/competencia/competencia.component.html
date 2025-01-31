@@ -19,21 +19,25 @@
                     </div>
 
                     <div class="col">
-                        <label for="nombre" class="form-label">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre"
-                            [(ngModel)]="competencia.nombre" required>
+                        <label for="descripcion" class="form-label">Descripción:</label>
+                        <input type="text" class="form-control" id="descripcion" name="descripcion"
+                            [(ngModel)]="competencia.descripcion" required>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col" *ngIf="competencia.id !== 0">
-                        <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
-                            [(ngModel)]="competencia.state" [attr.data-bs-toggle]="'tooltip'"
-                            [attr.data-bs-placement]="'top'" [attr.title]="competencia.state ? 'Activo' : 'Inactivo'" />
-                        <label class="form-check-label" for="state">Estado</label>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col" *ngIf="competencia.id !== 0">
+                            <label for="state" class="form-label">Estado:</label>
+                            <div>
+                                <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state"
+                                    name="state" [(ngModel)]="competencia.state"
+                                    [ngClass]="competencia.state ? 'state-active' : 'state-inactive'" />
+                                <label class="form-check-label" for="state">{{ competencia.state ? 'Activo' : 'Inactivo'
+                                    }}</label>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
@@ -41,7 +45,7 @@
                             {{ isEditing ? 'Actualizar' : 'Guardar' }}
                         </button>
                     </div>
-              
+                </div>
             </form>
         </div>
     </div>
@@ -53,31 +57,52 @@
     <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
         competencia</button>
 
+    <!-- Campo de búsqueda -->
+    <div class="search-container">
+        <input matInput placeholder="Buscar..." [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" />
+    </div>
+
     <!-- Tabla para mostrar los registros de competenciaes -->
-    <table class="table table-bordered table-hover table-striped">
-        <thead>
-            <tr>
-                <th>Códigos</th>
-                <th>Nombres</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let competencia of competencias">
-                <td>{{ competencia.codigo }}</td>
-                <td>{{ competencia.nombre }}</td>
-                <td>{{ competencia.state ? 'Activo' : 'Inactivo' }}</td>
-                <td>
+    <div class="table-container">
+        <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="codigo">
+                <th mat-header-cell *matHeaderCellDef> Código </th>
+                <td mat-cell *matCellDef="let competencia"> {{ competencia.codigo }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="descripcion">
+                <th mat-header-cell *matHeaderCellDef> Descripción </th>
+                <td mat-cell *matCellDef="let competencia"> {{ competencia.descripcion }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="state">
+                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                <td mat-cell *matCellDef="let competencia">
+                    <!-- Indicador de estado con color dinámico -->
+                    <span
+                        [ngClass]="competencia.state ? 'state-indicator state-active' : 'state-indicator state-inactive'"></span>
+                    {{ competencia.state ? 'Activo' : 'Inactivo' }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                <td mat-cell *matCellDef="let competencia">
                     <button class="btn-icon edit" (click)="editCompetencias(competencia)" title="Editar">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="btn-icon delete" (click)="deleteCompetencias(competencia.id)" title="Eliminar">
-                        <i class="bi bi-trash3-fill"></i>
+                        <i class="fas fa-trash"></i>
                     </button>
                 </td>
-            </tr>
-        </tbody>
-    </table>
+            </ng-container>
 
+            <!-- Cabecera de la tabla -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    <mat-paginator [length]="competencias.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
 </div>

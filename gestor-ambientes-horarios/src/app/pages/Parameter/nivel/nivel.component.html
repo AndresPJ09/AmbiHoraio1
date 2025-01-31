@@ -14,51 +14,43 @@
                 <div class="row">
                     <div class="col">
                         <label for="codigo" class="form-label">Codigo:</label>
-                        <input type="text" class="form-control" id="codigo" name="codigo" [(ngModel)]="nivel.codigo" required>
+                        <input type="text" class="form-control" id="codigo" name="codigo" [(ngModel)]="nivel.codigo"
+                            required>
                     </div>
 
                     <div class="col">
                         <label for="nombre" class="form-label">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" [(ngModel)]="nivel.nombre" required>
+                        <input type="text" class="form-control" id="nombre" name="nombre" [(ngModel)]="nivel.nombre"
+                            required>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col">
                         <label for="duracion" class="form-label">Duración:</label>
-                        <input
-                        id="duracion"
-                        type="text"
-                        class="form-control"
-                        [(ngModel)]="nivel.duracion"
-                        name="duracion"
-                        placeholder="Especifique duración (por ejemplo, '27 meses' o '40 horas')"
-                        required
-                      />
+                        <input id="duracion" type="text" class="form-control" [(ngModel)]="nivel.duracion"
+                            name="duracion" placeholder="Especifique duración (por ejemplo, '27 meses' o '40 horas')"
+                            required />
                     </div>
 
-                      <div class="col" *ngIf="nivel.id !== 0">
-                        <input 
-                          type="checkbox" 
-                          class="form-check-input bulk-select-checkbox" 
-                          id="state" 
-                          name="state" 
-                          [(ngModel)]="nivel.state" 
-                          [attr.data-bs-toggle]="'tooltip'" 
-                          [attr.data-bs-placement]="'top'"
-                          [attr.title]="nivel.state ? 'Activo' : 'Inactivo'" />
-                        <label class="form-check-label" for="state">Estado</label>
-                      </div>
+                    <div class="col" *ngIf="nivel.id !== 0">
+                        <label for="state" class="form-label">Estado:</label>
+                        <div>
+                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
+                                [(ngModel)]="nivel.state" [ngClass]="nivel.state ? 'state-active' : 'state-inactive'" />
+                            <label class="form-check-label" for="state">{{ nivel.state ? 'Activo' : 'Inactivo'
+                                }}</label>
+                        </div>
                     </div>
-                  
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" [disabled]="nivelForm.invalid">
-                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
-                    </button>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="nivelForm.invalid">
+                            {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                        </button>
+                    </div>
                 </div>
-         
             </form>
         </div>
     </div>
@@ -67,35 +59,60 @@
     <h2 class="title">Lista de Niveles</h2>
 
     <!-- Botón para abrir el modal de agregar niveles -->
-    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar Nivel</button>
+    <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
+        Nivel</button>
+
+    <!-- Campo de búsqueda -->
+    <div class="search-container">
+        <input matInput placeholder="Buscar..." [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" />
+    </div>
 
     <!-- Tabla para mostrar los registros de niveles -->
-    <table class="table table-bordered table-hover table-striped">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Nombre</th>
-                <th>Duracione</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let nivel of niveles">
-                <td>{{ nivel.codigo }}</td>
-                <td>{{ nivel.nombre }}</td>
-                <td>{{ nivel.duracion }}</td>
-                <td>{{ nivel.state ? 'Activo' : 'Inactivo' }}</td>
-                <td>
+    <div class="table-container">
+        <table mat-table [dataSource]="dataSource">
+            <ng-container matColumnDef="codigo">
+                <th mat-header-cell *matHeaderCellDef> Código </th>
+                <td mat-cell *matCellDef="let nivel"> {{ nivel.codigo }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="nombre">
+                <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                <td mat-cell *matCellDef="let nivel"> {{ nivel.nombre }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="duracion">
+                <th mat-header-cell *matHeaderCellDef> Duración </th>
+                <td mat-cell *matCellDef="let nivel"> {{ nivel.duracion }} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="state">
+                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                <td mat-cell *matCellDef="let nivel">
+                    <!-- Indicador de estado con color dinámico -->
+                    <span
+                        [ngClass]="nivel.state ? 'state-indicator state-active' : 'state-indicator state-inactive'"></span>
+                    {{ nivel.state ? 'Activo' : 'Inactivo' }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                <td mat-cell *matCellDef="let nivel">
                     <button class="btn-icon edit" (click)="editNiveles(nivel)" title="Editar">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="btn-icon delete" (click)="deleteNiveles(nivel.id)" title="Eliminar">
-                        <i class="bi bi-trash3-fill"></i>
+                        <i class="fas fa-trash"></i>
                     </button>
                 </td>
-            </tr>
-        </tbody>
-    </table>
+            </ng-container>
 
+            <!-- Cabecera de la tabla -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    <mat-paginator [length]="niveles.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
 </div>

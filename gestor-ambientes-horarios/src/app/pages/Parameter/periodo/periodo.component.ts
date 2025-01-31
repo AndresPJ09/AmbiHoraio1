@@ -1,13 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormsModule, NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-periodo',
   standalone: true,
-  imports: [HttpClientModule, FormsModule, CommonModule],
+  imports: [
+    HttpClientModule,
+    FormsModule,
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
+  ],
   templateUrl: './periodo.component.html',
   styleUrl: './periodo.component.scss'
 })
@@ -17,6 +27,13 @@ export class PeriodoComponent implements OnInit {
   isModalOpen = false;
   isDropdownOpen = false;
   isEditing = false;
+  isLoading: boolean = false;
+  searchTerm: string = '';
+  displayedColumns: string[] = ['nombre', 'fecha_inicio', 'fecha_fin', 'ano', 'state', 'actions'];
+  dataSource = new MatTableDataSource<any>(this.periodos);
+
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  @ViewChild(MatSort) sort: MatSort | undefined;
 
   private apiUrl = 'http://localhost:5062/api/Periodo';
 
@@ -24,13 +41,29 @@ export class PeriodoComponent implements OnInit {
 
   ngOnInit(): void {
     this.getPeriodos();
-
   }
+
+  ngAfterViewInit() {
+    if (this.paginator && this.sort) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
+  }
+
+  // Método para aplicar el filtro
+  applyFilter(): void {
+    this.dataSource.filter = this.searchTerm.trim().toLowerCase();
+  }
+
 
   getPeriodos(): void {
     this.http.get<any[]>(this.apiUrl).subscribe(
       (periodos) => {
-        this.periodos = periodos.map(periodo => ({ ...periodo }));
+        this.dataSource.data = this.periodos;
+        if (this.paginator) {
+          this.paginator.pageIndex = 0;
+          this.dataSource.paginator = this.paginator;
+        }
         this.cdr.detectChanges();
       },
       (error) => {

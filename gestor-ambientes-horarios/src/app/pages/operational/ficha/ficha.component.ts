@@ -1,48 +1,64 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import Swal from 'sweetalert2';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-ficha',
   standalone: true,
-  imports: [HttpClientModule, FormsModule, CommonModule, NgSelectModule, MatInputModule, MatAutocompleteModule, NgbTypeaheadModule],
+  imports: [
+    HttpClientModule,
+    FormsModule,
+    CommonModule,
+    NgSelectModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    NgbTypeaheadModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
+  ],
   templateUrl: './ficha.component.html',
   styleUrl: './ficha.component.scss'
 })
 export class FichaComponent implements OnInit {
   fichas: any[] = [];
-  ficha: any = { 
+  ficha: any = {
     id: 0,
-    codigo: '', 
-    userId: 0, 
-    programaId: 0, 
-    ambienteId: 0, 
-    proyectoId: 0, 
-    fecha_inicio: new Date().toISOString().slice(0, 10), 
-    fecha_fin: new Date().toISOString().slice(0, 10), 
-    fin_lectiva: new Date().toISOString().slice(0, 10), 
+    codigo: '',
+    programaId: 0,
+    proyectoId: 0,
+    fecha_inicio: new Date().toISOString().slice(0, 10),
+    fecha_fin: new Date().toISOString().slice(0, 10),
+    fin_lectiva: new Date().toISOString().slice(0, 10),
     num_semanas: '',
     cupo: '',
-    state: true };
-  users: any[] = [];
+    state: true
+  };
   programas: any[] = [];
-  ambientes: any[] = [];
   proyectos: any[] = [];
   isModalOpen = false;
-  filteredUsers: any[] = [];
   filteredProgramas: any[] = [];
-  filteredAmbientes: any[] = [];
   filteredProyectos: any[] = [];
   filteredNumSemanas: any[] = [];
   isDropdownOpen = false;
   isEditing = false;
   numSemanasPorProyecto: { [proyectoId: number]: string[] } = {};
+  isLoading: boolean = false;
+  searchTerm: string = '';
+  displayedColumns: string[] = ['codigo', 'programaId', 'proyectoId', 'fecha_inicio', 'fecha_fin', 'fin_lectiva', 'num_semanas', 'cupo', 'state', 'actions'];
+  dataSource = new MatTableDataSource<any>(this.fichas);
+
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  @ViewChild(MatSort) sort: MatSort | undefined;
 
   private apiUrl = 'http://localhost:5062/api/Ficha';
   private usersUrl = 'http://localhost:5062/api/User';
@@ -54,11 +70,21 @@ export class FichaComponent implements OnInit {
 
   ngOnInit(): void {
     this.getFichas();
-    this.getUsers();
     this.getProgramas();
-    this.getAmbientes();
     this.getProyectos();
     this.calculateWeeks();
+  }
+
+  ngAfterViewInit() {
+    if (this.paginator && this.sort) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
+  }
+
+  // Método para aplicar el filtro
+  applyFilter(): void {
+    this.dataSource.filter = this.searchTerm.trim().toLowerCase();
   }
 
   calculateWeeks(): void {
@@ -69,7 +95,6 @@ export class FichaComponent implements OnInit {
     const diffInMilliseconds = fechaFin.getTime() - fechaInicio.getTime();
     // Convertir a semanas
     const weeks = Math.ceil(diffInMilliseconds / (1000 * 60 * 60 * 24 * 7));
-
     // Asignar el número de semanas
     this.ficha.num_semanas = weeks > 0 ? weeks.toString() : '0';
   }
@@ -88,34 +113,15 @@ export class FichaComponent implements OnInit {
           fecha_fin: new Date(ficha.fecha_fin).toISOString().slice(0, 10),
           fin_lectiva: new Date(ficha.fin_lectiva).toISOString().slice(0, 10)
         }));
+        this.dataSource.data = this.fichas;  
+        if (this.paginator) {
+          this.paginator.pageIndex = 0; 
+          this.dataSource.paginator = this.paginator;
+        }
         this.cdr.detectChanges();
       },
       (error) => {
         console.error('Error fetching actividades:', error);
-      }
-    );
-  }
-
-  getUsers(): void {
-    this.http.get<any[]>(this.usersUrl).subscribe(
-      (users) => {
-        this.users = users;
-        this.filteredUsers = users;
-      },
-      (error) => {
-        console.error('Error fetching usuarios:', error);
-      }
-    );
-  }
-
-  getAmbientes(): void {
-    this.http.get<any[]>(this.ambientesUrl).subscribe(
-      (ambientes) => {
-        this.ambientes = ambientes;
-        this.filteredAmbientes = ambientes;
-      },
-      (error) => {
-        console.error('Error fetching ambientes:', error);
       }
     );
   }
@@ -156,17 +162,6 @@ export class FichaComponent implements OnInit {
     }
   }
 
-  searchAmbiente(event: any): void {
-    const term = event.target.value.toLowerCase();
-    if (!term) {
-      this.filteredAmbientes = this.ambientes;
-    } else {
-      this.filteredAmbientes = this.ambientes.filter(ambiente =>
-        ambiente.nombre.toLowerCase().includes(term)
-      );
-    }
-  }
-
   searchProyecto(event: any): void {
     const term = event.target.value.toLowerCase();
     if (!term) {
@@ -189,17 +184,6 @@ export class FichaComponent implements OnInit {
     }
   }
 
-  onAmbienteSelect(event: any): void {
-    const selectedambiente = this.ambientes.find(ambiente =>
-      ambiente.nombre === event.option.value
-    );
-    if (selectedambiente) {
-      this.ficha.ambienteId = selectedambiente.id;
-      this.ficha.ambienteNombre = selectedambiente.nombre;
-      this.filteredAmbientes = [];
-    }
-  }
-
   onProyectoSelect(event: any): void {
     const selectedproyecto = this.proyectos.find(proyecto =>
       proyecto.nombre === event.option.value
@@ -216,16 +200,6 @@ export class FichaComponent implements OnInit {
     return programa ? programa.nombre : 'Desconocido';
   }
 
-  getUserNombre(userId: number): string {
-    const user = this.users.find(use => use.id === userId);
-    return user ? user.username : 'Desconocido';
-  }
-
-  getAmbienteNombre(ambienteId: number): string {
-    const ambiente = this.ambientes.find(ambi => ambi.id === ambienteId);
-    return ambiente ? ambiente.nombre : 'Desconocido';
-  }
-
   getProyectoNombre(proyectoId: number): string {
     const proyecto = this.proyectos.find(use => use.id === proyectoId);
     return proyecto ? proyecto.nombre : 'Desconocido';
@@ -239,8 +213,6 @@ export class FichaComponent implements OnInit {
     this.isModalOpen = false;
     this.resetForm();
     this.isEditing = false;
-    this.filteredUsers = [];
-    this.filteredAmbientes = [];
     this.filteredProyectos = [];
     this.filteredProgramas = [];
   }
@@ -273,19 +245,15 @@ export class FichaComponent implements OnInit {
   }
 
   editFicha(ficha: any): void {
-    this.ficha = {...ficha, 
+    this.ficha = {
+      ...ficha,
       fecha_inicio: new Date(ficha.fecha_inicio).toISOString().slice(0, 10),
       fecha_fin: new Date(ficha.fecha_fin).toISOString().slice(0, 10),
-      fin_lectiva: new Date(ficha.fin_lectiva).toISOString().slice(0, 10) };
-      console.log("dsds", this.programas);
+      fin_lectiva: new Date(ficha.fin_lectiva).toISOString().slice(0, 10)
+    };
     const selectedprograma = this.programas.find(progr => progr.id === this.ficha.programaId);
     if (selectedprograma) {
       this.ficha.programaNombre = selectedprograma.nombre;
-    }
-
-    const selectedambiente = this.ambientes.find(progr => progr.id === this.ficha.ambienteId);
-    if (selectedambiente) {
-      this.ficha.ambienteNombre = selectedambiente.nombre;
     }
 
     const selectedproyecto = this.proyectos.find(progr => progr.id === this.ficha.proyectoId);
@@ -320,21 +288,18 @@ export class FichaComponent implements OnInit {
   }
 
   resetForm(): void {
-    this.  ficha = { 
+    this.ficha = {
       id: 0,
-      codigo: '', 
-      userId: 0, 
-      programaId: 0, 
-      ambienteId: 0, 
-      proyectoId: 0, 
-      fecha_inicio: new Date().toISOString().slice(0, 10), 
-      fecha_fin: new Date().toISOString().slice(0, 10), 
-      fin_lectiva: new Date().toISOString().slice(0, 10), 
+      codigo: '',
+      programaId: 0,
+      proyectoId: 0,
+      fecha_inicio: new Date().toISOString().slice(0, 10),
+      fecha_fin: new Date().toISOString().slice(0, 10),
+      fin_lectiva: new Date().toISOString().slice(0, 10),
       num_semanas: '',
       cupo: '',
-      state: true };
-    this.filteredUsers = [];
-    this.filteredAmbientes = [];
+      state: true
+    };
     this.filteredProyectos = [];
     this.filteredNumSemanas = [];
     this.filteredProgramas = [];

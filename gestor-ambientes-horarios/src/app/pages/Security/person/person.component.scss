@@ -2,6 +2,7 @@
 .title {
     color: #5EB319;
     text-align: left;
+    margin-top: 100px;
     margin-bottom: 110px;
     font-weight: bold;
     font-size: 40px;
@@ -239,7 +240,8 @@
     transition: all 0.2s ease;
     /* Efecto de transición */
     background-color: white;
-    /* Fondo blanco */
+    margin-left: 9px;
+    margin-top: 9px;
 }
 
 .bulk-select-checkbox:checked {
@@ -249,13 +251,21 @@
 
 .bulk-select-checkbox:checked+.form-check-label {
     color: #5EB319;
-
 }
+.modal-body {
+    position: relative;
+    flex: 1 1 auto;
+    margin-top: -20px;
+    margin-left: -14px;
+}
+/**/
 
 /* Estilos para el tooltip */
 .tooltip-inner {
     background-color: #5EB319;
+    /* Fondo verde para el tooltip */
     color: white;
+    /* Color de texto blanco en el tooltip */
     font-size: 0.9em;
 }
 
@@ -266,12 +276,9 @@
 
 .form-check-label {
     margin-left: 12px;
+    margin-top: 4px;
 }
-
-.container {
-    padding-bottom: 20px;
-    /* Ajustar el relleno inferior */
-}
+/*********/
 
 /**********/
 
@@ -319,4 +326,34 @@ input[matInput] {
     border: 1px solid #afb8a8;
     font-size: 14px;
 }
-/**********/
+
+.table-container {
+    overflow-x: auto;
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+
+      th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
+
+      td {
+        padding: 10px;
+        border: 1px solid #ddd;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+
+      tr:hover {
+        background-color: #f1f1f1;
+      }
+    }
+  }
+  /**********/

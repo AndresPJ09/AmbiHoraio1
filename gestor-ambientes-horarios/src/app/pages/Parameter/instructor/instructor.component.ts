@@ -3,12 +3,21 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
-
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-instructor',
   standalone: true,
-  imports: [HttpClientModule, FormsModule, CommonModule],
+  imports: [
+    HttpClientModule,
+    FormsModule,
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
+  ],
   templateUrl: './instructor.component.html',
   styleUrl: './instructor.component.scss'
 })
@@ -34,6 +43,13 @@ export class InstructorComponent implements OnInit {
   selectedImage: string | null = null;
   isImageModalOpen: boolean = false;
   file: string | null = null;
+  isLoading: boolean = false;
+  searchTerm: string = '';
+  displayedColumns: string[] = ['nombres', 'apellidos', 'foto', 'identificacion', 'vinculo', 'especialidad', 'correo', 'fecha_inicio', 'hora_ingreso', 'hora_egreso', 'state', 'actions'];
+  dataSource = new MatTableDataSource<any>(this.instructores);
+
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  @ViewChild(MatSort) sort: MatSort | undefined;
 
   private apiUrl = 'http://localhost:5062/api/Instructor';
   @ViewChild('foto') fileInput!: ElementRef;
@@ -44,6 +60,17 @@ export class InstructorComponent implements OnInit {
     this.getInstructores();
   }
 
+  ngAfterViewInit() {
+    if (this.paginator && this.sort) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
+  }
+
+  // Método para aplicar el filtro
+  applyFilter(): void {
+    this.dataSource.filter = this.searchTerm.trim().toLowerCase();
+  }
 
   formatTime(date: string): string {
     const time = new Date(date);
@@ -59,8 +86,7 @@ export class InstructorComponent implements OnInit {
       reader.onload = () => {
         const base64String = reader.result as string;
         this.selectedImage = base64String;
-        // Enviar base64 como parte del objeto instructor
-        this.instructor.foto = base64String.split(',')[1]; // Obtener solo la parte después de "data:image/jpeg;base64,"
+        this.instructor.foto = base64String.split(',')[1]; 
       };
       reader.readAsDataURL(file);
     }
@@ -73,6 +99,11 @@ export class InstructorComponent implements OnInit {
           ...instructor,
           fecha_inicio: new Date(instructor.fecha_inicio).toISOString().slice(0, 10)
         }));
+        this.dataSource.data = this.instructores;  
+        if (this.paginator) {
+          this.paginator.pageIndex = 0; 
+          this.dataSource.paginator = this.paginator;
+        }
         this.cdr.detectChanges();
       },
       (error) => {
@@ -124,7 +155,7 @@ export class InstructorComponent implements OnInit {
         Swal.fire('Éxito', 'Instructor creado exitosamente!', 'success');
       }, (error) => {
         console.error('Error al crear el instructor:', error);
-        Swal.fire('Error', 'No se pudo crear el instructor.', 'error');
+       Swal.fire('Error', error.error.message || 'Ocurrió un error al crear el instructor.', 'error');
       });
     } else {
       this.http.put(this.apiUrl, this.instructor).subscribe(() => {
@@ -133,7 +164,7 @@ export class InstructorComponent implements OnInit {
         Swal.fire('Éxito', 'Instructor actualizado exitosamente!', 'success');
       }, (error) => {
         console.error('Error al actualizar el instructor:', error);
-        Swal.fire('Error', 'No se pudo actualizar el instructor.', 'error');
+  Swal.fire('Error', error.error.message || 'Ocurrió un error al actualizar el instructor.', 'error');
       });
     }
   }
@@ -155,11 +186,7 @@ export class InstructorComponent implements OnInit {
       hora_egreso: this.extractTime(instructor.hora_egreso),
       foto: instructor.foto ? instructor.foto : null
     };
-
-    // Asignar la imagen seleccionada para mostrar en la vista previa
     this.selectedImage = instructor.foto ? 'data:image/jpeg;base64,' + instructor.foto : null;
-
-
     this.isEditing = true;
     this.openModal();
   }
@@ -189,7 +216,7 @@ export class InstructorComponent implements OnInit {
     this.selectedImage = null;
     this.removeImage();
     if (this.fileInput?.nativeElement) {
-      this.fileInput.nativeElement.value = ''; // Limpiar el input de archivo
+      this.fileInput.nativeElement.value = '';
     }
   }
 }

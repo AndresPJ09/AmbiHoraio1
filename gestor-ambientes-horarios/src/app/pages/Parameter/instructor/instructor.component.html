@@ -15,13 +15,15 @@
                     <div class="col">
                         <label for="nombres" class="form-label">Nombres:</label>
                         <input type="text" class="form-control" id="nombres" name="nombres"
-                            [(ngModel)]="instructor.nombres" required>
+                            [(ngModel)]="instructor.nombres" required maxlength="50"
+                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                     </div>
 
                     <div class="col">
                         <label for="apellidos" class="form-label">Apellidos:</label>
                         <input type="text" class="form-control" id="apellidos" name="apellidos"
-                            [(ngModel)]="instructor.apellidos" required>
+                            [(ngModel)]="instructor.apellidos" required maxlength="50"
+                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                     </div>
                 </div>
 
@@ -30,80 +32,90 @@
                         <label for="foto" class="form-label">Foto:</label>
                         <input type="file" class="form-control" id="foto" name="foto" accept="image/*" #foto
                             (change)="onFileSelected($event)">
-
-                        <!-- Image preview and Remove button -->
-                        <div *ngIf="selectedImage" class="image-preview-container">
-                            <img [src]="selectedImage" alt="Image preview" class="image-preview" />
-                            <button type="button" class="button2" (click)="removeImage()">Remove Image</button>
-                        </div>
-
-                        <div class="col">
-                            <label for="identificacion" class="form-label">Identificación:</label>
-                            <input type="text" class="form-control" id="identificacion" name="identificacion"
-                                [(ngModel)]="instructor.identificacion" required>
-                        </div>
+                    </div>
+                    <!-- Image preview and Remove button -->
+                    <div *ngIf="selectedImage" class="image-preview-container">
+                        <img [src]="selectedImage" alt="Image preview" class="image-preview" />
+                        <button type="button" class="button2" (click)="removeImage()">Remove Image</button>
                     </div>
 
-                    <div class="row">
-                        <div class="col">
-                            <label for="vinculo" class="form-label">Vinculo:</label>
-                            <input type="text" class="form-control" id="vinculo" name="vinculo"
-                                [(ngModel)]="instructor.vinculo" required>
-                        </div>
+                    <div class="col">
+                        <label for="identificacion" class="form-label">Identificación:</label>
+                        <input type="text" class="form-control" id="identificacion" name="identificacion"
+                            [(ngModel)]="instructor.identificacion" required maxlength="10" pattern="^\d{1,10}$">
+                    </div>
+                </div>
 
-                        <div class="col">
-                            <label for="especialidad" class="form-label">Especialidad:</label>
-                            <input type="text" class="form-control" id="especialidad" name="especialidad"
-                                [(ngModel)]="instructor.especialidad" required>
-                        </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="vinculo" class="form-label">Vínculo:</label>
+                        <select class="form-control" id="vinculo" name="vinculo" [(ngModel)]="instructor.vinculo"
+                            required>
+                            <option value="">Seleccione una opción</option>
+                            <option value="contrato">Contrato</option>
+                            <option value="planta">Planta</option>
+                        </select>
                     </div>
 
-                    <div class="row">
-                        <div class="col">
-                            <label for="correo" class="form-label">Correo:</label>
-                            <input type="email" class="form-control" id="correo" name="correo"
-                                [(ngModel)]="instructor.correo" required>
-                        </div>
+                    <div class="col">
+                        <label for="especialidad" class="form-label">Especialidad:</label>
+                        <input type="text" class="form-control" id="especialidad" name="especialidad"
+                            [(ngModel)]="instructor.especialidad" required>
+                    </div>
+                </div>
 
-                        <div class="col">
-                            <label for="fecha_inicio" class="form-label  input-field">Fecha de Inicio:</label>
-                            <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio"
-                                [(ngModel)]="instructor.fecha_inicio" required>
-                        </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="correo" class="form-label">Correo:</label>
+                        <input type="email" class="form-control" id="correo" name="correo"
+                            [(ngModel)]="instructor.correo" required maxlength="100"
+                            pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
+                            title="El email debe tener un @ y terminar en gmail.com" data-bs-toggle="tooltip"
+                            data-bs-placement="top">
                     </div>
 
-                    <div class="row">
-                        <div class="col">
-                            <label for="horaIngreso" class="form-label">Hora de ingreso:</label>
-                            <input type="time" class="form-control" id="horaIngreso" name="hora_ingreso"
-                                [(ngModel)]="instructor.hora_ingreso" required>
-                        </div>
+                    <div class="col">
+                        <label for="fecha_inicio" class="form-label  input-field">Fecha de Inicio:</label>
+                        <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio"
+                            [(ngModel)]="instructor.fecha_inicio" required>
+                    </div>
+                </div>
 
-                        <div class="col">
-                            <label for="horaEgreso" class="form-label">Hora de egreso:</label>
-                            <input type="time" class="form-control" id="horaEgreso" name="hora_egreso"
-                                [(ngModel)]="instructor.hora_egreso" required>
-                        </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="horaIngreso" class="form-label">Hora de ingreso:</label>
+                        <input type="time" class="form-control" id="horaIngreso" name="hora_ingreso"
+                            [(ngModel)]="instructor.hora_ingreso" required>
                     </div>
 
+                    <div class="col">
+                        <label for="horaEgreso" class="form-label">Hora de egreso:</label>
+                        <input type="time" class="form-control" id="horaEgreso" name="hora_egreso"
+                            [(ngModel)]="instructor.hora_egreso" required>
+                    </div>
+                </div>
+
+                <div class="modal-body">
                     <div class="row">
                         <div class="col" *ngIf="instructor.id !== 0">
-                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
-                                [(ngModel)]="instructor.state" [attr.data-bs-toggle]="'tooltip'"
-                                [attr.data-bs-placement]="'top'"
-                                [attr.title]="instructor.state ? 'Activo' : 'Inactivo'" />
-                            <label class="form-check-label" for="state">Estado</label>
-                        </div>
-
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
-                            <button type="submit" class="btn btn-primary" [disabled]="instructorForm.invalid">
-                                {{ isEditing ? 'Actualizar' : 'Guardar' }}
-                            </button>
+                            <label for="state" class="form-label">Estado:</label>
+                            <div>
+                                <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state"
+                                    name="state" [(ngModel)]="instructor.state"
+                                    [ngClass]="instructor.state ? 'state-active' : 'state-inactive'"/>
+                                <label class="form-check-label" for="state">{{ instructor.state ? 'Activo' : 'Inactivo'
+                                    }}</label>
                         </div>
                     </div>
                 </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="instructorForm.invalid">
+                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                    </button>
+                </div>
+            </div>
             </form>
         </div>
     </div>
@@ -123,55 +135,107 @@
     <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
         Instructor</button>
 
+    <!-- Campo de búsqueda -->
+    <div class="search-container">
+        <input matInput placeholder="Buscar..." [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" />
+    </div>
+
     <!-- Tabla para mostrar los registros de instructores -->
-    <table class="table table-bordered table-hover table-striped">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Foto</th>
-                <th>Idnetificacion</th>
-                <th>Vinculos</th>
-                <th>Especialidad</th>
-                <th>Correos</th>
-                <th>Fecha de inicio</th>
-                <th>Hora de ingreso</th>
-                <th>Hora de egreso</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let instructor of instructores">
-                <td>{{ instructor.nombres }}</td>
-                <td>{{ instructor.apellidos }}</td>
-                <td>
-                    <!-- Mostrar la foto si está disponible -->
+    <div class="table-container">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <!-- Nombre -->
+            <ng-container matColumnDef="nombres">
+                <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                <td mat-cell *matCellDef="let instructor"> {{ instructor.nombres }} </td>
+            </ng-container>
+
+            <!-- Apellido -->
+            <ng-container matColumnDef="apellidos">
+                <th mat-header-cell *matHeaderCellDef> Apellido </th>
+                <td mat-cell *matCellDef="let instructor"> {{ instructor.apellidos }} </td>
+            </ng-container>
+
+            <!-- Foto -->
+            <ng-container matColumnDef="foto">
+                <th mat-header-cell *matHeaderCellDef> Foto </th>
+                <td mat-cell *matCellDef="let instructor">
                     <img *ngIf="instructor.foto" [src]="'data:image/jpeg;base64,' + instructor.foto" alt="Foto"
                         style="width: 50px; height: 50px; object-fit: cover;" (click)="openImageModal(instructor.foto)">
-                    <!-- Si no hay foto, mostrar un ícono o texto alternativo -->
                     <span *ngIf="!instructor.foto">No disponible</span>
                 </td>
+            </ng-container>
 
-                <td>{{ instructor.identificacion }}</td>
-                <td>{{ instructor.vinculo }}</td>
-                <td>{{ instructor.especialidad }}</td>
-                <td>{{ instructor.correo }}</td>
-                <td>{{ instructor.fecha_inicio }}</td>
-                <td>{{ formatTime(instructor.hora_ingreso) }}</td>
-                <td>{{ formatTime(instructor.hora_egreso) }}</td>
+            <!-- Identificación -->
+            <ng-container matColumnDef="identificacion">
+                <th mat-header-cell *matHeaderCellDef> Identificación </th>
+                <td mat-cell *matCellDef="let instructor"> {{ instructor.identificacion }} </td>
+            </ng-container>
 
-                <td>{{ instructor.state ? 'Activo' : 'Inactivo' }}</td>
-                <td>
+            <!-- Vinculos -->
+            <ng-container matColumnDef="vinculo">
+                <th mat-header-cell *matHeaderCellDef> Vínculos </th>
+                <td mat-cell *matCellDef="let instructor"> {{ instructor.vinculo }} </td>
+            </ng-container>
+
+            <!-- Especialidad -->
+            <ng-container matColumnDef="especialidad">
+                <th mat-header-cell *matHeaderCellDef> Especialidad </th>
+                <td mat-cell *matCellDef="let instructor"> {{ instructor.especialidad }} </td>
+            </ng-container>
+
+            <!-- Correo -->
+            <ng-container matColumnDef="correo">
+                <th mat-header-cell *matHeaderCellDef> Correos </th>
+                <td mat-cell *matCellDef="let instructor"> {{ instructor.correo }} </td>
+            </ng-container>
+
+            <!-- Fecha de inicio -->
+            <ng-container matColumnDef="fecha_inicio">
+                <th mat-header-cell *matHeaderCellDef> Fecha de inicio </th>
+                <td mat-cell *matCellDef="let instructor"> {{ instructor.fecha_inicio | date: 'shortDate' }} </td>
+            </ng-container>
+
+            <!-- Hora de ingreso -->
+            <ng-container matColumnDef="hora_ingreso">
+                <th mat-header-cell *matHeaderCellDef> Hora de ingreso </th>
+                <td mat-cell *matCellDef="let instructor"> {{ formatTime(instructor.hora_ingreso) }} </td>
+            </ng-container>
+
+            <!-- Hora de egreso -->
+            <ng-container matColumnDef="hora_egreso">
+                <th mat-header-cell *matHeaderCellDef> Hora de egreso </th>
+                <td mat-cell *matCellDef="let instructor"> {{ formatTime(instructor.hora_egreso) }} </td>
+            </ng-container>
+
+            <!-- Estado -->
+            <ng-container matColumnDef="state">
+                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                <td mat-cell *matCellDef="let instructor">
+                    <span
+                        [ngClass]="instructor.state ? 'state-indicator state-active' : 'state-indicator state-inactive'">
+                    </span> {{ instructor.state ? 'Activo' : 'Inactivo' }}
+                </td>
+            </ng-container>
+
+            <!-- Acciones -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                <td mat-cell *matCellDef="let instructor">
                     <button class="btn-icon edit" (click)="editInstructores(instructor)" title="Editar">
                         <i class="fas fa-edit"></i>
                     </button>
                     <button class="btn-icon delete" (click)="deleteInstructores(instructor.id)" title="Eliminar">
-                        <i class="bi bi-trash3-fill"></i>
+                        <i class="fas fa-trash"></i>
                     </button>
                 </td>
-            </tr>
-        </tbody>
-    </table>
+            </ng-container>
 
+            <!-- Filas y cabecera -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+
+    <!-- Paginación -->
+    <mat-paginator [length]="instructores.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
 </div>

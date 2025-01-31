@@ -58,12 +58,11 @@
                     <div class="col" *ngIf="actividad.id !== 0">
                         <label for="state" class="form-label">Estado:</label>
                         <div>
-                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
-                                [(ngModel)]="actividad.state" [attr.data-bs-toggle]="'tooltip'"
-                                [attr.data-bs-placement]="'top'"
-                                [attr.title]="actividad.state ? 'Activo' : 'Inactivo'" />
-                            <label class="form-check-label" for="state">{{ actividad.state ? 'Activo' : 'Inactivo'
-                                }}</label>
+                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state"
+                            name="state" [(ngModel)]="actividad.state"
+                            [ngClass]="actividad.state ? 'state-active' : 'state-inactive'" />
+                        <label class="form-check-label" for="state">{{ actividad.state ? 'Activo' : 'Inactivo'
+                            }}</label>
                         </div>
                     </div>
                 </div>
@@ -86,28 +85,60 @@
     <button class="btn btn-success add-btn" (click)="openModal()"><i class="bi bi-plus-circle"></i> Agregar
         actividad</button>
 
+    <!-- Campo de búsqueda -->
+    <div class="search-container">
+        <input matInput placeholder="Buscar..." [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" />
+    </div>
+
     <!-- Tabla para mostrar los registros de actividads -->
-    <table class="table table-bordered table-hover table-striped">
-        <thead>
-            <tr>
-                <th>Actividad del proyecto</th>
-                <th>Competencias</th>
-                <th>Fecha de inicio</th>
-                <th>Fecha de fin</th>
-                <th>Número de semanas</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let actividad of actividades">
-                <td>{{ actividad.actividad_proyecto }}</td>
-                <td>{{ getCompetenciaNombre(actividad.competenciaId) }}</td>
-                <td>{{ actividad.fecha_inicio_Ac }}</td>
-                <td>{{ actividad.fecha_fin_Ac }}</td>
-                <td>{{ actividad.num_semanas }}</td>
-                <td>{{ actividad.state ? 'Activo' : 'Inactivo' }}</td>
-                <td>
+    <div class="table-container">
+        <table mat-table [dataSource]="dataSource">
+    
+            <!-- Actividad del Proyecto -->
+            <ng-container matColumnDef="actividad_proyecto">
+                <th mat-header-cell *matHeaderCellDef> Actividad del proyecto </th>
+                <td mat-cell *matCellDef="let actividad"> {{ actividad.actividad_proyecto }} </td>
+            </ng-container>
+    
+            <!-- Competencias -->
+            <ng-container matColumnDef="competenciaId">
+                <th mat-header-cell *matHeaderCellDef> Competencias </th>
+                <td mat-cell *matCellDef="let actividad"> {{ getCompetenciaNombre(actividad.competenciaId) }} </td>
+            </ng-container>
+    
+            <!-- Fecha de Inicio -->
+            <ng-container matColumnDef="fecha_inicio_Ac">
+                <th mat-header-cell *matHeaderCellDef> Fecha de inicio </th>
+                <td mat-cell *matCellDef="let actividad"> {{ actividad.fecha_inicio_Ac }} </td>
+            </ng-container>
+    
+            <!-- Fecha de Fin -->
+            <ng-container matColumnDef="fecha_fin_Ac">
+                <th mat-header-cell *matHeaderCellDef> Fecha de fin </th>
+                <td mat-cell *matCellDef="let actividad"> {{ actividad.fecha_fin_Ac }} </td>
+            </ng-container>
+    
+            <!-- Número de Semanas -->
+            <ng-container matColumnDef="num_semanas">
+                <th mat-header-cell *matHeaderCellDef> Número de semanas </th>
+                <td mat-cell *matCellDef="let actividad"> {{ actividad.num_semanas }} </td>
+            </ng-container>
+    
+            <!-- Estado -->
+            <ng-container matColumnDef="state">
+                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                <td mat-cell *matCellDef="let actividad">
+                    <span
+                        [ngClass]="actividad.state ? 'state-indicator state-active' : 'state-indicator state-inactive'">
+                    </span>
+                    {{ actividad.state ? 'Activo' : 'Inactivo' }}
+                </td>
+            </ng-container>
+    
+            <!-- Acciones -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                <td mat-cell *matCellDef="let actividad">
                     <button class="btn-icon edit" (click)="editActividades(actividad)" title="Editar">
                         <i class="fas fa-edit"></i>
                     </button>
@@ -115,7 +146,14 @@
                         <i class="fas fa-trash"></i>
                     </button>
                 </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+            </ng-container>
+    
+            <!-- Cabecera de la tabla -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+    
+    <!-- Paginación -->
+    <mat-paginator [length]="actividades.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+    

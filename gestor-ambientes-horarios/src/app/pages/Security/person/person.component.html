@@ -43,20 +43,23 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col" *ngIf="person.id !== 0">
-                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
-                                [(ngModel)]="person.state" [ngClass]="person.state ? 'state-active' : 'state-inactive'"
-                                [attr.data-bs-toggle]="'tooltip'" [attr.data-bs-placement]="'top'"
-                                [attr.title]="person.state ? 'Activo' : 'Inactivo'" />
-                            <label class="form-check-label" for="state">Estado</label>
+                            <label for="state" class="form-label">Estado:</label>
+                            <div>
+                                <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state"
+                                    name="state" [(ngModel)]="person.state"
+                                    [ngClass]="person.state ? 'state-active' : 'state-inactive'" />
+                                <label class="form-check-label" for="state">{{ person.state ? 'Activo' : 'Inactivo'
+                                    }}</label>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" [disabled]="personForm.invalid">
-                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
-                    </button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="personForm.invalid">
+                            {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -106,7 +109,6 @@
                     {{ person.state ? 'Activo' : 'Inactivo' }}
                 </td>
             </ng-container>
-
 
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef> Acciones </th>

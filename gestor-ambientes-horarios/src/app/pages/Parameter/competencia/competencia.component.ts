@@ -1,22 +1,39 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormsModule, NgForm } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-competencia',
   standalone: true,
-  imports: [HttpClientModule, FormsModule, CommonModule],
+  imports: [
+    HttpClientModule, 
+    FormsModule, 
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
+  ],
   templateUrl: './competencia.component.html',
   styleUrl: './competencia.component.scss'
 })
 export class CompetenciaComponent implements OnInit {
   competencias: any[] = [];
-  competencia: any = { id: 0, codigo: '', nombre: '', state: true };
+  competencia: any = { id: 0, codigo: '', descripcion: '', state: true };
   isModalOpen = false;
   isDropdownOpen = false;
   isEditing = false;
+  isLoading: boolean = false;
+  searchTerm: string = '';
+  displayedColumns: string[] = ['codigo', 'descripcion', 'state', 'actions'];
+  dataSource = new MatTableDataSource<any>(this.competencias);
+
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  @ViewChild(MatSort) sort: MatSort | undefined;
 
   private apiUrl = 'http://localhost:5062/api/Competencia';
 
@@ -27,10 +44,27 @@ export class CompetenciaComponent implements OnInit {
 
   }
 
+  ngAfterViewInit() {
+    if (this.paginator && this.sort) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
+  }
+
+  // Método para aplicar el filtro
+  applyFilter(): void {
+    this.dataSource.filter = this.searchTerm.trim().toLowerCase();
+  }
+
   getCompetencias(): void {
     this.http.get<any[]>(this.apiUrl).subscribe(
       (competencias) => {
-        this.competencias = competencias.map(nivel => ({ ...nivel }));
+        this.competencias = competencias;
+        this.dataSource.data = this.competencias;  
+        if (this.paginator) {
+          this.paginator.pageIndex = 0; 
+          this.dataSource.paginator = this.paginator;
+        }
         this.cdr.detectChanges();
       },
       (error) => {
@@ -50,11 +84,6 @@ export class CompetenciaComponent implements OnInit {
   }
 
   onSubmit(form: NgForm): void {
-    if (this.competencia.codigo.trim() === '' || this.competencia.nombre.trim() === '') {
-      Swal.fire('Error', 'Por favor, complete todos los campos requeridos.', 'error');
-      return;
-    }
-
     if (this.competencia.id === 0) {
       this.http.post(this.apiUrl, this.competencia).subscribe(() => {
         this.getCompetencias();
@@ -108,7 +137,7 @@ export class CompetenciaComponent implements OnInit {
   }
 
   resetForm(): void {
-    this.competencia = { id: 0, codigo: '', nombre: '', state: true };
+    this.competencia = { id: 0, codigo: '', descripcion: '', state: true };
   }
 }
 

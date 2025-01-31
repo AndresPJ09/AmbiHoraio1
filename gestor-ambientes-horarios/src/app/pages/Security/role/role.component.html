@@ -24,32 +24,37 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col">
                         <!-- Views Asociadas -->
-                        <label for="views">Vistas asociadas:</label>
-                        <div class="form-label">
+                        <label for="views" class="form-label">Vistas asociadas:</label>
+                        <div>
                             <p-multiSelect id="views" name="views" [options]="views" [(ngModel)]="role.views" required
-                                #viewsField="ngModel" optionLabel="name" placeholder="Selecciona views"
-                                scrollHeight="250px" display="chip">
+                                #viewsField="ngModel" optionLabel="name" placeholder="Selecciona vistas"
+                                scrollHeight="200px" display="chip">
                             </p-multiSelect>
                         </div>
-                    </div>
 
-                    <div class="col" *ngIf="role.id !== 0">
-                        <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
-                            [(ngModel)]="role.state" [attr.data-bs-toggle]="'tooltip'" [attr.data-bs-placement]="'top'"
-                            [attr.title]="role.state ? 'Activo' : 'Inactivo'" />
-                        <label class="form-check-label" for="state">Estado</label>
+                        <div class="modal-body">
+                            <div class="col" *ngIf="role.id !== 0">
+                                <label for="state" class="form-label">Estado:</label>
+                                <div>
+                                    <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state"
+                                        name="state" [(ngModel)]="role.state"
+                                        [ngClass]="role.state ? 'state-active' : 'state-inactive'" />
+                                    <label class="form-check-label" for="state">{{ role.state ? 'Activo' : 'Inactivo'
+                                        }}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                            <button type="submit" class="btn btn-primary" [disabled]="roleForm.invalid">
+                                {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                            </button>
+                        </div>
                     </div>
                 </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" [disabled]="roleForm.invalid">
-                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
-                    </button>
-                </div>
-
             </form>
         </div>
     </div>

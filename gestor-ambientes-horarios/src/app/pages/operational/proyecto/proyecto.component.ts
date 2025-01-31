@@ -1,17 +1,31 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import Swal from 'sweetalert2';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-proyecto',
   standalone: true,
-  imports: [HttpClientModule, FormsModule, CommonModule, NgSelectModule, MatInputModule, MatAutocompleteModule, NgbTypeaheadModule],
+  imports: [
+    HttpClientModule,
+    FormsModule,
+    CommonModule,
+    NgSelectModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    NgbTypeaheadModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
+  ],
   templateUrl: './proyecto.component.html',
   styleUrl: './proyecto.component.scss'
 })
@@ -23,6 +37,13 @@ export class ProyectoComponent implements OnInit {
   filteredActividades: any[] = [];
   isDropdownOpen = false;
   isEditing = false;
+  isLoading: boolean = false;
+  searchTerm: string = '';
+  displayedColumns: string[] = ['nombre', 'jornada_tecnica', 'actividadId', 'fase', 'state', 'actions'];
+  dataSource = new MatTableDataSource<any>(this.proyectos);
+
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  @ViewChild(MatSort) sort: MatSort | undefined;
 
   private apiUrl = 'http://localhost:5062/api/Proyecto';
   private actividadesUrl = 'http://localhost:5062/api/Actividad';
@@ -34,11 +55,29 @@ export class ProyectoComponent implements OnInit {
     this.getActividades();
   }
 
+  ngAfterViewInit() {
+    if (this.paginator && this.sort) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
+  }
+
+  // Método para aplicar el filtro
+  applyFilter(): void {
+    this.dataSource.filter = this.searchTerm.trim().toLowerCase();
+  }
+
   getProyectos(): void {
     this.http.get<any[]>(this.apiUrl).subscribe(
       (proyectos) => {
         this.proyectos = proyectos;
+        this.dataSource.data = this.proyectos;  
+        if (this.paginator) {
+          this.paginator.pageIndex = 0; 
+          this.dataSource.paginator = this.paginator;
+        }
         this.cdr.detectChanges();
+        
       },
       (error) => {
         console.error('Error fetching proyectos:', error);
@@ -122,7 +161,7 @@ export class ProyectoComponent implements OnInit {
   }
 
   editProyecto(proyecto: any): void {
-    this.proyecto = {...proyecto };
+    this.proyecto = { ...proyecto };
     const selectedactividad = this.actividades.find(acti => acti.id === this.proyecto.actividadId);
     if (selectedactividad) {
       this.proyecto.actividadNombre = selectedactividad.actividad_proyecto;

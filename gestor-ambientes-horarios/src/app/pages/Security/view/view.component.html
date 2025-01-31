@@ -33,36 +33,38 @@
 
                     <div class="col">
                         <!-- Modulo -->
-                        <label for="moduleName">Modulo:</label>
-                        <div class="form-label">
-                            <input type="text" class="form-control input-field" matInput [matAutocomplete]="auto"
-                                id="moduleName" name="moduleName" [(ngModel)]="view.moduleName"
-                                (input)="searchmodules($event)" required #moduleName="ngModel" />
-                            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onmoduleSelect($event)">
-                                <mat-option *ngFor="let module of filteredModules" [value]="module.name">
-                                    {{ module.name }}
-                                </mat-option>
-                            </mat-autocomplete>
-                        </div>
+                        <label for="moduleName" class="form-label">Modulo:</label>
+                        <input type="text" class="form-control" matInput [matAutocomplete]="auto" id="moduleName"
+                            name="moduleName" [(ngModel)]="view.moduleName" (input)="searchmodules($event)" required
+                            #moduleName="ngModel" />
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onmoduleSelect($event)">
+                            <mat-option *ngFor="let module of filteredModules" [value]="module.name">
+                                {{ module.name }}
+                            </mat-option>
+                        </mat-autocomplete>
                     </div>
                 </div>
 
                 <div class="modal-body">
                     <div class="row">
                         <div class="col" *ngIf="view.id !== 0">
-                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
-                                [(ngModel)]="view.state" [attr.data-bs-toggle]="'tooltip'"
-                                [attr.data-bs-placement]="'top'" [attr.title]="view.state ? 'Activo' : 'Inactivo'" />
-                            <label class="form-check-label" for="state">Estado</label>
+                            <label for="state" class="form-label">Estado:</label>
+                            <div>
+                                <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state"
+                                    name="state" [(ngModel)]="view.state"
+                                    [ngClass]="view.state ? 'state-active' : 'state-inactive'" />
+                                <label class="form-check-label" for="state">{{ view.state ? 'Activo' : 'Inactivo'
+                                    }}</label>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" [disabled]="viewForm.invalid">
-                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
-                    </button>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="viewForm.invalid">
+                            {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>

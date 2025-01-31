@@ -130,11 +130,16 @@ export class PersonComponent implements OnInit {
       if (result.isConfirmed) {
         this.http.delete(`${this.apiUrl}/${id}`).subscribe(() => {
           this.getPersons();
-          Swal.fire('¡Eliminado!', 'Tu archivo ha sido eliminado.', 'success');
-        });
-      }
-    });
-  }
+          Swal.fire('¡Eliminado!', 'La persona ha sido eliminado.', 'success');
+             },
+                 (error) => {
+                   console.error('Error eliminando persona:', error);
+                   Swal.fire('Error', 'Hubo un problema al eliminar el persona.', 'error');
+                 }
+               );
+             }
+           });
+         }
 
   resetForm(): void {
     this.person = { id: 0, name: '', last_name: '', email: '', identification: '', state: true };

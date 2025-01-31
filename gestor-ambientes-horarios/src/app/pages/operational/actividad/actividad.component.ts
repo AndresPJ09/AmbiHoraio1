@@ -1,17 +1,31 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import Swal from 'sweetalert2';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-actividad',
   standalone: true,
-  imports: [HttpClientModule, FormsModule, CommonModule, NgSelectModule, MatInputModule, MatAutocompleteModule, NgbTypeaheadModule],
+  imports: [
+    HttpClientModule,
+    FormsModule,
+    CommonModule,
+    NgSelectModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    NgbTypeaheadModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
+  ],
   templateUrl: './actividad.component.html',
   styleUrl: './actividad.component.scss'
 })
@@ -23,6 +37,13 @@ export class ActividadComponent implements OnInit {
   filteredCompetencias: any[] = [];
   isDropdownOpen = false;
   isEditing = false;
+  isLoading: boolean = false;
+  searchTerm: string = '';
+  displayedColumns: string[] = ['actividad_proyecto', 'competenciaId', 'fecha_inicio_Ac', 'fecha_fin_Ac', 'num_semanas', 'state', 'actions'];
+  dataSource = new MatTableDataSource<any>(this.actividades);
+
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  @ViewChild(MatSort) sort: MatSort | undefined;
 
   private apiUrl = 'http://localhost:5062/api/Actividad';
   private competenciasUrl = 'http://localhost:5062/api/Competencia';
@@ -33,6 +54,18 @@ export class ActividadComponent implements OnInit {
     this.getActividades();
     this.getCompetencias();
     this.calculateWeeks();
+  }
+
+  ngAfterViewInit() {
+    if (this.paginator && this.sort) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
+  }
+
+  // Método para aplicar el filtro
+  applyFilter(): void {
+    this.dataSource.filter = this.searchTerm.trim().toLowerCase();
   }
 
   calculateWeeks(): void {
@@ -61,6 +94,11 @@ export class ActividadComponent implements OnInit {
           fecha_inicio_Ac: new Date(actividad.fecha_inicio_Ac).toISOString().slice(0, 10),
           fecha_fin_Ac: new Date(actividad.fecha_fin_Ac).toISOString().slice(0, 10)
         }));
+        this.dataSource.data = this.actividades;  
+        if (this.paginator) {
+          this.paginator.pageIndex = 0; 
+          this.dataSource.paginator = this.paginator;
+        }
         this.cdr.detectChanges();
       },
       (error) => {
@@ -182,7 +220,7 @@ export class ActividadComponent implements OnInit {
   }
 
   resetForm(): void {
-    this.actividad = { id: 0, actividad_proyecto: '', competenciaId: 0, fecha_inicio_Ac: new Date().toISOString().slice(0, 10), fecha_fin_Ac: new Date().toISOString().slice(0, 10), num_semanas: '', state: true  };
+    this.actividad = { id: 0, actividad_proyecto: '', competenciaId: 0, fecha_inicio_Ac: new Date().toISOString().slice(0, 10), fecha_fin_Ac: new Date().toISOString().slice(0, 10), num_semanas: '', state: true };
     this.filteredCompetencias = [];
     this.calculateWeeks();
   }

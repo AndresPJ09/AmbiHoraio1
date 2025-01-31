@@ -1,16 +1,29 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 
 @Component({
   selector: 'app-programa',
   standalone: true,
-  imports: [HttpClientModule, CommonModule, FormsModule, MatInputModule, MatAutocompleteModule, NgbTypeaheadModule],
+  imports: [
+    HttpClientModule,
+    CommonModule,
+    FormsModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    NgbTypeaheadModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule
+  ],
   templateUrl: './programa.component.html',
   styleUrl: './programa.component.scss'
 })
@@ -23,21 +36,46 @@ export class ProgramaComponent implements OnInit {
   filteredNiveles: any[] = [];
   isDropdownOpen = false;
   isEditing = false;
+  isLoading: boolean = false;
+  searchTerm: string = '';
+  displayedColumns: string[] = ['nombre', 'nivelId', 'state', 'actions'];
+  dataSource = new MatTableDataSource<any>(this.programas);
+
+  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  @ViewChild(MatSort) sort: MatSort | undefined;
 
   private apiUrl = 'http://localhost:5062/api/Programa';
   private nivelesUrl = 'http://localhost:5062/api/Nivel';
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.getProgramas();
     this.getNiveles();
   }
 
+  ngAfterViewInit() {
+    if (this.paginator && this.sort) {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+    }
+  }
+
+  // Método para aplicar el filtro
+  applyFilter(): void {
+    this.dataSource.filter = this.searchTerm.trim().toLowerCase();
+  }
+
+
   getProgramas(): void {
     this.http.get<any[]>(this.apiUrl).subscribe(
       (programas) => {
         this.programas = programas;
+        this.dataSource.data = this.programas;  
+        if (this.paginator) {
+          this.paginator.pageIndex = 0; 
+          this.dataSource.paginator = this.paginator;
+        }
         this.cdr.detectChanges();
       },
       (error) => {
@@ -50,7 +88,7 @@ export class ProgramaComponent implements OnInit {
     this.http.get<any[]>(this.nivelesUrl).subscribe(
       (niveles) => {
         this.niveles = niveles;
-        this.filteredNiveles = niveles; 
+        this.filteredNiveles = niveles;
       },
       (error) => {
         console.error('Error fetching niveles:', error);
@@ -61,7 +99,7 @@ export class ProgramaComponent implements OnInit {
   searchNiveles(event: any): void {
     const term = event.target.value.toLowerCase();
     if (term) {
-      this.filteredNiveles = this.niveles.filter(nivel => 
+      this.filteredNiveles = this.niveles.filter(nivel =>
         nivel.nombre.toLowerCase().includes(term)
       );
     } else {
@@ -70,15 +108,15 @@ export class ProgramaComponent implements OnInit {
   }
 
   onNivelselect(event: any): void {
-    const selectednivel = this.niveles.find(nivel => 
+    const selectednivel = this.niveles.find(nivel =>
       nivel.nombre === event.option.value
     );
     if (selectednivel) {
-        this.programa.nivelId = selectednivel.id;
-        this.programa.nivelNombre = selectednivel.nombre;
-        this.filteredNiveles = [];
+      this.programa.nivelId = selectednivel.id;
+      this.programa.nivelNombre = selectednivel.nombre;
+      this.filteredNiveles = [];
     }
-}
+  }
 
   getNivelNombre(nivelId: number): string | undefined {
     const nivel = this.niveles.find(nive => nive.id === nivelId);
@@ -101,7 +139,7 @@ export class ProgramaComponent implements OnInit {
       Swal.fire('Error', 'Debe seleccionar él nivel válida.', 'error');
       return;
     }
-    
+
 
     if (this.programa.id === 0) {
       this.http.post(this.apiUrl, this.programa).subscribe(() => {
@@ -119,10 +157,10 @@ export class ProgramaComponent implements OnInit {
   }
 
   editProgramas(programa: any): void {
-    this.programa = { ...programa,};
+    this.programa = { ...programa, };
     const selectednivel = this.niveles.find(per => per.id === this.programa.nivelId);
     if (selectednivel) {
-        this.programa.nivelNombre = selectednivel.nombre; 
+      this.programa.nivelNombre = selectednivel.nombre;
     }
     this.isEditing = true;
     this.openModal();
