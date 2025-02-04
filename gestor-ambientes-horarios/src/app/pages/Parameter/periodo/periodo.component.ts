@@ -23,7 +23,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 })
 export class PeriodoComponent implements OnInit {
   periodos: any[] = [];
-  periodo: any = { id: 0, mes: '', state: true };
+  periodo: any = { id: 0, nombre: '',  fecha_inicio: '',  fecha_fin: '',  ano: '', state: true };
   isModalOpen = false;
   isDropdownOpen = false;
   isEditing = false;
@@ -59,6 +59,7 @@ export class PeriodoComponent implements OnInit {
   getPeriodos(): void {
     this.http.get<any[]>(this.apiUrl).subscribe(
       (periodos) => {
+        this.periodos = periodos;
         this.dataSource.data = this.periodos;
         if (this.paginator) {
           this.paginator.pageIndex = 0;
@@ -137,6 +138,6 @@ export class PeriodoComponent implements OnInit {
   }
 
   resetForm(): void {
-    this.periodo = { id: 0, mes: '', state: true };
+    this.periodo = { id: 0, nombre: '',  fecha_inicio: '',  fecha_fin: '',  ano: '', state: true };
   }
 }

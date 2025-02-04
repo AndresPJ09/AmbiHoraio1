@@ -56,12 +56,12 @@
     <!-- Tabla para mostrar los registros de periodos -->
     <div class="table-container">
         <table mat-table [dataSource]="dataSource">
-            <ng-container matColumnDef="name">
+            <ng-container matColumnDef="nombre">
                 <th mat-header-cell *matHeaderCellDef> Nombre </th>
-                <td mat-cell *matCellDef="let periodo"> {{ periodo.name }} </td>
+                <td mat-cell *matCellDef="let periodo"> {{ periodo.nombre }} </td>
             </ng-container>
 
-            <ng-container matColumnDef="fecha_fin">
+            <ng-container matColumnDef="fecha_inicio">
                 <th mat-header-cell *matHeaderCellDef> Fecha de inicio </th>
                 <td mat-cell *matCellDef="let periodo"> {{ periodo.fecha_fin }} </td>
             </ng-container>

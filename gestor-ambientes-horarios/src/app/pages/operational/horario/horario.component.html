@@ -55,11 +55,15 @@
         <thead>
             <tr>
                 <th>Gestor</th>
+                <th>Ficha</th>
+                <th>Ambiente</th>
+                <th>Periodo</th>
                 <th>Jornada programada</th>
-                <th>Validación</th>
-                <th>Horas</th>
+                <th>Fecha</th>
                 <th>Hora de ingreso</th>
                 <th>Hora de salida</th>
+                <th>Horas</th>
+                <th>Validación</th>
                 <th>Observaciones</th>
                 <th>Estado</th>
                 <th>Acciones</th>
@@ -67,12 +71,16 @@
         </thead>
         <tbody>
             <tr *ngFor="let horario of horarios">
-                <td>{{ horario.nombre }}</td>
-                <td>{{ horario.jornada_tecnica }}</td>
-                <td>{{ horario.validacion }}</td>
-                <td>{{ horario.horas }}</td>
+                <td>{{ getUserName(horario.userId) }}</td>
+                <td>{{ getFichaName(horario.fichaId) }}</td>
+                <td>{{ getAmbienteName(horario.ambienteId) }}</td>
+                <td>{{ getPeriodoName(horario.periodoId) }}</td>
+                <td>{{ horario.jornada_programa }}</td>
+                <td>{{ horario.fecha_inicio }}</td>
                 <td>{{ horario.hora_ingreso }}</td>
                 <td>{{ horario.hora_egreso }}</td>
+                <td>{{ horario.horas }}</td>
+                <td>{{ horario.validacion }}</td>
                 <td>{{ horario.observaciones }}</td>
                 <td>{{ horario.state ? 'Activo' : 'Inactivo' }}</td>
                 <td>

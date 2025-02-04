@@ -90,7 +90,6 @@ export class ViewComponent implements OnInit {
       (modules) => {
         this.modules = modules;
         this.filteredModules = modules;
-        console.log(this.modules);
       },
       (error) => {
         console.error('Error fetching modules:', error);
