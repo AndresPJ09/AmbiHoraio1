@@ -78,7 +78,7 @@ export class UserperfileComponent implements OnInit {
 
   subscribeToProfileImage() {
     this.userService.profileImageUrl$.subscribe(imageUrl => {
-      this.profileImageUrl = imageUrl;
+      this.profileImageUrl = imageUrl || 'assets/person-circle.svg'; 
     });
   }
 
@@ -102,10 +102,8 @@ export class UserperfileComponent implements OnInit {
             this.user.id = response.id,
               this.user.username = response.username,
               this.user.password = response.password
-            this.user.personId = response.personId,
+              this.user.personId = response.personId,
               this.roles = response.roles;
-
-
 
             // Actualizamos la imagen de perfil
             if (response.photoBase64) {

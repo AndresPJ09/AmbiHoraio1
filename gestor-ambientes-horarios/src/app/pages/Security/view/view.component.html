@@ -19,7 +19,7 @@
                     <div class="col">
                         <label for="description" class="form-label">Descripción:</label>
                         <input type="text" class="form-control" id="description" name="description"
-                            [(ngModel)]="view.description" required maxlength="100" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                            [(ngModel)]="view.description" required>
                     </div>
                 </div>
 
@@ -33,10 +33,10 @@
 
                     <div class="col">
                         <!-- Modulo -->
-                        <label for="moduleName" class="form-label">Modulo:</label>
+                        <label for="moduleName" class="form-label">Módulo:</label>
                         <input type="text" class="form-control" matInput [matAutocomplete]="auto" id="moduleName"
-                            name="moduleName" [(ngModel)]="view.moduleName" (input)="searchmodules($event)" required
-                            #moduleName="ngModel" />
+                            name="moduleName" [(ngModel)]="view.moduleName" (input)="searchmodules($event)"
+                            placeholder="Buscar módulo" required #moduleName="ngModel" />
                         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onmoduleSelect($event)">
                             <mat-option *ngFor="let module of filteredModules" [value]="module.name">
                                 {{ module.name }}

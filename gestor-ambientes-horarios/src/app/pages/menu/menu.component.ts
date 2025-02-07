@@ -40,7 +40,7 @@ export class MenuComponent implements OnInit {
     this.loadMenu();
     this.loadUserData();
     this.userService.profileImageUrl$.subscribe(imageUrl => {
-      this.profileImageUrl = imageUrl;
+      this.profileImageUrl = imageUrl || 'assets/person-circle.svg'; 
     });
   }
 

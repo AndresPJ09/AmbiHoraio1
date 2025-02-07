@@ -168,7 +168,7 @@ export class ActividadComponent implements OnInit {
       },
         (error) => {
           console.error('Error al actualizar actividad:', error);
-          Swal.fire('Error', error.message, 'error');
+          Swal.fire('Error', error.error.message, 'error');
         });
     } else {
       this.http.put(this.apiUrl, this.actividad).subscribe(() => {
@@ -178,7 +178,7 @@ export class ActividadComponent implements OnInit {
       },
         (error) => {
           console.error('Error al actualizar Actividad:', error);
-          Swal.fire('Error', error.message, 'error');
+          Swal.fire('Error', error.error.message, 'error');
         });
     }
   }

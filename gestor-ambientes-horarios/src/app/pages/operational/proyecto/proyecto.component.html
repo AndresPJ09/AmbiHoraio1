@@ -41,7 +41,8 @@
                         <div>
                             <input type="text" class="form-control input-field" matInput [matAutocomplete]="auto"
                                 id="actividadNombre" name="actividadNombre" [(ngModel)]="proyecto.actividadNombre"
-                                (input)="searchactividades($event)" required #actividadNombre="ngModel" />
+                                (input)="searchactividades($event)" placeholder="Buscar actividad" required
+                                #actividadNombre="ngModel" />
                             <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onactividadSelect($event)">
                                 <mat-option *ngFor="let actividad of filteredActividades"
                                     [value]="actividad.actividad_proyecto">

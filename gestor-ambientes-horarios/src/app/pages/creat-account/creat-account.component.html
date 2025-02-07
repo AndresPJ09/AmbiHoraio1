@@ -1,6 +1,7 @@
 <div class="bg-image">
   <div class="container">
     <h2>Crear Cuenta</h2>
+    
 
     <!-- Spinner -->
     <div *ngIf="isLoading" class="container1">
@@ -77,6 +78,7 @@
       <!-- Botones de acción -->
       <div class="button-group">
         <button type="button" class="btn btn-primary1" (click)="confirmExit()">Retroceder</button>
+        
         <button type="submit" class="btn btn-primary" [disabled]="!termsAccepted" (click)="onSubmit()">Crear
           Cuenta</button>
       </div>

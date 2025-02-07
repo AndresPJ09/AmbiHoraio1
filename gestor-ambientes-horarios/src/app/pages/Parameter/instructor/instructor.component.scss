@@ -240,8 +240,6 @@
 .bulk-select-checkbox:checked {
     background-color: #5EB319;
     border-color: #5EB319;
-    left: 13px;
-    margin-top: 39px;
 }
 
 .bulk-select-checkbox:checked+.form-check-label {
@@ -250,6 +248,7 @@
 
 /* Style checkbox */
 .form-check-input {
+    margin-top: 10px;
     transform: scale(1.8);
 }
 
@@ -259,13 +258,14 @@
 }
 
 .form-check-label {
-    margin-right: 10px;
+    margin-left: 12px;
+    margin-top: 4px;
 }
 
 .modal-body {
     position: relative;
     flex: 1 1 auto;
-    margin-top: -40px;
+    margin-top: -20px;
     margin-left: -14px;
 }
 
@@ -281,12 +281,6 @@
 .tooltip-arrow {
     border-top-color: #5EB319 !important;
 }
-
-.form-check-label {
-    margin-left: 30px;
-    margin-top: 39px;
-}
-
 /********/
 
 /****Imgen****/
@@ -393,12 +387,10 @@
 
 .state-active {
     background-color: #5EB319;
-    /* Verde */
 }
 
 .state-inactive {
     background-color: #FF0000;
-    /* Rojo */
 }
 
 /**********/

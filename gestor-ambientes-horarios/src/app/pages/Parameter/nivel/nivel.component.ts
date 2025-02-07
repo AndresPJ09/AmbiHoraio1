@@ -96,7 +96,7 @@ export class NivelComponent implements OnInit {
         Swal.fire('Éxito', 'Nivel creado exitosamente!', 'success');
       }, (error) => {
         console.error('Error al crear el nivel:', error);
-        Swal.fire('Error', 'No se pudo crear el nivel.', 'error');
+           Swal.fire('Error', error.error.message || 'No se pudo crear el nivel.', 'error');
       });
     } else {
       this.http.put(this.apiUrl, this.nivel).subscribe(() => {
@@ -105,7 +105,7 @@ export class NivelComponent implements OnInit {
         Swal.fire('Éxito', 'nivel actualizado exitosamente!', 'success');
       }, (error) => {
         console.error('Error al actualizar el nivel:', error);
-        Swal.fire('Error', 'No se pudo actualizar el nivel.', 'error');
+         Swal.fire('Error', error.error.message || 'No se pudo actualizar el nivel.', 'error');
       });
     }
   }
@@ -134,7 +134,7 @@ export class NivelComponent implements OnInit {
           },
           (error) => {
             console.error('Error eliminando nivel:', error);
-            Swal.fire('Error', 'Hubo un problema al eliminar el nivel.', 'error');
+             Swal.fire('Error', error.error.message || 'Hubo un problema al eliminar el nivel.', 'error');
           }
         );
       }

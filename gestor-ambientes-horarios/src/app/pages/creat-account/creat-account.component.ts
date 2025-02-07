@@ -110,9 +110,9 @@ export class CreatAccountComponent implements OnInit {
         Swal.fire('Éxito', 'Cuenta creada con éxito', 'success');
         this.router.navigate(['/login']);
       },
-      error: () => {
+      error: (error) => {
         this.isLoading = false;
-        Swal.fire('Error', 'Hubo un problema al crear la cuenta', 'error');
+          Swal.fire('Error', error.error.message ||'Hubo un problema al crear la cuenta', 'error');
       }
     });
   }
@@ -147,8 +147,13 @@ export class CreatAccountComponent implements OnInit {
       }
     }).then((result) => {
       if (result.isConfirmed) {
-        this.router.navigate(['/login']);
-        sessionStorage.clear();
+        this.isLoading = true; // Activar el spinner antes de redirigir
+  
+        setTimeout(() => {
+          sessionStorage.clear();
+          this.router.navigate(['/login']);
+          this.isLoading = false; // Desactivar el spinner después de la redirección
+        }, 1000);
       }
     });
   }

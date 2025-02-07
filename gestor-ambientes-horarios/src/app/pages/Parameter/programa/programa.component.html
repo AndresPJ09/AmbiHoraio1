@@ -19,10 +19,11 @@
 
                     <div class="col">
                         <!-- Nivel -->
-                        <label for="nivelNombre" class="form-label">Nivel:</label>
+                        <label for="nivelNombre" class="form-label">Nivel de formación:</label>
                         <input type="text" class="form-control input-field" matInput [matAutocomplete]="auto"
                             id="nivelNombre" name="nivelNombre" [(ngModel)]="programa.nivelNombre"
-                            (input)="searchNiveles($event)" required #nivelNombre="ngModel" />
+                            (input)="searchNiveles($event)" placeholder="Buscar nivel de formación" required
+                            #nivelNombre="ngModel" />
                         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onNivelselect($event)">
                             <mat-option *ngFor="let nivel of filteredNiveles" [value]="nivel.nombre">
                                 {{ nivel.nombre }}

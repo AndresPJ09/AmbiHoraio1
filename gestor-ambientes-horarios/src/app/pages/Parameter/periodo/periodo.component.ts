@@ -23,7 +23,13 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 })
 export class PeriodoComponent implements OnInit {
   periodos: any[] = [];
-  periodo: any = { id: 0, nombre: '',  fecha_inicio: '',  fecha_fin: '',  ano: '', state: true };
+  periodo: any = { 
+    id: 0, 
+    nombre: '',  
+    fecha_inicio: new Date().toISOString().slice(0, 10),  
+    fecha_fin: new Date().toISOString().slice(0, 10),  
+    ano: '', 
+    state: true };
   isModalOpen = false;
   isDropdownOpen = false;
   isEditing = false;
@@ -37,11 +43,24 @@ export class PeriodoComponent implements OnInit {
 
   private apiUrl = 'http://localhost:5062/api/Periodo';
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef, private fb: FormBuilder,) { }
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef, private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.getPeriodos();
+    this.setAnoFromFechaInicio();
   }
+
+  onFechaInicioChange(): void {
+    const year = new Date(this.periodo.fecha_inicio).getFullYear();
+    this.periodo.ano = year.toString();
+  }
+
+  // Método que ejecuta al iniciar para poner el año basado en la fecha de inicio
+  setAnoFromFechaInicio(): void {
+    const year = new Date(this.periodo.fecha_inicio).getFullYear();
+    this.periodo.ano = year.toString();
+  }
+
 
   ngAfterViewInit() {
     if (this.paginator && this.sort) {
@@ -59,7 +78,11 @@ export class PeriodoComponent implements OnInit {
   getPeriodos(): void {
     this.http.get<any[]>(this.apiUrl).subscribe(
       (periodos) => {
-        this.periodos = periodos;
+        this.periodos = periodos.map(periodo => ({
+          ...periodo,
+          fecha_inicio: new Date(periodo.fecha_inicio).toISOString().slice(0, 10),
+          fecha_fin: new Date(periodo.fecha_fin).toISOString().slice(0, 10)
+        }));
         this.dataSource.data = this.periodos;
         if (this.paginator) {
           this.paginator.pageIndex = 0;
@@ -92,7 +115,7 @@ export class PeriodoComponent implements OnInit {
         Swal.fire('Éxito', 'Periodo creado exitosamente!', 'success');
       }, (error) => {
         console.error('Error al crear el periodo:', error);
-        Swal.fire('Error', 'No se pudo crear el periodo.', 'error');
+        Swal.fire('No se pudo crear el periodo.', error.error.message, 'error');
       });
     } else {
       this.http.put(this.apiUrl, this.periodo).subscribe(() => {
@@ -101,13 +124,16 @@ export class PeriodoComponent implements OnInit {
         Swal.fire('Éxito', 'periodo actualizado exitosamente!', 'success');
       }, (error) => {
         console.error('Error al actualizar el periodo:', error);
-        Swal.fire('Error', 'No se pudo actualizar el periodo.', 'error');
+        Swal.fire('No se pudo actualizar el periodo.', error.error.message, 'error');
       });
     }
   }
 
   editPeriodos(periodo: any): void {
-    this.periodo = { ...periodo };
+    this.periodo = { ...periodo,
+      fecha_inicio: new Date(periodo.fecha_inicio).toISOString().slice(0, 10),
+      fecha_fin: new Date(periodo.fecha_fin).toISOString().slice(0, 10)
+     };
     this.openModal();
     this.isEditing = true;
   }
@@ -138,6 +164,6 @@ export class PeriodoComponent implements OnInit {
   }
 
   resetForm(): void {
-    this.periodo = { id: 0, nombre: '',  fecha_inicio: '',  fecha_fin: '',  ano: '', state: true };
+    this.periodo = { id: 0, nombre: '',  fecha_inicio: new Date().toISOString().slice(0, 10),  fecha_fin: new Date().toISOString().slice(0, 10),  ano: '', state: true };
   }
 }

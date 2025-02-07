@@ -6,11 +6,11 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class UserService {
-  private profileImageUrlSource = new BehaviorSubject<string | null>(localStorage.getItem('profileImageUrl'));
+  private profileImageUrlSource = new BehaviorSubject<string | null>(null); // Elimina el valor por defecto de localStorage
   profileImageUrl$ = this.profileImageUrlSource.asObservable();
 
   updateProfileImage(newImageUrl: string) {
-    localStorage.setItem('profileImageUrl', newImageUrl);
-    this.profileImageUrlSource.next(newImageUrl);
+    this.profileImageUrlSource.next(newImageUrl); // Actualiza solo el BehaviorSubject sin usar localStorage
   }
+
 }

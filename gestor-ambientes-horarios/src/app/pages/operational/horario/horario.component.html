@@ -11,34 +11,131 @@
 
                 <div class="row">
                     <div class="col">
-                        <label for="nombre" class="form-label">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre"
-                            [(ngModel)]="horario.nombre" required maxlength="50"
+                        <!-- Modulo -->
+                        <label for="userName" class="form-label">Nombre de usuario:</label>
+                        <input type="text" class="form-control" matInput [matAutocomplete]="auto" id="userName"
+                            name="userName" [(ngModel)]="horario.userName" (input)="searchusers($event)"
+                            placeholder="Buscar usuario" required #userName="ngModel" />
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onuserSelect($event)">
+                            <mat-option *ngFor="let user of filteredUsers" [value]="user.name">
+                                {{ user.username }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </div>
+
+                    <div class="col">
+                        <!-- Ambinete -->
+                        <label for="fichaName" class="form-label">Codigo de ficha:</label>
+                        <input type="text" class="form-control" matInput [matAutocomplete]="autoFich" id="fichaName"
+                            name="fichaName" [(ngModel)]="horario.fichaName" (input)="searchfichas($event)"
+                            placeholder="Buscar ficha" required #fichaName="ngModel" />
+                        <mat-autocomplete #autoFich="matAutocomplete" (optionSelected)="onfichaSelect($event)">
+                            <mat-option *ngFor="let ficha of filteredFichas" [value]="ficha.codigo">
+                                {{ ficha.codigo }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <!-- Modulo -->
+                        <label for="instructorName" class="form-label">Nombre de instructor:</label>
+                        <input type="text" class="form-control" matInput [matAutocomplete]="autoInstru"
+                            id="instructorName" name="instructorName" [(ngModel)]="horario.instructorName"
+                            (input)="searchinstructores($event)" placeholder="Buscar instructor" required
+                            #instructorName="ngModel" />
+                        <mat-autocomplete #autoInstru="matAutocomplete" (optionSelected)="oninstructorSelect($event)">
+                            <mat-option *ngFor="let instructor of filteredInstructores" [value]="instructor.nombres">
+                                {{ instructor.nombres }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </div>
+
+                    <div class="col">
+                        <!-- Ambinete -->
+                        <label for="ambienteName" class="form-label">Nombre de ambiente:</label>
+                        <input type="text" class="form-control" matInput [matAutocomplete]="autoAmbi" id="ambienteName"
+                            name="ambienteName" [(ngModel)]="horario.ambienteName" (input)="searchambientes($event)"
+                            placeholder="Buscar ambiente" required #ambienteName="ngModel" />
+                        <mat-autocomplete #autoAmbi="matAutocomplete" (optionSelected)="onambienteSelect($event)">
+                            <mat-option *ngFor="let ambiente of filteredAmbientes" [value]="ambiente.codigo">
+                                {{ ambiente.codigo }} - {{ ambiente.nombre }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <!-- Ambinete -->
+                        <label for="periodoName" class="form-label">Periodo:</label>
+                        <input type="text" class="form-control" matInput [matAutocomplete]="autoPerio" id="periodoName"
+                            name="periodoName" [(ngModel)]="horario.periodoName" (input)="searchperiodos($event)"
+                            placeholder="Buscar periodo" required #periodoName="ngModel" />
+                        <mat-autocomplete #autoPerio="matAutocomplete" (optionSelected)="onperiodoSelect($event)">
+                            <mat-option *ngFor="let periodo of filteredPeriodos" [value]="periodo.nombre">
+                                {{ periodo.nombre }}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </div>
+
+                    <div class="col">
+                        <label for="fecha_inicio" class="form-label  input-field">Fecha:</label>
+                        <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio"
+                            [(ngModel)]="horario.fecha_inicio" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="horaIngreso" class="form-label">Hora de ingreso:</label>
+                        <input type="time" class="form-control" id="horaIngreso" name="hora_ingreso"
+                            [(ngModel)]="horario.hora_ingreso" required>
+                    </div>
+
+                    <div class="col">
+                        <label for="horaEgreso" class="form-label">Hora de egreso:</label>
+                        <input type="time" class="form-control" id="horaEgreso" name="hora_egreso"
+                            [(ngModel)]="horario.hora_egreso" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="validacion" class="form-label">Validación:</label>
+                        <input type="text" class="form-control" id="validacion" name="validacion"
+                            [(ngModel)]="horario.validacion" required maxlength="10"
                             pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                     </div>
 
-                <div class="row">
-                    <div class="col" *ngIf="horario.id !== 0">
-                        <label for="state" class="form-label">Estado:</label>
-                        <div>
-                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
-                                [(ngModel)]="horario.state" [attr.data-bs-toggle]="'tooltip'"
-                                [attr.data-bs-placement]="'top'"
-                                [attr.title]="horario.state ? 'Activo' : 'Inactivo'" />
-                            <label class="form-check-label" for="state">{{ horario.state ? 'Activo' : 'Inactivo'
-                                }}</label>
+
+                        <div class="col">
+                            <label for="observaciones" class="form-label">Observaciones:</label>
+                            <input type="text" class="form-control" id="observaciones" name="observaciones"
+                                [(ngModel)]="horario.observaciones" required maxlength="150"
+                                pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                         </div>
                     </div>
-                </div>
 
+                        <div class="col" *ngIf="horario.id !== 0">
+                            <label for="state" class="form-label">Estado:</label>
+                            <div>
+                                <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state"
+                                    name="state" [(ngModel)]="horario.state" [attr.data-bs-toggle]="'tooltip'"
+                                    [attr.data-bs-placement]="'top'"
+                                    [attr.title]="horario.state ? 'Activo' : 'Inactivo'" />
+                                <label class="form-check-label" for="state">{{ horario.state ? 'Activo' : 'Inactivo'
+                                    }}</label>
+                            </div>
+                        </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" [disabled]="horarioForm.invalid">
-                        {{ isEditing ? 'Actualizar' : 'Guardar' }}
-                    </button>
-                </div>
-            </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                        <button type="submit" class="btn btn-primary" [disabled]="horarioForm.invalid">
+                            {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                        </button>
+                    </div>
             </form>
         </div>
     </div>

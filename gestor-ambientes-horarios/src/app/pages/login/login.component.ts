@@ -41,7 +41,7 @@ export class LoginComponent {
           Swal.fire({
             title: '¡Bienvenido a AmbiHorario!',
             html: ``,
-            background: '#f4f6f9', // Fondo claro
+            background: '#f4f6f9', 
             timer: 2000, // Tiempo de la alerta
             timerProgressBar: true, // Barra de progreso del temporizador
             showConfirmButton: false, // Sin botón de confirmación
@@ -53,10 +53,8 @@ export class LoginComponent {
             }
           }).then(() => {
             this.router.navigate(['/dashboard/home']).then(() => {
-              // Reemplazar el historial del navegador para evitar volver al login
               window.history.replaceState({}, '', '/dashboard/home');
             });
-             // Redirección tras la alerta
           });
           
         } else {
@@ -79,6 +77,8 @@ export class LoginComponent {
       showCancelButton: true,
       confirmButtonText: '<i class="fa fa-user-plus"></i> Crear cuenta',
       cancelButtonText: '<i class="fa fa-times-circle"></i> Cancelar',
+      confirmButtonColor: '#5EB319',
+      cancelButtonColor: '#ff0000',
      
       timer: 10000, 
       timerProgressBar: true, 

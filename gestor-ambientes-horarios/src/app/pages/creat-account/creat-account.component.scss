@@ -1,6 +1,6 @@
 /**** Fondo de la página ****/
 .bg-image {
-    background-image: url('../../../../public/assets/image\ 2.jpg');
+    background-image: url('../../../../public/assets/66347.jpg');
     background-size: cover; 
     background-position: center; 
     background-repeat: no-repeat; 
@@ -57,8 +57,8 @@
   
   @media (max-width: 768px) {
     .container {
-      width: 70%; /* Ancho más grande en pantallas medianas */
-      right: 10px; /* Menor margen a la derecha */
+      width: 70%;
+      right: 10px; 
     }
   }
   
@@ -405,26 +405,13 @@
 .tooltip-arrow {
   border-top-color: #5bc0de; /* Color de la flecha */
 }
-
+/* */
 
 
 /* Estilo personalizado para los mensajes de error */
 .text-danger {
   font-size: 0.85rem;
   margin-top: 5px;
-}
-
-/* Estilo personalizado para los tooltips */
-.tooltip-inner {
-  background-color: #5bc0de; /* Color de fondo */
-  color: white; /* Color del texto */
-  font-size: 0.9em; /* Tamaño de la fuente */
-  padding: 5px 10px; /* Espaciado */
-  border-radius: 4px; /* Bordes redondeados */
-}
-
-.tooltip-arrow {
-  border-top-color: #5bc0de; /* Color de la flecha */
 }
 
 

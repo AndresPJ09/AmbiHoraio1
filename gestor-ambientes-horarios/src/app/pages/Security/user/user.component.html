@@ -28,8 +28,8 @@
                         <!-- Persona -->
                         <label for="personName" class="form-label">Persona:</label>
                         <input type="text" class="form-control" matInput [matAutocomplete]="auto" id="personName"
-                            name="personName" [(ngModel)]="user.personName" (input)="searchpersons($event)" required
-                            #personName="ngModel" />
+                            name="personName" [(ngModel)]="user.personName" (input)="searchpersons($event)"
+                            placeholder="Buscar persona" required #personName="ngModel" />
                         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onpersonSelect($event)">
                             <mat-option *ngFor="let person of filteredPersons" [value]="person.name">
                                 {{ person.name }}

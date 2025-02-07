@@ -44,8 +44,8 @@
                         <div>
                             <input type="text" class="form-control input-field" matInput [matAutocomplete]="auto"
                                 id="competenciaNombre" name="competenciaNombre"
-                                [(ngModel)]="actividad.competenciaNombre" (input)="searchcompetencias($event)" required
-                                #competenciaNombre="ngModel" />
+                                [(ngModel)]="actividad.competenciaNombre" (input)="searchcompetencias($event)"
+                                placeholder="Buscar competencia" required #competenciaNombre="ngModel" />
                             <mat-autocomplete #auto="matAutocomplete" (optionSelected)="oncompetenciaSelect($event)">
                                 <mat-option *ngFor="let competencia of filteredCompetencias"
                                     [value]="competencia.descripcion">
@@ -58,11 +58,11 @@
                     <div class="col" *ngIf="actividad.id !== 0">
                         <label for="state" class="form-label">Estado:</label>
                         <div>
-                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state"
-                            name="state" [(ngModel)]="actividad.state"
-                            [ngClass]="actividad.state ? 'state-active' : 'state-inactive'" />
-                        <label class="form-check-label" for="state">{{ actividad.state ? 'Activo' : 'Inactivo'
-                            }}</label>
+                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
+                                [(ngModel)]="actividad.state"
+                                [ngClass]="actividad.state ? 'state-active' : 'state-inactive'" />
+                            <label class="form-check-label" for="state">{{ actividad.state ? 'Activo' : 'Inactivo'
+                                }}</label>
                         </div>
                     </div>
                 </div>
@@ -93,37 +93,37 @@
     <!-- Tabla para mostrar los registros de actividads -->
     <div class="table-container">
         <table mat-table [dataSource]="dataSource">
-    
+
             <!-- Actividad del Proyecto -->
             <ng-container matColumnDef="actividad_proyecto">
                 <th mat-header-cell *matHeaderCellDef> Actividad del proyecto </th>
                 <td mat-cell *matCellDef="let actividad"> {{ actividad.actividad_proyecto }} </td>
             </ng-container>
-    
+
             <!-- Competencias -->
             <ng-container matColumnDef="competenciaId">
                 <th mat-header-cell *matHeaderCellDef> Competencias </th>
                 <td mat-cell *matCellDef="let actividad"> {{ getCompetenciaNombre(actividad.competenciaId) }} </td>
             </ng-container>
-    
+
             <!-- Fecha de Inicio -->
             <ng-container matColumnDef="fecha_inicio_Ac">
                 <th mat-header-cell *matHeaderCellDef> Fecha de inicio </th>
                 <td mat-cell *matCellDef="let actividad"> {{ actividad.fecha_inicio_Ac }} </td>
             </ng-container>
-    
+
             <!-- Fecha de Fin -->
             <ng-container matColumnDef="fecha_fin_Ac">
                 <th mat-header-cell *matHeaderCellDef> Fecha de fin </th>
                 <td mat-cell *matCellDef="let actividad"> {{ actividad.fecha_fin_Ac }} </td>
             </ng-container>
-    
+
             <!-- Número de Semanas -->
             <ng-container matColumnDef="num_semanas">
                 <th mat-header-cell *matHeaderCellDef> Número de semanas </th>
                 <td mat-cell *matCellDef="let actividad"> {{ actividad.num_semanas }} </td>
             </ng-container>
-    
+
             <!-- Estado -->
             <ng-container matColumnDef="state">
                 <th mat-header-cell *matHeaderCellDef> Estado </th>
@@ -134,7 +134,7 @@
                     {{ actividad.state ? 'Activo' : 'Inactivo' }}
                 </td>
             </ng-container>
-    
+
             <!-- Acciones -->
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef> Acciones </th>
@@ -147,13 +147,12 @@
                     </button>
                 </td>
             </ng-container>
-    
+
             <!-- Cabecera de la tabla -->
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
     </div>
-    
+
     <!-- Paginación -->
     <mat-paginator [length]="actividades.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
-    
