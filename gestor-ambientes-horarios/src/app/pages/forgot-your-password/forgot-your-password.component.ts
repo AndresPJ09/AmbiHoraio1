@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-forgot-your-password',
@@ -13,7 +14,8 @@ import Swal from 'sweetalert2';
     FormsModule,
     CommonModule,
     NgbTypeaheadModule,
-    HttpClientModule
+    HttpClientModule,
+    MatTooltipModule
   ],
   templateUrl: './forgot-your-password.component.html',
   styleUrl: './forgot-your-password.component.scss'
@@ -28,7 +30,11 @@ export class ForgotYourPasswordComponent {
   isLoading: boolean = false;
   verificationCodeParts: string[] = ["", "", "", ""];
   isCodeComplete: boolean = false;
-  user: any = { id: 0, username: '', password: '', personId: 0, state: true };
+  user: any = { id: 0, username: '', password: '', photo: '', personId: 0, state: true };
+  newPassword: string = '';
+  confirmPassword: string = '';
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
   private apiUrl = 'http://localhost:5062/password';
   private apiUrlUser = 'http://localhost:5062/api/User';
 
@@ -55,6 +61,29 @@ export class ForgotYourPasswordComponent {
     } else {
       Swal.fire('Error', 'No se encontró el ID del usuario en la sesión.', 'error');
     }
+  }
+
+  //metodo para actualizar el user
+  updatedUser(): void {
+    const updatedData = {
+      id: this.user.id,
+      username: this.user.username,
+      password: this.newPassword,
+      photoBase64: this.user.photoBase64,
+      personId: this.user.personId,
+      roles: [{ id: 1 }]
+    };
+
+    this.http.put(`${this.apiUrlUser}`, updatedData).subscribe(
+      (response: any) => {
+        Swal.fire('¡Éxito!', 'Contraseña cambiada con éxito.', 'success');
+        this.router.navigate(['/login']);
+      },
+      (error) => {
+        console.error('Error al actualizar el usuario:', error);
+        Swal.fire('Error', error.error.message ||  'No se pudo actualizar la contraseña. Por favor, intenta de nuevo.', 'error');
+      }
+    );
   }
 
   moveToNext(event: Event, index: number): void {
@@ -106,7 +135,6 @@ export class ForgotYourPasswordComponent {
   // Método para pasar al siguiente paso
   async nextStep(): Promise<void> {
 
-
     if (this.currentStep === 1) {
       await this.sendActivationCode();
       return;
@@ -133,6 +161,81 @@ export class ForgotYourPasswordComponent {
       }
       return;
     }
+
+    if (this.currentStep === 3) {
+      Swal.fire('Error', 'Las contraseñas no coinciden o están vacías.', 'error');
+      return;
+    }
+
+    if (this.currentStep < 3) {
+      this.currentStep++;
+    } else {
+      this.submitPassword();
+    }
+  }
+
+  // Método para regresar al paso anterior
+  prevStep(): void {
+    if (this.currentStep > 1) {
+      this.currentStep--;
+    }
+  }
+
+  passwordError: string = '';
+  isValidPassword(password: string): boolean {
+    // Verifica si la contraseña cumple con los requisitos mínimos de longitud
+    if (!password || password.length < 8) {
+      this.passwordError = 'La contraseña debe tener al menos 8 caracteres.';
+      return false;
+    }
+
+    // Verifica que haya al menos una letra mayúscula
+    const hasUpperCase = /[A-Z]/.test(password);
+    // Verifica que haya al menos un número
+    const hasNumber = /[0-9]/.test(password);
+    // Verifica que haya al menos un carácter especial
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+
+    if (!hasUpperCase) {
+      this.passwordError = 'La contraseña debe contener al menos una mayúscula.';
+      return false;
+    }
+
+    if (!hasNumber) {
+      this.passwordError = 'La contraseña debe contener al menos un número.';
+      return false;
+    }
+
+    if (!hasSpecialChar) {
+      this.passwordError = 'La contraseña debe contener al menos un carácter especial.';
+      return false;
+    }
+
+    // Limpia el mensaje de error si la contraseña es válida
+    this.passwordError = '';
+    return true;
+  }
+
+  validatePassword() {
+    if (!this.newPassword || this.newPassword.length < 8) {
+        this.passwordError = 'Debe tener al menos 8 caracteres.';
+    } else if (!/[A-Z]/.test(this.newPassword)) {
+        this.passwordError = 'Debe contener al menos una mayúscula.';
+    } else if (!/[0-9]/.test(this.newPassword)) {
+        this.passwordError = 'Debe contener al menos un número.';
+    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(this.newPassword)) {
+        this.passwordError = 'Debe contener al menos un carácter especial.';
+    } else {
+        this.passwordError = '';
+    }
+}
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConfirmPasswordVisibility(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 
   // Validación del correo electrónico
@@ -143,7 +246,36 @@ export class ForgotYourPasswordComponent {
 
   // Validación del código de verificación
   validateCode(): boolean {
-    return this.verificationCode.length === 4; 
+    return this.verificationCode.length === 4;
+  }
+
+  isPasswordsMatching(password: string, confirmPassword: string): boolean {
+    return password === confirmPassword;
+  }
+
+  // Validación de las contraseñas
+  validatePasswords(): boolean {
+    return !!this.newPassword && !!this.confirmPassword && this.newPassword === this.confirmPassword;
+  }
+
+  // Enviar la nueva contraseña (solo validación por ahora)
+  submitPassword(): void {
+    if (this.validatePasswords()) {
+      this.updatedUser();
+    } else {
+      Swal.fire('Error', 'Las contraseñas no coinciden o están vacías.', 'error');
+    }
+  }
+
+  // Temporizador de 30 segundos
+  startTimer(): void {
+    this.timeLeft = 30;
+    this.timer = setInterval(() => {
+      this.timeLeft--;
+      if (this.timeLeft === 0) {
+        clearInterval(this.timer);
+      }
+    }, 1000);
   }
 
   // Confirmar salir y perder datos
@@ -161,7 +293,7 @@ export class ForgotYourPasswordComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         this.isLoading = true; // Activar el spinner antes de redirigir
-  
+
         setTimeout(() => {
           sessionStorage.clear();
           this.router.navigate(['/login']);
@@ -171,28 +303,53 @@ export class ForgotYourPasswordComponent {
     });
   }
 
-    // Confirmar al ir atrás en el segundo paso
-    confirmExitToStep1(): void {
-      Swal.fire({
-        title: '¿Estás seguro?',
-        text: 'Perderás el código ingresado si retrocedes.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, regresar',
-        cancelButtonText: 'Cancelar',
-        reverseButtons: true,
-        confirmButtonColor: '#44E32A', 
-        cancelButtonColor: '#ff0000',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.isLoading = true; // Activar spinner
-          sessionStorage.removeItem('activationData');
-    
-          setTimeout(() => {
-            this.currentStep = 1; 
-            this.isLoading = false; // Desactivar spinner después del cambio de paso
-          }, 500);
-        }
-      });
-    }
+  // Confirmar al ir atrás en el segundo paso
+  confirmExitToStep1(): void {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Perderás el código ingresado si retrocedes.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, regresar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true,
+      confirmButtonColor: '#44E32A',
+      cancelButtonColor: '#ff0000',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.isLoading = true; // Activar spinner
+        sessionStorage.removeItem('activationData');
+
+        setTimeout(() => {
+          this.currentStep = 1;
+          this.isLoading = false; 
+        }, 1000);
+      }
+    });
+  }
+  
+  // Confirmar al ir atrás en el tercer paso
+  confirmExitToStep2(): void {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Perderás las contraseñas ingresadas si retrocedes.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, regresar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true,
+      confirmButtonColor: '#44E32A',
+      cancelButtonColor: '#ff0000',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.isLoading = true; 
+        this.currentStep = 2;
+
+        setTimeout(() => {
+          this.currentStep = 1;
+          this.isLoading = false; 
+        }, 1000);
+      }
+    });
+  }
 }

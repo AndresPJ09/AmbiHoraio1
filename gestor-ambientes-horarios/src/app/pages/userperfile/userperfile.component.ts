@@ -78,7 +78,7 @@ export class UserperfileComponent implements OnInit {
 
   subscribeToProfileImage() {
     this.userService.profileImageUrl$.subscribe(imageUrl => {
-      this.profileImageUrl = imageUrl || 'assets/person-circle.svg'; 
+      this.profileImageUrl = imageUrl || 'assets/person-circle.svg';
     });
   }
 
@@ -100,10 +100,10 @@ export class UserperfileComponent implements OnInit {
           (response: any) => {
             console.log('User response:', response);
             this.user.id = response.id,
-              this.user.username = response.username,
-              this.user.password = response.password
-              this.user.personId = response.personId,
-              this.roles = response.roles;
+            this.user.username = response.username,
+            this.user.password = response.password
+            this.user.personId = response.personId,
+            this.roles = response.roles;
 
             // Actualizamos la imagen de perfil
             if (response.photoBase64) {
@@ -192,7 +192,6 @@ export class UserperfileComponent implements OnInit {
       state: true
     };
 
-    console.log('Updated Data USER:', updatedData);
     const apiUrl = `${this.updatePasswordUrl}/`;
     this.http.put(apiUrl, updatedData).subscribe(
       (response: any) => {

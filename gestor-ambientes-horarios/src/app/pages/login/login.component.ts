@@ -21,9 +21,9 @@ export class LoginComponent {
   isLoading: boolean = false;
   showPassword: boolean = false;
 
-  private apiUrl = 'http://localhost:5062/login'; 
+  private apiUrl = 'http://localhost:5062/login';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) { }
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
@@ -31,17 +31,17 @@ export class LoginComponent {
 
   onSubmit(form: NgForm): void {
     const loginData = { username: this.username, password: this.password };
-  
+
     this.http.post(this.apiUrl, loginData).subscribe(
       (response: any) => {
         if (response) {
           localStorage.setItem("menu", JSON.stringify(response));
-  
+
           // Alerta de bienvenida
           Swal.fire({
             title: '¡Bienvenido a AmbiHorario!',
             html: ``,
-            background: '#f4f6f9', 
+            background: '#f4f6f9',
             timer: 2000, // Tiempo de la alerta
             timerProgressBar: true, // Barra de progreso del temporizador
             showConfirmButton: false, // Sin botón de confirmación
@@ -56,7 +56,7 @@ export class LoginComponent {
               window.history.replaceState({}, '', '/dashboard/home');
             });
           });
-          
+
         } else {
           this.showCreateAccountAlert();
         }
@@ -66,7 +66,7 @@ export class LoginComponent {
       }
     );
   }
-  
+
   private showCreateAccountAlert() {
     Swal.fire({
       title: '<strong>¡Credenciales incorrectas!</strong>',
@@ -79,9 +79,9 @@ export class LoginComponent {
       cancelButtonText: '<i class="fa fa-times-circle"></i> Cancelar',
       confirmButtonColor: '#5EB319',
       cancelButtonColor: '#ff0000',
-     
-      timer: 10000, 
-      timerProgressBar: true, 
+
+      timer: 10000,
+      timerProgressBar: true,
       showClass: {
         popup: 'animate__animated animate__fadeInDown'
       },
@@ -105,21 +105,21 @@ export class LoginComponent {
   }
 
   onForgotPassword() {
-    this.isLoading = true; 
+    this.isLoading = true;
 
     setTimeout(() => {
       this.router.navigate(['/forgot-your-password']);
       this.isLoading = false;
-    }, 1000); 
+    }, 1000);
   }
 
   onCreateAccount() {
-    this.isLoading = true; 
+    this.isLoading = true;
 
     setTimeout(() => {
       this.router.navigate(['/creat-account']);
       this.isLoading = false
-    }, 1000); 
+    }, 1000);
   }
 }
 
