@@ -17,31 +17,32 @@
     <form>
       <!-- Nombre y Apellidos -->
       <div class="group">
-        <input required="true" maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$" type="name" class="main-input"
-          id="name" [(ngModel)]="person.name" name="name" />
+        <input required="true" maxlength="50" type="name" class="main-input"
+          id="name" [(ngModel)]="person.name" name="name" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')"/>
         <span class="highlight-span"></span>
         <label class="lebal-email" for="name">Nombre</label>
       </div>
 
       <div class="group">
-        <input required="true" maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$" type="text" class="main-input"
-          id="last_name" [(ngModel)]="person.last_name" name="last_name" />
+        <input required="true" maxlength="50" type="text" class="main-input"
+          id="last_name" [(ngModel)]="person.last_name" name="last_name" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')" />
         <span class="highlight-span"></span>
         <label class="lebal-email" for="last_name">Apellidos</label>
       </div>
 
       <!-- Email e Identificación -->
       <div class="group">
-        <input required="true" maxlength="100" pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
-          title="El email debe tener un @ y terminar en gmail.com" data-bs-toggle="tooltip" data-bs-placement="top"
-          type="text" class="main-input" id="email" [(ngModel)]="person.email" name="email" />
+        <input required="true" maxlength="50" 
+          type="text" class="main-input" id="email" [(ngModel)]="person.email" name="email" 
+          (input)="validateEmail()" />
         <span class="highlight-span"></span>
         <label class="lebal-email" for="email">Correo Electrónico</label>
+        <div class="tooltip-email" [class.show]="emailError">{{ emailError }}</div>
       </div>
-
+      
       <div class="group">
-        <input required="true" maxlength="10" pattern="^\d{1,10}$" type="text" class="main-input" id="identification"
-          [(ngModel)]="person.identification" name="identification" />
+        <input required="true" maxlength="10" type="text" class="main-input" id="identification"
+          [(ngModel)]="person.identification" name="identification" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
         <span class="highlight-span"></span>
         <label class="lebal-email" for="identification">Identificación</label>
       </div>
@@ -56,7 +57,7 @@
 
       <div class="group">
         <input required="true" [type]="showPassword ? 'text' : 'password'" class="main-input" id="password"
-          [(ngModel)]="user.password" name="password" #password="ngModel" (blur)="validatePassword(user.password)" />
+          [(ngModel)]="user.password" name="password" #password="ngModel" (input)="validatePassword(user.password)" />
         <span class="highlight-span"></span>
         <label class="lebal-email" for="password">Contraseña</label>
         <label class="password-toggle-container">

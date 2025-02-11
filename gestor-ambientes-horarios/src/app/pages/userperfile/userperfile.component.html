@@ -87,29 +87,29 @@
       <div class="person-data">
         <div class="row">
           <div class="col">
-            <label for="firstName" class="form-label">Nombres</label>
+            <label for="firstName" class="form-label">Nombres:</label>
             <input type="text" id="firstName" class="form-control input-field" [(ngModel)]="person.name"
-              placeholder="Ingresar nombre">
+              placeholder="Ingresar nombre" maxlength="50" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
           </div>
 
           <div class="col">
-            <label for="lastName" class="form-label">Apellidos</label>
+            <label for="lastName" class="form-label">Apellidos:</label>
             <input type="text" id="lastName" class="form-control input-field" [(ngModel)]="person.last_name"
-              placeholder="Ingresar apellido">
+              placeholder="Ingresar apellido" maxlength="50" oninput="this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '')">
           </div>
         </div>
 
         <div class="row">
           <div class="col">
-            <label for="identification" class="form-label">Identificación</label>
+            <label for="identification" class="form-label">Identificación:</label>
             <input type="text" id="identification" class="form-control input-field" [(ngModel)]="person.identification"
-              placeholder="Ingresar tipo de documento">
+              placeholder="Ingresar tipo de documento" maxlength="10" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
           </div>
 
           <div class="col">
-            <label for="email" class="form-label">Correo electrónico</label>
+            <label for="email" class="form-label">Correo electrónico:</label>
             <input type="text" id="email" class="form-control input-field" [(ngModel)]="person.email"
-              placeholder="Ingresar correo electrónico">
+              placeholder="Ingresar correo electrónico" maxlength="50" pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$">
           </div>
         </div>
 

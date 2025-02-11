@@ -17,7 +17,7 @@
                             name="userName" [(ngModel)]="horario.userName" (input)="searchusers($event)"
                             placeholder="Buscar usuario" required #userName="ngModel" />
                         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onuserSelect($event)">
-                            <mat-option *ngFor="let user of filteredUsers" [value]="user.name">
+                            <mat-option *ngFor="let user of filteredUsers" [value]="user.username">
                                 {{ user.username }}
                             </mat-option>
                         </mat-autocomplete>

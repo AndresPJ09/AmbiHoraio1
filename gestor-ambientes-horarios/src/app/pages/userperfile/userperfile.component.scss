@@ -119,7 +119,7 @@
 /**** Botones para guardar cambios ****/
 .save-btn {
   background-color: #5EB319;
-  color: #000000;
+  color: #ffffff;
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
@@ -129,15 +129,15 @@
   margin-left: 20px;
 
   &:hover {
-    background-color: #579722;
-    color: #ffffff;
+    background-color: #5EB319;
+    color: #222222;
     transform: translateY(-2px);
   }
 }
 
 .save-btn1 {
   background-color: #5EB319;
-  color: #000000;
+  color: #ffffff;
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
@@ -147,15 +147,15 @@
   margin-top: 10px;
 
   &:hover {
-    background-color: #579722;
-    color: #ffffff;
+    background-color: #5EB319;
+    color: #222222;
     transform: translateY(-2px);
   }
 }
 
 .save-btn3 {
   background-color: #085ee0;
-  color: #000000;
+  color: #ffffff;
   padding: 10px 15px;
   border: none;
   border-radius: 5px;
@@ -165,8 +165,8 @@
   margin-left: 995px;
 
   &:hover {
-    background-color: #2769cc;
-    color: #ffffff;
+    background-color: #2a6dd3;
+    color: #222222;
     transform: translateY(-2px);
   }
 }

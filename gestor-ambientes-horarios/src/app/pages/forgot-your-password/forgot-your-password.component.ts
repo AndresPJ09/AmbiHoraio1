@@ -181,53 +181,47 @@ export class ForgotYourPasswordComponent {
     }
   }
 
-  passwordError: string = '';
-  isValidPassword(password: string): boolean {
-    // Verifica si la contraseña cumple con los requisitos mínimos de longitud
-    if (!password || password.length < 8) {
-      this.passwordError = 'La contraseña debe tener al menos 8 caracteres.';
-      return false;
-    }
-
-    // Verifica que haya al menos una letra mayúscula
-    const hasUpperCase = /[A-Z]/.test(password);
-    // Verifica que haya al menos un número
-    const hasNumber = /[0-9]/.test(password);
-    // Verifica que haya al menos un carácter especial
+  passwordError: string | null = null;
+  validatePassword(password: string): void {
+    const minLength = 8;
+    const maxLength = 15;
+    const hasUppercase = /[A-Z]/.test(password);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const hasNumber = /\d/.test(password); // Verifica si hay al menos un número
+    const hasMinLength = password.length >= minLength;
+    const hasMaxLength = password.length <= maxLength;
 
-    if (!hasUpperCase) {
-      this.passwordError = 'La contraseña debe contener al menos una mayúscula.';
-      return false;
-    }
-
-    if (!hasNumber) {
-      this.passwordError = 'La contraseña debe contener al menos un número.';
-      return false;
-    }
-
-    if (!hasSpecialChar) {
-      this.passwordError = 'La contraseña debe contener al menos un carácter especial.';
-      return false;
-    }
-
-    // Limpia el mensaje de error si la contraseña es válida
-    this.passwordError = '';
-    return true;
-  }
-
-  validatePassword() {
-    if (!this.newPassword || this.newPassword.length < 8) {
-        this.passwordError = 'Debe tener al menos 8 caracteres.';
-    } else if (!/[A-Z]/.test(this.newPassword)) {
-        this.passwordError = 'Debe contener al menos una mayúscula.';
-    } else if (!/[0-9]/.test(this.newPassword)) {
-        this.passwordError = 'Debe contener al menos un número.';
-    } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(this.newPassword)) {
-        this.passwordError = 'Debe contener al menos un carácter especial.';
+    if (!hasMinLength) {
+      this.passwordError = `La contraseña debe tener minimo ${minLength} caracteres.`;
+    } else if (!hasMaxLength) {
+      this.passwordError = `La contraseña no debe superar los ${maxLength} caracteres.`;
+    } else if (!hasUppercase) {
+      this.passwordError = 'La contraseña debe contener al menos 1 letra mayúscula.';
+    } else if (!hasSpecialChar) {
+      this.passwordError = 'La contraseña debe contener al menos 1 carácter especial.';
+    } else if (!hasNumber) {
+      this.passwordError = 'La contraseña debe contener al menos 1 número.';
     } else {
-        this.passwordError = '';
+      this.passwordError = null;
     }
+}
+
+isPasswordsMatching(password: string, confirmPassword: string): boolean {
+  return password === confirmPassword;
+}
+
+// Validación de las contraseñas
+validatePasswords(): boolean {
+  return !!this.newPassword && !!this.confirmPassword && this.newPassword === this.confirmPassword;
+}
+
+// Enviar la nueva contraseña (solo validación por ahora)
+submitPassword(): void {
+  if (this.validatePasswords()) {
+    this.updatedUser();
+  } else {
+    Swal.fire('Error', 'Las contraseñas no coinciden o están vacías.', 'error');
+  }
 }
 
   togglePasswordVisibility(): void {
@@ -247,24 +241,6 @@ export class ForgotYourPasswordComponent {
   // Validación del código de verificación
   validateCode(): boolean {
     return this.verificationCode.length === 4;
-  }
-
-  isPasswordsMatching(password: string, confirmPassword: string): boolean {
-    return password === confirmPassword;
-  }
-
-  // Validación de las contraseñas
-  validatePasswords(): boolean {
-    return !!this.newPassword && !!this.confirmPassword && this.newPassword === this.confirmPassword;
-  }
-
-  // Enviar la nueva contraseña (solo validación por ahora)
-  submitPassword(): void {
-    if (this.validatePasswords()) {
-      this.updatedUser();
-    } else {
-      Swal.fire('Error', 'Las contraseñas no coinciden o están vacías.', 'error');
-    }
   }
 
   // Temporizador de 30 segundos
@@ -343,7 +319,6 @@ export class ForgotYourPasswordComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         this.isLoading = true; 
-        this.currentStep = 2;
 
         setTimeout(() => {
           this.currentStep = 1;

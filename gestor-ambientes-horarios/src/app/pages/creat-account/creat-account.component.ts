@@ -26,7 +26,6 @@ export class CreatAccountComponent implements OnInit {
     password: '',
     roles: []
   };
-
   termsAccepted = false;
   isLoading: boolean = false;
   showPassword: boolean = false;
@@ -45,6 +44,16 @@ export class CreatAccountComponent implements OnInit {
 
     if (storedPerson) {
       this.person = JSON.parse(storedPerson);
+    }
+  }
+
+  emailError: string | null = null;
+  validateEmail(): void {
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    if (!emailPattern.test(this.person.email)) {
+      this.emailError = 'El correo debe ser válido y terminar en @gmail.com';
+    } else {
+      this.emailError = null;
     }
   }
 
@@ -112,7 +121,7 @@ export class CreatAccountComponent implements OnInit {
       },
       error: (error) => {
         this.isLoading = false;
-          Swal.fire('Error', error.error.message ||'Hubo un problema al crear la cuenta', 'error');
+        Swal.fire('Error', error.error.message || 'Hubo un problema al crear la cuenta', 'error');
       }
     });
   }
@@ -148,7 +157,7 @@ export class CreatAccountComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.isLoading = true; // Activar el spinner antes de redirigir
-  
+
         setTimeout(() => {
           sessionStorage.clear();
           this.router.navigate(['/login']);
@@ -182,17 +191,20 @@ export class CreatAccountComponent implements OnInit {
     const maxLength = 15;
     const hasUppercase = /[A-Z]/.test(password);
     const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const hasNumber = /\d/.test(password); // Verifica si hay al menos un número
     const hasMinLength = password.length >= minLength;
     const hasMaxLength = password.length <= maxLength;
 
     if (!hasMinLength) {
-      this.passwordError = `La contraseña debe tener al menos ${minLength} caracteres.`;
+      this.passwordError = `La contraseña debe tener minimo ${minLength} caracteres.`;
     } else if (!hasMaxLength) {
       this.passwordError = `La contraseña no debe superar los ${maxLength} caracteres.`;
     } else if (!hasUppercase) {
       this.passwordError = 'La contraseña debe contener al menos 1 letra mayúscula.';
     } else if (!hasSpecialChar) {
       this.passwordError = 'La contraseña debe contener al menos 1 carácter especial.';
+    } else if (!hasNumber) {
+      this.passwordError = 'La contraseña debe contener al menos 1 número.';
     } else {
       this.passwordError = null;
     }

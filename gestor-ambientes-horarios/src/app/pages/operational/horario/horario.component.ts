@@ -64,6 +64,7 @@ export class HorarioComponent implements OnInit {
   searchTerm: string = '';
   displayedColumns: string[] = ['nombres', 'apellidos', 'foto', 'identificacion', 'vinculo', 'especialidad', 'correo', 'fecha_inicio', 'hora_ingreso', 'hora_egreso', 'state', 'actions'];
   dataSource = new MatTableDataSource<any>(this.instructores);
+  loggedInUser!: any; // Usuario autenticado
 
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
   @ViewChild(MatSort) sort: MatSort | undefined;
@@ -84,6 +85,7 @@ export class HorarioComponent implements OnInit {
     this.getUsers();
     this.getAmbientes();
     this.getPeriodos();
+    
   }
 
   formatTime(date: string): string {

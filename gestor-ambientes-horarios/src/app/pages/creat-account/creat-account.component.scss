@@ -432,3 +432,19 @@
   display: block;
 }
 
+.tooltip-email {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #ff6b6b;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  display: none;
+  z-index: 10;
+}
+
+.tooltip-email.show {
+  display: block;
+}

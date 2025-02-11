@@ -68,7 +68,7 @@
     <ul>
       <li>
         <a routerLink="/dashboard/home" routerLinkActive="active">
-     Inicio
+          <i class="bi bi-house-fill"></i> Inicio
         </a>
       </li>
 
@@ -78,7 +78,7 @@
           <h2 class="accordion-header" [id]="module.module + 'Heading'">
             <button class="accordion-button collapsed" type="button" (click)="toggleAccordion(module.module)"
               [attr.aria-expanded]="isAccordionOpen(module.module)" [attr.aria-controls]="module.module + 'Collapse'">
-              <i [class]="module.moduleDescription"></i> {{ module.module }}
+              <i [innerHTML]="module.moduleDescription"></i> {{ module.module }}
             </button>
           </h2>
           <div #collapse [id]="module.module + 'Collapse'" class="accordion-collapse collapse"
