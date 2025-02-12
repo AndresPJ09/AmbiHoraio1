@@ -153,6 +153,7 @@ export class ForgotYourPasswordComponent {
 
       const storedData = JSON.parse(sessionStorage.getItem('activationData') || '{}');
       if (this.verificationCode === storedData.code) {
+        this.isLoading = true;
         // El código es correcto
         Swal.fire('¡Código Verificado!', 'El código es correcto. Proceda al siguiente paso.', 'success');
         await this.loadUser()

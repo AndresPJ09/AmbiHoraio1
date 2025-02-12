@@ -44,9 +44,8 @@ export class HorarioComponent implements OnInit {
     ambienteId: 0,
     periodoId: 0,
     jornada_programa: '',
-    fecha_inicio: new Date().toISOString().slice(0, 10),
-    hora_ingreso: '',
-    hora_egreso: '',
+    fecha_hora_ingreso: new Date().toISOString().slice(0, 16),
+    fecha_hora_egreso:  new Date().toISOString().slice(0, 16),
     horas: '',
     validacion: '',
     observaciones: '',
@@ -85,12 +84,32 @@ export class HorarioComponent implements OnInit {
     this.getUsers();
     this.getAmbientes();
     this.getPeriodos();
+    this.getInstructores();
     
   }
 
-  formatTime(date: string): string {
-    const time = new Date(date);
-    return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  formatearFechaHora(fechaHora: string): string {
+    const fecha = new Date(fechaHora);
+  
+    // Verificar si la fecha es válida
+    if (isNaN(fecha.getTime())) {
+      console.error('Fecha inválida:', fechaHora);
+      return ''; // Retornar una cadena vacía si la fecha no es válida
+    }
+  
+    // Formatear la fecha en el formato YYYY-MM-DD
+    const año = fecha.getFullYear();
+    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
+    const dia = fecha.getDate().toString().padStart(2, '0');
+  
+    // Formatear la hora en formato HH:mm AM/PM
+    let horas = fecha.getHours();
+    const minutos = fecha.getMinutes().toString().padStart(2, '0');
+    const ampm = horas >= 12 ? 'PM' : 'AM';
+    horas = horas % 12;
+    horas = horas ? horas : 12; // La hora 0 se convierte en 12 AM
+  
+    return `${año}-${mes}-${dia} - ${horas}:${minutos} ${ampm}`;
   }
 
   getHorarios(): void {
@@ -98,8 +117,10 @@ export class HorarioComponent implements OnInit {
       (horarios) => {
         this.horarios = horarios.map(horario => ({
           ...horario,
-          fecha_inicio: new Date(horario.fecha_inicio).toISOString().slice(0, 10),
+         fecha_hora_ingreso: this.formatearFechaHora(horario.fecha_hora_ingreso),
+        fecha_hora_egreso: this.formatearFechaHora(horario.fecha_hora_egreso)
         }));
+               console.log("gggfg",this.horarios)
         this.cdr.detectChanges();
       },
       (error) => {
@@ -146,9 +167,9 @@ export class HorarioComponent implements OnInit {
   getInstructores(): void {
     this.http.get<any[]>(this.instructoresUrl).subscribe(
       (instructores) => {
-        console.log("instructore", this.instructores)
         this.instructores = instructores;
         this.filteredInstructores = instructores;
+        console.log("instructore", this.instructores)
       },
       (error) => {
         console.error('Error fetching instructores:', error);
@@ -174,7 +195,7 @@ export class HorarioComponent implements OnInit {
     );
     if (selectedinstructor) {
       this.horario.instructorId = selectedinstructor.id;
-      this.horario.instructorName  = `${selectedinstructor.nombres} - ${selectedinstructor.apellidos}`;
+      this.horario.instructorName  = `${selectedinstructor.nombres} ${selectedinstructor.apellidos}`;
       this.filteredInstructores = [];
     }
   }
@@ -184,6 +205,7 @@ export class HorarioComponent implements OnInit {
       (ambientes) => {
         this.ambientes = ambientes;
         this.filteredAmbientes = ambientes;
+        console.log("ambiente", this.ambientes)
       },
       (error) => {
         console.error('Error fetching ambientes:', error);
@@ -239,7 +261,7 @@ export class HorarioComponent implements OnInit {
 
   onperiodoSelect(event: any): void {
     const selectedperiodo = this.periodos.find(periodo =>
-      periodo.codigo === event.option.value
+      periodo.nombre === event.option.value
     );
     if (selectedperiodo) {
       this.horario.periodoId = selectedperiodo.id;
@@ -303,8 +325,8 @@ export class HorarioComponent implements OnInit {
   }
 
   getInstructorName(periodoId: number): string {
-    const instructor = this.periodos.find(mod => mod.id === periodoId);
-    return instructor ? `${instructor.nombres} - ${instructor.apellidos}` : 'Desconocido';
+    const instructor = this.instructores.find(instru => instru.id === periodoId);
+    return instructor ? `${instructor.nombres} ${instructor.apellidos}` : 'Desconocido';
   }
 
   openModal(): void {
@@ -345,20 +367,11 @@ export class HorarioComponent implements OnInit {
     }
   }
 
-  extractTime(dateTime: string): string {
-    if (!dateTime) return '';
-    const date = new Date(dateTime);
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes}`;
-  }
-
   editHorario(horario: any): void {
     this.horario = {
       ...horario,
-      fecha_inicio: new Date(horario.fecha_inicio).toISOString().slice(0, 10),
-      hora_ingreso: this.extractTime(horario.hora_ingreso),
-      hora_egreso: this.extractTime(horario.hora_egreso),
+      fecha_hora_ingreso: this.formatearFechaHora(horario.fecha_hora_ingreso),
+      fecha_hora_egreso: this.formatearFechaHora(horario.fecha_hora_egreso)
     };
     const selecteduser = this.users.find(use => use.id === this.horario.userId);
     if (selecteduser) {
@@ -372,6 +385,16 @@ export class HorarioComponent implements OnInit {
     const selectedperiodo = this.periodos.find(peri => peri.id === this.horario.periodoId);
     if (selectedperiodo) {
       this.horario.periodoName = selectedperiodo.nombre;
+    }
+
+    const selectedficha = this.fichas.find(fic => fic.id === this.horario.fichaId);
+    if (selectedficha) {
+      this.horario.fichaName = selectedficha.codigo;
+    }
+
+    const selectedinstructor = this.instructores.find(instru => instru.id === this.horario.instructorId);
+    if (selectedinstructor) {
+      this.horario.instructorName =  `${selectedinstructor.nombres} - ${selectedinstructor.apellidos}`;
     }
     this.isEditing = true;
     this.openModal();
@@ -409,9 +432,8 @@ export class HorarioComponent implements OnInit {
       ambienteId: 0,
       periodoId: 0,
       jornada_programa: '',
-      fecha_inicio: new Date().toISOString().slice(0, 10),
-      hora_ingreso: '',
-      hora_egreso: '',
+      fecha_hora_ingreso: new Date().toISOString().slice(0, 16),
+      fecha_hora_egreso:  new Date().toISOString().slice(0, 16),
       horas: '',
       observaciones: '',
       validacion: '',

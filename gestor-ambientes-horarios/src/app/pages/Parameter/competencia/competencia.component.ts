@@ -16,14 +16,19 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
     CommonModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule 
   ],
   templateUrl: './competencia.component.html',
   styleUrl: './competencia.component.scss'
 })
 export class CompetenciaComponent implements OnInit {
   competencias: any[] = [];
-  competencia: any = { id: 0, codigo: '', descripcion: '', state: true };
+  competencia: any = { 
+    id: 0, 
+    codigo: '', 
+    descripcion: '', 
+    state: true 
+  };
   isModalOpen = false;
   isDropdownOpen = false;
   isEditing = false;
@@ -37,7 +42,7 @@ export class CompetenciaComponent implements OnInit {
 
   private apiUrl = 'http://localhost:5062/api/Competencia';
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef, private fb: FormBuilder,) { }
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef,) { }
 
   ngOnInit(): void {
     this.getCompetencias();

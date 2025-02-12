@@ -39,7 +39,7 @@
 
                 <div class="row">
                     <div class="col">
-                        <!-- Modulo -->
+                        <!-- Instructor -->
                         <label for="instructorName" class="form-label">Nombre de instructor:</label>
                         <input type="text" class="form-control" matInput [matAutocomplete]="autoInstru"
                             id="instructorName" name="instructorName" [(ngModel)]="horario.instructorName"
@@ -47,13 +47,13 @@
                             #instructorName="ngModel" />
                         <mat-autocomplete #autoInstru="matAutocomplete" (optionSelected)="oninstructorSelect($event)">
                             <mat-option *ngFor="let instructor of filteredInstructores" [value]="instructor.nombres">
-                                {{ instructor.nombres }}
+                                {{ instructor.nombres }}  {{ instructor.apellidos }}
                             </mat-option>
                         </mat-autocomplete>
                     </div>
 
                     <div class="col">
-                        <!-- Ambinete -->
+                        <!-- Ambiente -->
                         <label for="ambienteName" class="form-label">Nombre de ambiente:</label>
                         <input type="text" class="form-control" matInput [matAutocomplete]="autoAmbi" id="ambienteName"
                             name="ambienteName" [(ngModel)]="horario.ambienteName" (input)="searchambientes($event)"
@@ -68,6 +68,17 @@
 
                 <div class="row">
                     <div class="col">
+                        <label for="jornada_programa" class="form-label">Jornada programa:</label>
+                        <select class="form-control" id="jornada_programa" name="jornada_programa"
+                            [(ngModel)]="horario.jornada_programa" required>
+                            <option value="" disabled selected>Seleccione una opción</option>
+                            <option value="MAÑANA">MAÑANA</option>
+                            <option value="TARDE">TARDE</option>
+                            <option value="NOCHE">NOCHE</option>
+                        </select>
+                    </div>
+
+                    <div class="col">
                         <!-- Ambinete -->
                         <label for="periodoName" class="form-label">Periodo:</label>
                         <input type="text" class="form-control" matInput [matAutocomplete]="autoPerio" id="periodoName"
@@ -79,62 +90,62 @@
                             </mat-option>
                         </mat-autocomplete>
                     </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="fecha_hora_ingreso" class="form-label input-field">Fecha y hora de ingreso:</label>
+                        <input type="datetime-local" class="form-control" id="fecha_hora_ingreso"
+                            name="fecha_hora_ingreso" [(ngModel)]="horario.fecha_hora_ingreso" required>
+                    </div>
 
                     <div class="col">
-                        <label for="fecha_inicio" class="form-label  input-field">Fecha:</label>
-                        <input type="date" class="form-control" id="fecha_inicio" name="fecha_inicio"
-                            [(ngModel)]="horario.fecha_inicio" required>
+                        <label for="fecha_hora_egreso" class="form-label">Fecha y hora de egreso:</label>
+                        <input type="datetime-local" class="form-control" id="fecha_hora_egreso"
+                            name="fecha_hora_egreso" [(ngModel)]="horario.fecha_hora_egreso" required>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col">
-                        <label for="horaIngreso" class="form-label">Hora de ingreso:</label>
-                        <input type="time" class="form-control" id="horaIngreso" name="hora_ingreso"
-                            [(ngModel)]="horario.hora_ingreso" required>
+                        <label for="horas" class="form-label">Horas:</label>
+                        <input type="text" class="form-control" id="horas" name="horas"
+                            [(ngModel)]="horario.horas">
                     </div>
 
-                    <div class="col">
-                        <label for="horaEgreso" class="form-label">Hora de egreso:</label>
-                        <input type="time" class="form-control" id="horaEgreso" name="hora_egreso"
-                            [(ngModel)]="horario.hora_egreso" required>
-                    </div>
-                </div>
-
-                <div class="row">
                     <div class="col">
                         <label for="validacion" class="form-label">Validación:</label>
                         <input type="text" class="form-control" id="validacion" name="validacion"
                             [(ngModel)]="horario.validacion" required maxlength="10"
                             pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
                     </div>
+                </div>
 
+                <div class="row">
+                    <div class="col">
+                        <label for="observaciones" class="form-label">Observaciones:</label>
+                        <textarea  put type="text" class="form-control" id="observaciones" name="observaciones"
+                            [(ngModel)]="horario.observaciones" required maxlength="150"
+                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$" rows="3"></textarea>
+                    </div>
 
-                        <div class="col">
-                            <label for="observaciones" class="form-label">Observaciones:</label>
-                            <input type="text" class="form-control" id="observaciones" name="observaciones"
-                                [(ngModel)]="horario.observaciones" required maxlength="150"
-                                pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$">
+                    <div class="col" *ngIf="horario.id !== 0">
+                        <label for="state" class="form-label">Estado:</label>
+                        <div>
+                            <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state" name="state"
+                                [(ngModel)]="horario.state" [attr.data-bs-toggle]="'tooltip'"
+                                [attr.data-bs-placement]="'top'" [attr.title]="horario.state ? 'Activo' : 'Inactivo'" />
+                            <label class="form-check-label" for="state">{{ horario.state ? 'Activo' : 'Inactivo'
+                                }}</label>
                         </div>
                     </div>
 
-                        <div class="col" *ngIf="horario.id !== 0">
-                            <label for="state" class="form-label">Estado:</label>
-                            <div>
-                                <input type="checkbox" class="form-check-input bulk-select-checkbox" id="state"
-                                    name="state" [(ngModel)]="horario.state" [attr.data-bs-toggle]="'tooltip'"
-                                    [attr.data-bs-placement]="'top'"
-                                    [attr.title]="horario.state ? 'Activo' : 'Inactivo'" />
-                                <label class="form-check-label" for="state">{{ horario.state ? 'Activo' : 'Inactivo'
-                                    }}</label>
-                            </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
+                            <button type="submit" class="btn btn-primary" [disabled]="horarioForm.invalid">
+                                {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                            </button>
                         </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" (click)="closeModal()">Cerrar</button>
-                        <button type="submit" class="btn btn-primary" [disabled]="horarioForm.invalid">
-                            {{ isEditing ? 'Actualizar' : 'Guardar' }}
-                        </button>
                     </div>
             </form>
         </div>
@@ -156,9 +167,8 @@
                 <th>Ambiente</th>
                 <th>Periodo</th>
                 <th>Jornada programada</th>
-                <th>Fecha</th>
-                <th>Hora de ingreso</th>
-                <th>Hora de salida</th>
+                <th>Fecha de hora ingreso</th>
+                <th>Fecha de hora salida</th>
                 <th>Horas</th>
                 <th>Validación</th>
                 <th>Observaciones</th>
@@ -173,9 +183,8 @@
                 <td>{{ getAmbienteName(horario.ambienteId) }}</td>
                 <td>{{ getPeriodoName(horario.periodoId) }}</td>
                 <td>{{ horario.jornada_programa }}</td>
-                <td>{{ horario.fecha_inicio }}</td>
-                <td>{{ horario.hora_ingreso }}</td>
-                <td>{{ horario.hora_egreso }}</td>
+                <td>{{ horario.fecha_hora_ingreso }}</td>
+                <td>{{ horario.fecha_hora_egreso }}</td>
                 <td>{{ horario.horas }}</td>
                 <td>{{ horario.validacion }}</td>
                 <td>{{ horario.observaciones }}</td>

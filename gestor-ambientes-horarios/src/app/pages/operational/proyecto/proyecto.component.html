@@ -32,8 +32,15 @@
                 <div class="row">
                     <div class="col">
                         <label for="fase" class="form-label">Fase:</label>
-                        <input type="text" class="form-control" id="fase" name="fase" [(ngModel)]="proyecto.fase"
-                            required>
+                        <select class="form-control" id="fase" name="fase" [(ngModel)]="proyecto.fase" required>
+                            <option value="" disabled selected>Seleccione una fase</option>
+                            <option value="Ejecución">Ejecución</option>
+                            <option value="Planeación">Planeación</option>
+                            <option value="Análisis">Análisis</option>
+                            <option value="Análisis y contextualización">Análisis y contextualización</option>
+                            <option value="Evaluación">Evaluación</option>
+                            <option value="Etapa productiva">Etapa productiva</option>
+                        </select>
                     </div>
 
                     <div class="col-md-6">

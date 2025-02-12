@@ -15,13 +15,15 @@
                     <div class="col">
                         <label for="codigo" class="form-label">Codigo:</label>
                         <input type="text" class="form-control" id="codigo" name="codigo"
-                            [(ngModel)]="competencia.codigo" required>
+                            [(ngModel)]="competencia.codigo" maxlength="20" pattern="^[a-zA-Z0-9áéíóúÁÉÍÓÚñÑ\s]+$"
+                            required>
                     </div>
 
                     <div class="col">
                         <label for="descripcion" class="form-label">Descripción:</label>
                         <input type="text" class="form-control" id="descripcion" name="descripcion"
-                            [(ngModel)]="competencia.descripcion" required>
+                            [(ngModel)]="competencia.descripcion" maxlength="50" pattern="^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$"
+                            required>
                     </div>
                 </div>
 
